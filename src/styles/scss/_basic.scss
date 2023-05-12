@@ -203,7 +203,11 @@ a {
   font-weight: 700;
   padding: var(--space-s) var(--space-l);
   overflow: hidden;
-  max-width: 300px;
+  
+  flex: 1 1 auto;
+  @include mq(small){
+    max-width: 300px;
+  }
 }
 
 .btn__primary {
@@ -664,15 +668,15 @@ a {
   height: auto;
   overflow-x: hidden;
   min-height: 100vh;
-  padding: 150px 1.5rem 1rem 1.5rem;
+  padding: 1rem;
   width: 100%;
   flex-direction: column;
   position: relative;
   @include mq(small) {
-    padding: 150px 2.5rem 1rem 2.5rem;
+    padding: 1.5rem;
   }
   @include mq(medium) {
-    padding: 150px 5% 1rem 5%;
+    padding: 2rem;
   }
   @include mq(large) {
     padding: 150px 10% 1rem 10%;
@@ -683,9 +687,16 @@ a {
   .__s__b {
     @extend %flex-center;
     flex-direction: column;
+    justify-content: flex-end;
     width: 100%;
     max-width: 1200px;
-    margin: auto;
+    margin: 0;
+    flex: 1 1 100%;
+    // margin: 7rem 0;
+    // margin: 10dvh 0;
+    @include mq(medium){
+      justify-content: center;
+    }
   }
 }
 

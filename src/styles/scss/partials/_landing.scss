@@ -41,13 +41,10 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-content: center;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  margin: auto;
+  margin: 0;
   box-sizing: border-box;
-  @include mq(medium) {
-    margin: auto;
-  }
 }
 .lr__wrapper > div {
   @extend %flex-full;

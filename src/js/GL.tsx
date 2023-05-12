@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { useEffect, useRef, useState, Suspense } from "react";
-import { Canvas, Vector3, useFrame } from "@react-three/fiber";
+import { Canvas, Vector3, useFrame, useThree } from "@react-three/fiber";
 import {
   useCursor,
   QuadraticBezierLine,
@@ -13,6 +13,7 @@ import {
   Line,
   ScrollControls,
   useScroll,
+  useAspect,
 } from "@react-three/drei";
 import { easing } from "maath";
 import {
@@ -30,6 +31,7 @@ import { imgs } from "@/pages/atoms";
 import Timeline from "./Timeline";
 import { useRouter } from "next/router";
 import LandingGL from "./LandingGL";
+import { DepthOfField, EffectComposer } from "@react-three/postprocessing";
 
 const Loader = () => {
   const [animate, cycle] = useCycle({ opacity: 1 }, { opacity: 0 });
@@ -137,14 +139,15 @@ export const GL = ({location}:any) => {
 
       useEffect(() => {
         // console.log(images);
+        document.addEventListener("mousemove", handleMove)
       }, []);
       return (
         <>
           <div id="canvasWrapper" className="canvas__wrapper" ref={windowRef}>
             <Suspense fallback={<Loader />}>
               <MotionConfig transition={{ type: "spring" }}>
-                <Canvas onMouseMove={handleMove} dpr={[1, 1.5]}>
-                  <fog attach="fog" args={["#1e1f26", 0, 80]} ></fog>
+                <Canvas dpr={[1, 1.5]}>
+                  <fog attach="fog" args={["#1e1f26", 30, 70]} ></fog>
                   <Preload all />
                   <Camera />
                   <color attach={"background"} args={["#1e1f26"]} ></color>
@@ -157,10 +160,13 @@ export const GL = ({location}:any) => {
          
                   {/* <Timeline/> */}
                   <LandingGL/>
+                  <ambientLight color="#eeeeee" intensity={1} />
+  
 
+                  <Environment preset="night" />
 
-                  <Environment preset="studio" />
                 </Canvas>
+ 
               </MotionConfig>
             </Suspense>
           </div>
@@ -176,9 +182,15 @@ export const GL = ({location}:any) => {
     
 
     const Camera = () => {
+      const {size} = useThree()
+      const [w,h] = useAspect(size.width, size.height)
       const camera = useRef<any>(null!);
+      const vec = new THREE.Vector3(0,0,0)
+      useEffect(()=>{
+
+      },[size])
       const { ...cameraProps } = {
-        position: new THREE.Vector3(0, 15, 20),
+        position: new THREE.Vector3(0, w/6, 20),
       };
 
       useFrame((event) => {
@@ -191,6 +203,7 @@ export const GL = ({location}:any) => {
       return (
         <motion3d.mesh ref={camera}>
           <PerspectiveCamera
+          
           fov={75}
             onPointerMove={handleMove}
             makeDefault
@@ -202,5 +215,5 @@ export const GL = ({location}:any) => {
 
     // console.log("arrayyyy", array)
     const router = useRouter();
-    return(<>{fetching ? <Loader /> : <App images={array} />}</>) ;
+    return(<App images={array} />) ;
   };
