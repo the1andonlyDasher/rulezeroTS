@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-const NavLink = ({name, link, hash}) => {
+const NavLink = ({name, link, hash}:any) => {
     return(
         <li className="navItem">
             <Link 

@@ -90,9 +90,8 @@ canvas {
 }
 
 .canvas__wrapper {
-  height: 100%;
+  @extend %absolute-full;
   position: fixed;
-  width: 100%;
   z-index: -10;
 }
 
@@ -205,7 +204,7 @@ a {
   overflow: hidden;
   
   flex: 1 1 auto;
-  @include mq(small){
+  @include mq(medium){
     max-width: 300px;
   }
 }

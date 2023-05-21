@@ -18,7 +18,7 @@ const variants = {
     }
   }
 };
-export const NavItem = ({href, name, toggle}) => {
+export const NavItem = ({href, name, toggle}:any) => {
     return (
         <>
       <motion.li

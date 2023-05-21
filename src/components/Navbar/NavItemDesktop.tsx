@@ -17,7 +17,14 @@ const variants = {
     opacity: 0,
   },
 };
-export const NavItem = ({href, name, clickLink}) => {
+
+type NavItemProps = {
+  href?: string;
+  name?: string;
+  clickLink?: any;
+}
+
+export const NavItem = ({href,name, clickLink}:NavItemProps) => {
   const [isShrunk, setShrunk] = useState(false);
   useEffect(() => {
     const handler = () => {

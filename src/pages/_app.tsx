@@ -1,72 +1,45 @@
 import '@/styles/style.css'
+import { GL } from '@/js/GL';
 import type { AppProps } from 'next/app'
-import { AnimatePresence, motion } from "framer-motion";
+import Layout from '@/components/Layout';
+import { useEffect } from 'react';
+import React from 'react';
+import { Canvas, useFrame } from '@react-three/fiber'
+import { useRef, useState } from 'react'
+import LandingGL from '@/js/LandingGL';
+import { Environment } from '@react-three/drei';
+function Box(props:any) {
+  // This reference will give us direct access to the mesh
+  const mesh = useRef<any>(!null)
+  // Set up state for the hovered and active state
+  const [hovered, setHover] = useState(false)
+  const [active, setActive] = useState(false)
+  // Subscribe this component to the render-loop, rotate the mesh every frame
+  useFrame((state, delta) => (mesh.current.rotation.x += delta))
+  // Return view, these are regular three.js elements expressed in JSX
+  return (
+    <mesh
+      {...props}
+      ref={mesh}
+      scale={active ? 1.5 : 1}
+      onClick={(event) => setActive(!active)}
+      onPointerOver={(event) => setHover(true)}
+      onPointerOut={(event) => setHover(false)}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+    </mesh>
+  )
+}
 
+export default function App({ Component, pageProps }: AppProps) {
+ useEffect(()=>{
+  console.log("mounting")
+ })
+  return (<>
+<Layout>
+      <Component {...pageProps} />
+    </Layout>
+    <GL/>
 
-const variants = {
-  initial: { opacity: 0 },
-  enter: {
-    opacity: 1,
-    transition: { staggerChildren: 0.5, delayChildren: 2, duration: 0.5 },
-  },
-  exit: {
-    opacity: 0,
-    transition: {
-      staggerChildren: 0.5,
-      staggerDirection: -1,
-      duration: 0.5,
-      delay: 2,
-    },
-  },
-};
-
-const handExitComplete = () => {
-  window.scrollTo(0, 0);
-  if (typeof window !== "undefined") {
-    // Get the hash from the url
-    const hashId = window.location.hash;
-
-    if (hashId) {
-      // Use the hash to find the first element with that id
-      const element = document.querySelector(`${hashId}`);
-
-      if (element) {
-        // Smooth scroll to that elment
-        element.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-          inline: "nearest",
-        });
-        console.log("scrollToHash");
-      }
-    }
-    // else {
-    //   window.scrollTo(0,0)
-    //   console.log("scrollTop")
-    // }
-  }
-};
-
-export default function App({ Component, router, pageProps }: AppProps) {
-  return(<>
-        <AnimatePresence
-        mode="wait"
-        initial={true}
-        onExitComplete={() =>
-          setTimeout(() => {
-            handExitComplete();
-          }, 100)
-        }
-      >
-        <motion.div
-          key={router.route}
-          variants={variants}
-          initial="initial"
-          animate="enter"
-          exit="exit"
-          className="main"
-        >
-          <Component {...pageProps} />
-        </motion.div>
-      </AnimatePresence></>)
+  </>)
 }

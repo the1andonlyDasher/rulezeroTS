@@ -30,10 +30,9 @@ const variants = {
   },
 };
 
-const Hero = () => {
+const Hero = ({headerPartOne, headerPartTwo, subHeader, text, buttonOne, buttonTwo}:any) => {
   return (
     <>
-      <Section>
         <div className="lr__wrapper">
           <motion.div
             className="left-wrapper"
@@ -43,24 +42,22 @@ const Hero = () => {
             exit="exit"
           >
             <h1>
-              Actionable
-              <br /> <strong> Information</strong>
+            {headerPartOne}
+              <br /> <strong>{headerPartTwo}</strong>
             </h1>
-            <h3>Swapping notes and talking shop</h3>
+            <h3>{subHeader}</h3>
             <p>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut.
+              {text}
             </p>
             <div className="button__wrapper no-flex">
-              <Link href="/archive"><button type="button" className="btn__primary">Watch now!</button></Link>
+              <Link href="/archive"><button type="button" className="btn__primary">{buttonOne}</button></Link>
               
-                <a href="#contact"><button type="button" className="btn__outline">Contact us</button></a>
+               {buttonTwo ?  <a href="#contact"><button type="button" className="btn__outline">{buttonTwo}</button></a> : null}
               
             </div>
           </motion.div>
           <div className="right-wrapper"></div>
         </div>
-      </Section>
     </>
   );
 };

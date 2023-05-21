@@ -21,6 +21,7 @@ import { motion as motion3d } from "framer-motion-3d";
 import { proxy } from "valtio";
 import { atom, useAtom } from "jotai";
 import { imgs } from "@/pages/atoms";
+import Papa from "papaparse";
 
 
 let mouseX: any;
@@ -56,19 +57,76 @@ type planeProps = {
 
 
 const Timeline = () => {
-
-    const [app, setApp] = useAtom(imgs)
-    const unit = proxy({ value: 15 });
-
-    
+  let count = atom<planeProps[]>([]);
+  const [fetching, fetch] = useState(true);
+  const [array, setArray] = useState<any>([]);
+  const [app, setApp] = useAtom<any>(imgs)
+  const [currentLocation, setLocation] = useState(location)
   useEffect(() => {
+    console.log(currentLocation);
     if (typeof window !== "undefined") {
       mouseX = 0;
       mouseY = 0;
       windowHalfX = window.innerWidth / 2;
       windowHalfY = window.innerHeight / 2;
     }
-  }, [])
+    if (typeof window !== "undefined" && fetching) {
+      var r:any,
+        rx:any =
+          /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
+
+      Papa.parse(
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSloYeSqI6BpICcq9gG5a3KRhXv99DKlrj9XmEAIvmX0BxWw-olhU9J9kDG0LvM976e8jYblR0THwkj/pub?output=csv",
+        {
+          skipEmptyLines: "greedy",
+          preview: 0,
+          worker: true,
+          download: true,
+          header: true,
+          complete: (results) => {
+            console.log("Parsing complete:", results);
+            results.data.map((data:any, index) => {
+              r = data.Link.match(rx);
+              var t = data.Title;
+              var d = data.Dates;
+              if(fetching){
+                app.push({
+                  position: [
+                    index % 2
+                      ? -(Math.random() < 0.5
+                          ? 15 + Math.random() * 5
+                          : 10 + Math.random() * 5)
+                      : Math.random() < 0.5
+                      ? 15
+                      : 10,
+                    Math.random() < 0.5
+                      ? 10 + Math.random() * 5
+                      : 10 + Math.random() * 5,
+                    -15 * index,
+                  ],
+                  rotation: [0, 0, 0],
+                  url: `https://img.youtube.com/vi/${r[1]}/mqdefault.jpg`,
+                  title: t,
+                  name: r[1],
+                  date: d
+                });
+                setArray(app)
+              }
+              fetch(false);
+            });
+          },
+        }
+      );
+    }
+  },[fetching, array]);
+  const App = ({images}:{images:any}) =>{
+
+
+    const [app, setApp] = useAtom(imgs)
+    const unit = proxy({ value: 15 });
+
+    
+
 
   const Frames = ( {images}:{images:any}) => {
     var p = new THREE.Vector3();
@@ -317,6 +375,11 @@ return(
   </ScrollControls>
   </>
 )
+}
+
+return(<>
+  <App images={array}/>
+  </>)
 }
 
 export default Timeline

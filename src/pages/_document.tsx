@@ -1,4 +1,10 @@
+
+import Footer from '@/components/Footer'
+import Navbar from '@/components/Navbar/navbar'
 import { Html, Head, Main, NextScript } from 'next/document'
+
+
+
 
 export default function Document() {
   return (

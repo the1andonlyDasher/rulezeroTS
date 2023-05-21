@@ -2,14 +2,14 @@ import React, { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useCycle } from "framer-motion";
-import { NavItem } from "@/components/Nav/NavItemDesktop";
-import Navigation from "@/components/Nav/Navigation";
-import MobileNav from "@/components/Nav/MobileNav";
-import { NavItem as Mnav } from "@/components/Nav/NavItemMobile";
+import { NavItem } from "@/components/Navbar/NavItemDesktop";
+import Navigation from "@/components/Navbar/Navigation";
+import MobileNav from "@/components/Navbar/MobileNav";
+import { NavItem as Mnav } from "@/components/Navbar/NavItemMobile";
 import NavbarToggle from "./NavbarToggle";
 
-const Navbar = ({ logo, alt, children }) => {
-  const navbarMain = useRef();
+const Navbar = ({ logo, alt, children }:any) => {
+  const navbarMain = useRef<any>(!null);
   const [isShrunk, setShrunk] = useState(false);
   useEffect(() => {
     const handler = () => {
@@ -60,12 +60,13 @@ const Navbar = ({ logo, alt, children }) => {
   }
 
   const [isOpen, toggleOpen] = useCycle(false, true);
-  const navitems = ["Home", "Training", "Über mich", "Kontakt"];
-  const hrefs = ["/", "/#cards", "/#about", "/#contact"];
+  const navitems = ["Home", "Archive", "About", "Contact"];
+  const hrefs = ["/", "/archive", "/about", "/contact"];
 
   return (
     <motion.nav
-      className={isShrunk ? "navbar shrunk" : "navbar"}
+      // className={isShrunk ? "navbar shrunk" : "navbar"}
+      className={"navbar"}
       variants={variants}
       ref={navbarMain}
       initial={false}
@@ -79,11 +80,11 @@ const Navbar = ({ logo, alt, children }) => {
           href="/"
           variants={image_variants} initial="hidden" animate="enter" exit="exit"
         >
-          <Image  src={logo} alt={alt} />
+          {/* <Image  src={logo} alt={alt} /> */}
         </motion.a>
         <Navigation>
             {navitems.map((i, index) => (
-              <NavItem key={i} name={i} href={hrefs[index]} />
+              <NavItem clickLink={null} key={i} name={i} href={hrefs[index]} />
             ))}
           </Navigation>
           <MobileNav>

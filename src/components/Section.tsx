@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { useRef, forwardRef, ReactNode, ReactComponentElement, ReactElement } from "react";
 import { motion } from "framer-motion";
 
 const section_variants = {
@@ -25,7 +25,7 @@ const header_variants = {
   },
 };
 
-type sectionProps = {
+interface sectionProps {
  sectionName?:string;
  ref?: any
  id?: string;
@@ -34,7 +34,11 @@ type sectionProps = {
  children?: JSX.Element
 }
 
-function Section({sectionName, ref, id, header, text, children}:sectionProps) {
+interface sProps {
+  props: sectionProps;
+}
+
+function Section({sectionName,ref, id, text, header, children}:sectionProps) {
 
     return (
       <motion.section
@@ -46,6 +50,7 @@ function Section({sectionName, ref, id, header, text, children}:sectionProps) {
         ref={ref}
         id={id}
         variants={section_variants}
+
       >
         <motion.div  variants={section_variants} className="__s__b">
           {header ? (
@@ -60,6 +65,6 @@ function Section({sectionName, ref, id, header, text, children}:sectionProps) {
     );
   }
 
-const Sec = forwardRef<HTMLElement, sectionProps>((props, ref) => <Section {...props}>{props.children}</Section>);
+const Sec = forwardRef<ReactElement, sectionProps>((props, ref) => <Section {...props}></Section>);
 
 export default Sec;

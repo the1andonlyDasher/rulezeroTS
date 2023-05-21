@@ -26,7 +26,7 @@ const variants = {
 
 
 
-const MobileNav = ({children}) => {
+const MobileNav = ({children}:any) => {
     
   return (
     <>

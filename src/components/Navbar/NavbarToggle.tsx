@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, useCycle } from 'framer-motion';
 
-const NavbarToggle = ({ toggle, clickLink }) => {
+const NavbarToggle = ({ toggle, clickLink }:any) => {
     const [click, setClick] = useCycle(true, false);
 
 
@@ -20,8 +20,6 @@ const NavbarToggle = ({ toggle, clickLink }) => {
         open: { rotate: [0,0, 45], top: ["35%","50%", "50%"]  },
         transition: {
           type: "spring",
-          stiffness: 20,
-          restDelta: 2
         }
     }} ></motion.div>
         <motion.div className="bar " variants={{
@@ -29,8 +27,6 @@ const NavbarToggle = ({ toggle, clickLink }) => {
             open: { rotate: [0, 0, -45], top:["65%", "50%", "50%"]  },
             transition: {
               type: "spring",
-              stiffness: 20,
-              restDelta: 2
             }
     }} ></motion.div>
       </button>

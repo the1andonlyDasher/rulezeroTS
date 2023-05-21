@@ -6,6 +6,9 @@ import { DepthOfField, EffectComposer } from '@react-three/postprocessing'
 import { Flex, Box as FlexBox } from '@react-three/flex'
 import {motion} from 'framer-motion-3d'
 import { MotionConfig } from 'framer-motion'
+import Pill from './Pill'
+import { loc } from '@/pages/atoms'
+import { useAtom } from 'jotai'
 
 
 
@@ -50,7 +53,7 @@ function VideoText({ position, width }: any) {
                 strokeWidth={0.05}
                 castShadow
                 font="/fonts/prompt-v10-latin-900italic.woff"
-                fontSize={Math.min(20, Math.max(10, width / 4))}
+                fontSize={Math.min(20, Math.max(10, width * 0.7))}
                 maxWidth={width}
                 characters="abcdefghijklmnopqrstuvwxyz0123456789!"
                 anchorX="center"
@@ -94,10 +97,13 @@ function Box(props: any) {
 
 export default function LandingGL() {
     const [loaded, setLoaded] = useState(false);
-    const {size} = useThree()
+    const [app, setApp] = useAtom(loc)
+
     const light = useRef<any>(!null)
     const text = useRef<any>(!null)
     const vec = new THREE.Vector3()
+    const {size} = useThree()
+    size.updateStyle = true;
     const [vpWidth, vpHeight] = useAspect(size.width, size.height);
     const [target] = useState(() => new THREE.Object3D())
     const variants = {
@@ -106,6 +112,7 @@ export default function LandingGL() {
     }
     useEffect(()=>{
         setLoaded(true)
+           
     },[])
     return (
         <>
@@ -138,7 +145,7 @@ export default function LandingGL() {
                     position={[-10, 0, -22]}
                     width={vpWidth}
                 >
-                    <FlexBox padding={0} alignContent='center' flexGrow={1} flexBasis={1} flexShrink={0} flexDirection='column'>
+                    <FlexBox padding={-1} alignContent='center' flexGrow={1} flexBasis={1} flexShrink={0} flexDirection='column'>
                         {/* <Text
                             fontSize={Math.min(20, Math.max(10, vpWidth / 4))}
                             maxWidth={vpWidth}
@@ -151,13 +158,17 @@ export default function LandingGL() {
                     </FlexBox>
                     <FlexBox padding={1} alignContent='center' flexGrow={1} flexBasis={1} flexShrink={0} flexDirection='column'>
                         <motion.group
-                            animate={loaded ? {x:0, scale:1} : {x:-10, scale:0}}
+                            animate={loaded && app==="firstSection" ? {x:0, scale:1} : app==="secondSection" ? {x:100, scale:1}:{x:10, scale:0}}
                         >
-                            <primitive object={target} position={[0, -15, 0]} />
-                            <VideoText width={vpWidth} position={[0, vpHeight / 2 - (vpWidth * -0.001), 0]} />
+                            <primitive object={target} position={[0, -15, 0]} dispose={null} />
+                            
+                            <VideoText width={vpWidth} position={[0, vpHeight / 2 - (vpWidth * 0.1 - 10) , 0]} />
                         </motion.group>
                     </FlexBox>
                 </Flex>
+                <motion.group >
+                        <Pill loaded={loaded} position={[0, vpHeight / 2 + 10, -40]}/>
+                        </motion.group>
                 <Ground />
             </Suspense>
             </MotionConfig>
