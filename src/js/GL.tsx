@@ -14,6 +14,8 @@ import {
   ScrollControls,
   useScroll,
   useAspect,
+  MeshReflectorMaterial,
+  useTexture,
 } from "@react-three/drei";
 import { easing } from "maath";
 import {
@@ -29,21 +31,13 @@ import Papa from "papaparse";
 import { useEffectOnce } from "./UseEffectOnce";
 import { imgs } from "@/pages/atoms";
 import Timeline from "./Timeline";
-
+import { useRouter } from 'next/router';
 import LandingGL from "./LandingGL";
 import { DepthOfField, EffectComposer } from "@react-three/postprocessing";
+import { MeshLambertMaterial } from "three";
 
-const Loader = () => {
-  const [animate, cycle] = useCycle({ opacity: 1 }, { opacity: 0 });
-  useEffect(() => {
-    cycle();
-  }, []);
-  return (
-    <motion.div animate={animate} className="loader__wrapper">
-      <div className="loader"></div>
-    </motion.div>
-  );
-};
+
+
 
 interface plane {
   props: planeProps;
@@ -63,16 +57,97 @@ let windowHalfX:any;
 let windowHalfY:any;
 
 export const GL = () => {
+  const router = useRouter()
+  const [loaded, setLoaded] = useState<any>(false)
+  const Loader = () => {
+    const [animate, cycle] = useCycle({ opacity: 1 }, { opacity: 0 });
+    useEffect(() => {
+      loaded === true && cycle();
+    }, []);
+    return (
+      <motion.div animate={animate} className="loader__wrapper">
+        <div className="loader"></div>
+      </motion.div>
+    );
+  };
 
+  const Camera = () => {
+    const {size} = useThree()
+    const [w,h] = useAspect(size.width, size.height)
+    const camera = useRef<any>(null!);
+    useEffect(()=>{
+      if(router.pathname === "/archive"){
+        camera.current.position.lerp(new THREE.Vector3(camera.current.position.x, camera.current.position.y, -20), 0.5)
+      } else {
+        camera.current.position.lerp(new THREE.Vector3(camera.current.position.x, camera.current.position.y, 0), 0.5)
+      }
+    },[router])
+    const { ...cameraProps } = {
+       position: new THREE.Vector3(0, w/6, 20),
+    };
+
+    useFrame((state) => {
+      camera.current.position.x +=
+        (mouseX - camera.current.position.x) * 0.05;
+      camera.current.position.y +=
+        (-mouseY - camera.current.position.y) * 0.05;
+    });
+
+    return (
+      <motion3d.mesh ref={camera}
+      position={[-20,0,0]}>
+        <PerspectiveCamera
+        
+        fov={75}
+          onPointerMove={handleMove}
+          makeDefault
+          {...cameraProps}
+        />
+      </motion3d.mesh>
+    );
+  };
+
+  const controls = useAnimationControls();
+  const controls2 = useAnimationControls();
       useEffect(() => {
         if (typeof window !== "undefined") {
           mouseX = 0;
           mouseY = 0;
           windowHalfX = window.innerWidth / 2;
           windowHalfY = window.innerHeight / 2;
+          setLoaded(true)
         }
         document.addEventListener("mousemove", handleMove)
       }, []);
+
+      function Ground() {
+        const nScale = new THREE.Vector2(205, 205)
+        const [normal, color, roughness, metalness, displacement] = useTexture(['/textures/Metal046B_1K_NormalDX.jpg', '/textures/Metal046B_1K_Color.jpg', '/textures/SurfaceImperfections003_1K_var1.jpg', '/textures/Metal046B_1K_Metalness.jpg', '/textures/Metal046B_1K_Displacement.jpg'])
+        return (
+            <mesh receiveShadow castShadow rotation={[-Math.PI / 2, 0, Math.PI / 2]} position={[0, -2, -50]}>
+                <planeGeometry args={[200, 200]} />
+                <MeshReflectorMaterial
+                    blur={[100, 400]}
+                    resolution={512}
+                    mirror={0.9}
+                    mixBlur={6}
+                    mixStrength={4.5}
+                    map={color}
+                    color="#999999"
+                    displacementMap={displacement}
+                    displacementBias={0.5}
+                    roughnessMap={roughness}
+                    roughness={1}
+                    metalnessMap={metalness}
+                    metalness={0.4}
+                    normalMap={normal}
+                    normalScale={nScale}>
+                </MeshReflectorMaterial>
+            </mesh>
+    
+        )
+    }
+
       return (
         <>
           <div id="canvasWrapper" className="canvas__wrapper" >
@@ -89,16 +164,14 @@ export const GL = () => {
                     colors={["#f47d65", "#b12496", "#31302b"]}
                     size={1024}
                   /> */}
-         
-                  {/* <Timeline/> */}
-                  <LandingGL/>
-                  <ambientLight color="#eeeeee" intensity={1} />
+                  <Timeline visible={loaded && router.pathname === "/archive" ? true : false}/>
+                   <LandingGL visible={loaded && router.pathname === "/" ? true : false}/> 
+            
   
-
-                  <Environment preset="night" />
-<EffectComposer>
-<DepthOfField focusDistance={0} focalLength={0.2} bokehScale={2} height={480} />
-</EffectComposer>
+                  <Ground />
+                  <ambientLight color="#eeeeee" intensity={1} />
+                  <Environment preset="night"/>
+                  
                 </Canvas>
               </MotionConfig>
             </Suspense>
@@ -114,37 +187,6 @@ export const GL = () => {
 
     
 
-    const Camera = () => {
-      const {size} = useThree()
-      const [w,h] = useAspect(size.width, size.height)
-      const camera = useRef<any>(null!);
-      const vec = new THREE.Vector3(0,0,0)
-      useEffect(()=>{
-
-      },[size])
-      const { ...cameraProps } = {
-        position: new THREE.Vector3(0, w/6, 20),
-      };
-
-      useFrame((event) => {
-        camera.current.position.x +=
-          (mouseX - camera.current.position.x) * 0.05;
-        camera.current.position.y +=
-          (-mouseY - camera.current.position.y) * 0.05;
-      });
-
-      return (
-        <motion3d.mesh ref={camera}>
-          <PerspectiveCamera
-          
-          fov={75}
-            onPointerMove={handleMove}
-            makeDefault
-            {...cameraProps}
-          />
-        </motion3d.mesh>
-      );
-    };
 
 
  

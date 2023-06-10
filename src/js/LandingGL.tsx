@@ -5,41 +5,16 @@ import { Text, useTexture, MeshReflectorMaterial, SpotLight, RoundedBox, useAspe
 import { DepthOfField, EffectComposer } from '@react-three/postprocessing'
 import { Flex, Box as FlexBox } from '@react-three/flex'
 import {motion} from 'framer-motion-3d'
-import { MotionConfig } from 'framer-motion'
+import { MotionConfig, useAnimationControls } from 'framer-motion'
 import Pill from './Pill'
 import { loc } from '@/pages/atoms'
 import { useAtom } from 'jotai'
+import { useRouter } from 'next/router'
 
 
 
 
-function Ground() {
-    const nScale = new THREE.Vector2(205, 205)
-    const [normal, color, roughness, metalness, displacement] = useTexture(['/textures/Metal046B_1K_NormalDX.jpg', '/textures/Metal046B_1K_Color.jpg', '/textures/SurfaceImperfections003_1K_var1.jpg', '/textures/Metal046B_1K_Metalness.jpg', '/textures/Metal046B_1K_Displacement.jpg'])
-    return (
-        <mesh receiveShadow castShadow rotation={[-Math.PI / 2, 0, Math.PI / 2]} position={[0, -2, -50]}>
-            <planeGeometry args={[200, 200]} />
-            <MeshReflectorMaterial
-                blur={[400, 100]}
-                resolution={512}
-                mirror={0.6}
-                mixBlur={6}
-                mixStrength={4.5}
-                map={color}
-                color="#999999"
-                displacementMap={displacement}
-                displacementBias={0.5}
-                roughnessMap={roughness}
-                roughness={1}
-                metalnessMap={metalness}
-                metalness={0.4}
-                normalMap={normal}
-                normalScale={nScale}>
-            </MeshReflectorMaterial>
-        </mesh>
 
-    )
-}
 
 function VideoText({ position, width }: any) {
 
@@ -71,34 +46,17 @@ function VideoText({ position, width }: any) {
     )
 }
 
-function Box(props: any) {
-    // This reference will give us direct access to the mesh
-    const mesh = useRef<any>(!null)
-    // Set up state for the hovered and active state
-    const [hovered, setHover] = useState(false)
-    const [active, setActive] = useState(false)
-    // Subscribe this component to the render-loop, rotate the mesh every frame
-    useFrame((state, delta) => (mesh.current.rotation.x += delta))
-    // Return view, these are regular three.js elements expressed in JSX
-    return (
-        <mesh
-            {...props}
-            ref={mesh}
-            scale={active ? 1.5 : 1}
-            onClick={(event) => setActive(!active)}
-            onPointerOver={(event) => setHover(true)}
-            onPointerOut={(event) => setHover(false)}>
-            <boxGeometry args={[10, 10, 10]} />
-            <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
-        </mesh>
-    )
+interface LandingLGProps{
+    visible: Boolean
 }
 
 
-export default function LandingGL() {
+export default function LandingGL({visible}:LandingLGProps) {
     const [loaded, setLoaded] = useState(false);
+    const router = useRouter();
+    const controls = useAnimationControls()
     const [app, setApp] = useAtom(loc)
-
+    const [see, setSeen] = useState(false)
     const light = useRef<any>(!null)
     const text = useRef<any>(!null)
     const vec = new THREE.Vector3()
@@ -112,11 +70,16 @@ export default function LandingGL() {
     }
     useEffect(()=>{
         setLoaded(true)
-           
-    },[])
+        setSeen(!see)
+        if(router.pathname === "/"){
+            controls.start({x:0, scale:1, opacity:1})
+        } else {
+            controls.start({x:50, scale:0, opacity:0}).then(()=>{setSeen(false)})
+        }
+    },[router.pathname])
     return (
         <>
-<MotionConfig transition={{type:"spring"}}>
+<MotionConfig transition={{type:"spring", stiffness:100, damping: 50, bounce: 0.25, mass:0.5,}}>
             <Suspense fallback={null}>
                 <SpotLight
                     ref={light}
@@ -146,30 +109,28 @@ export default function LandingGL() {
                     width={vpWidth}
                 >
                     <FlexBox padding={-1} alignContent='center' flexGrow={1} flexBasis={1} flexShrink={0} flexDirection='column'>
-                        {/* <Text
-                            fontSize={Math.min(20, Math.max(10, vpWidth / 4))}
-                            maxWidth={vpWidth}
-                            position={[0, vpHeight / 2, 0]}>
-                            RULE ZERO
-                            <meshBasicMaterial opacity={0} toneMapped={false}>
-                                
-                            </meshBasicMaterial>
-                        </Text> */}
+
                     </FlexBox>
                     <FlexBox padding={1} alignContent='center' flexGrow={1} flexBasis={1} flexShrink={0} flexDirection='column'>
+                        {see &&
                         <motion.group
-                            animate={loaded && app==="firstSection" ? {x:0, scale:1} : app==="secondSection" ? {x:100, scale:1}:{x:10, scale:0}}
+                        initial={{x:20}}
+                            animate={visible ? loaded && app==="firstSection" ? {x:0, scale:1} : app==="secondSection" ? {x:100, scale:1}:{x:10, scale:1}:{x:100}}
                         >
                             <primitive object={target} position={[0, -15, 0]} dispose={null} />
                             
                             <VideoText width={vpWidth} position={[0, vpHeight / 2 - (vpWidth * 0.1 - 10) , 0]} />
-                        </motion.group>
+                        </motion.group>}
                     </FlexBox>
                 </Flex>
-                <motion.group >
+                {see &&
+                <motion.group
+                        initial={{x:20}}
+                        animate={controls}
+                        >
                         <Pill loaded={loaded} position={[0, vpHeight / 2 + 10, -40]}/>
-                        </motion.group>
-                <Ground />
+                        </motion.group>}
+          
             </Suspense>
             </MotionConfig>
         </>

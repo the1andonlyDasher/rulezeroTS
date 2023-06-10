@@ -3,8 +3,7 @@ import Footer from './Footer';
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Metadata } from "next";
-import {Switch, Route} from "wouter"
-import { GL } from "@/js/GL";
+
 
 export const metadata: Metadata = {
   title: 'Home',
@@ -60,7 +59,7 @@ export default function Layout({ children }: any) {
   return (
     <>
 
-
+<Navbar />
           <AnimatePresence
         mode="wait"
         initial={true}
@@ -78,12 +77,12 @@ export default function Layout({ children }: any) {
           exit="exit"
           className="main"
         >
-          <Navbar />
+
           {children}
-          <Footer/>
+
           </motion.div>
       </AnimatePresence>
-
+      <Footer/>
 
 
     </>

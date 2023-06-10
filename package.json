@@ -38,8 +38,7 @@
     "three": "^0.148.0",
     "typescript": "5.0.4",
     "uuid-by-string": "^4.0.0",
-    "valtio": "^1.10.4",
-    "wouter": "^2.8.0"
+    "valtio": "^1.10.4"
   },
   "devDependencies": {
     "@types/papaparse": "^5.3.7"

@@ -7,6 +7,8 @@ import Navigation from "@/components/Navbar/Navigation";
 import MobileNav from "@/components/Navbar/MobileNav";
 import { NavItem as Mnav } from "@/components/Navbar/NavItemMobile";
 import NavbarToggle from "./NavbarToggle";
+import logo from "../../../public/images/maxresdefault.png"
+
 
 const Navbar = ({ logo, alt, children }:any) => {
   const navbarMain = useRef<any>(!null);
@@ -80,7 +82,7 @@ const Navbar = ({ logo, alt, children }:any) => {
           href="/"
           variants={image_variants} initial="hidden" animate="enter" exit="exit"
         >
-          {/* <Image  src={logo} alt={alt} /> */}
+          <Image  src={logo} width={50} height={50} alt={alt} />
         </motion.a>
         <Navigation>
             {navitems.map((i, index) => (
