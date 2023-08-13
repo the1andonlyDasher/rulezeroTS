@@ -1,5 +1,7 @@
-import React, { useRef, forwardRef, ReactNode, ReactComponentElement, ReactElement } from "react";
-import { motion } from "framer-motion";
+import React, { useRef, forwardRef, ReactNode, ReactComponentElement, ReactElement, useEffect, useState } from "react";
+import { motion, useAnimationControls, useInView } from "framer-motion";
+import { useAtom } from "jotai";
+import { ready } from "@/pages/atoms";
 
 const section_variants = {
   initial: {
@@ -14,13 +16,15 @@ const section_variants = {
 };
 
 const header_variants = {
-  initial: { opacity: 0 },
+  initial: { opacity: 0, x:100 },
   enter: {
     opacity: 1,
-    transition: { ease:"easeIn", duration: 0.5, delay: 0.5 },
+    x: 0,
+    transition: { ease:"easeIn", duration: 0.5, delay: 1 },
   },
   exit: {
     opacity: 0,
+    x:-100,
     transition: { ease:"easeOut", duration: 0.5 },
   },
 };
@@ -45,7 +49,7 @@ function Section({sectionName,ref, id, text, header, children}:sectionProps) {
         data-section-name={sectionName}
         initial="initial"
         whileInView="enter"
-        viewport={{ margin: "100px 0px 100px 0px" }}
+        viewport={{ margin: "100px 0px 100px 0px", amount:"all" }}
         exit="exit"
         ref={ref}
         id={id}

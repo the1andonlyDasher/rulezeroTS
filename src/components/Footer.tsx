@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const Footer = () => {
   useEffect(()=>{
-    console.log("footer mounted")
+    // console.log("footer mounted")
   })
   return (
     <>

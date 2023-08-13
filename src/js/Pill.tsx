@@ -5,7 +5,6 @@ import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } fr
 import { Vector3, useFrame, extend, useThree } from '@react-three/fiber'
 import { Instance, SpotLight, Text3D, useAspect, useGLTF } from '@react-three/drei'
 import { motion } from 'framer-motion-3d'
-
 import { Physics, PlaneProps, Triplet, useBox, usePlane } from '@react-three/cannon'
 import { Color, Mesh } from 'three'
 import { geometry } from 'maath';
@@ -13,19 +12,19 @@ import { loc } from '@/pages/atoms';
 import { useAtom } from 'jotai';
 import { Box, Flex } from '@react-three/flex';
 import { useRouter } from 'next/router';
-import { useAnimationControls } from 'framer-motion';
+import { useAnimation, useAnimationControls } from 'framer-motion';
 
 type pillProps = {
     position: Vector3
-    loaded: Boolean
+    loaded?: Boolean
 }
 
-export default function Pill({ position, loaded }: pillProps) {
+export default function Pill({ position }: pillProps) {
     const [app, setApp] = useAtom(loc)
     const router = useRouter()
-    const controls  = useAnimationControls()
+    const controls = useAnimation()
     type InstancedGeometryProps = {
-        // colors: Float32Array
+
         number: number
         text: any
         size: number
@@ -44,18 +43,14 @@ export default function Pill({ position, loaded }: pillProps) {
             loader.load("/fonts/Prompt Black_Italic.json", function (response) {
                 setFont(response)
             })
-            if(router.pathname ==="/"){
-                controls.start({})
-            } else {
-                controls.start({})
-            }
+
         }, [])
 
         const args: Triplet = [size, size, size]
         const [ref, { at }] = useBox(
             () => ({
                 args,
-                mass: 0.025,
+                mass: 0.25,
                 position: [Math.random() + 2, Math.random() + 40, Math.random() - 0.5],
             }),
             useRef<THREE.InstancedMesh>(null),
@@ -73,7 +68,7 @@ export default function Pill({ position, loaded }: pillProps) {
         const [ref] = usePlane(() => ({ ...props }), useRef<Mesh>(null))
         return (
             <mesh ref={ref} receiveShadow>
-                <planeGeometry args={[20, 20]} />
+                <planeGeometry args={[40, 40]} />
                 <shadowMaterial color="#171717" />
             </mesh>
         )
@@ -89,7 +84,6 @@ export default function Pill({ position, loaded }: pillProps) {
     const [target] = useState(() => new THREE.Object3D())
     const { nodes, materials }: any = useGLTF("/models/RPill.glb")
     const { size } = useThree()
-    size.updateStyle = true;
     const [vpWidth, vpHeight] = useAspect(size.width, size.height);
     const InstancedGeometry = Boxes
 
@@ -101,46 +95,43 @@ export default function Pill({ position, loaded }: pillProps) {
             flexDirection="row"
             margin="auto"
             height={vpHeight}
-
             width={vpWidth}
         >
             <Box padding={-1} alignContent='center' flexGrow={1} flexBasis={1} flexShrink={0} flexDirection='column'>
-               <motion.group ref={group} scale={10} position={position} rotation={[0.45, 0, 0.45]} 
-                initial={{ x:0, scale: 0 }} 
-                animate={loaded && app === "firstSection" ? 
-                { x: 0, scale: 10, transition: { delay: 1 } } : 
-                app === "secondSection" ? 
-                { x: 0, z: -20, scale: 10 } : 
-                { x: 100, scale: 0 }}>
-                    <motion.mesh initial={{x:0, y:0, rotateZ:0}} animate={app == "secondSection" ? { x: -vpWidth / 20, y: vpHeight / 30, rotateZ: 0.45 } : {x:0, y:0, rotateZ:0}} receiveShadow castShadow ref={top_half} geometry={nodes.cap_top.geometry} material={materials.red_mat} />
-                    <motion.mesh initial={{x:0, y:0, rotateZ:0}} animate={app == "secondSection" ? { x: vpWidth / 20, y: -vpHeight / 20, rotateZ: 1.95 } : {x:0, y:0, rotateZ:0}} receiveShadow castShadow ref={bottom_half} geometry={nodes.cap_bottom.geometry} material={materials.white_mat} />
+                <motion.group ref={group} scale={10} position={position} rotation={[0.45, 0, 0.45]}
+                    animate={ app === "firstSection" ?
+                        { x: 0, scale: 10, transition: { delay: 1 } } :
+                        app === "secondSection" ?
+                            { x: 0, z: -20, scale: 10 } :
+                            { x: 100, scale: 0 }}>
+                    <motion.mesh initial={{scale:0}} exit={{scale:0}}  animate={app == "secondSection" ? { x: -vpWidth / 20, y: vpHeight / 30, rotateZ: 0.45, scale:1 } : { x: 0, y: 0, rotateZ: 0, scale:1  }} receiveShadow  ref={top_half} geometry={nodes.cap_top.geometry} material={materials.red_mat} />
+                    <motion.mesh initial={{scale:0}} exit={{scale:0}}  animate={app == "secondSection" ? { x: vpWidth / 20, y: -vpHeight / 20, rotateZ: 1.95, scale:1 } : { x: 0, y: 0, rotateZ: 0, scale:1  }} receiveShadow ref={bottom_half} geometry={nodes.cap_bottom.geometry} material={materials.white_mat} />
                 </motion.group>
             </Box>
         </Flex>
-        <motion.group initial={{y:-10}} animate={{y:0}} exit={{y:-10}}>
-        <SpotLight
-            castShadow
-            penumbra={0.2}
-            radiusTop={0.4}
-            radiusBottom={60}
-            distance={100}
-            angle={0.6}
-            color={"red"}
-            attenuation={30}
-            anglePower={4}
-            intensity={app === "secondSection" ? 30 : 0}
-            opacity={app === "secondSection" ? 0.2 : 0}
-            target={target}
-            position={[0, 35, 0]}
-        />
-        <primitive object={target} position={[0, -15, 0]} dispose={null} />
-        <Physics isPaused={app == "secondSection" ? false : true} gravity={[0, -20, 0]} broadphase="Naive">
-            <Plane rotation={[-Math.PI / 2, 0, 0]}/>
-            {text.map((item: any) =>
-                <InstancedGeometry key={item} {...{ number, size: textSize, text: item }} />
-            )}
+        <motion.group initial={{ y: -10 }} animate={{ y: 0 }} exit={{ y: -10 }}>
+            <SpotLight
+                castShadow
+                penumbra={0.2}
+                radiusTop={0.4}
+                radiusBottom={60}
+                distance={100}
+                angle={0.6}
+                color={"red"}
+                attenuation={30}
+                anglePower={4}
+                intensity={app === "secondSection" ? 30 : 0}
+                opacity={app === "secondSection" ? 0.2 : 0}
+                target={target}
+                position={[0, 35, 0]} shadowCameraFov={undefined} shadowCameraLeft={undefined} shadowCameraRight={undefined} shadowCameraTop={undefined} shadowCameraBottom={undefined} shadowCameraNear={undefined} shadowCameraFar={undefined} shadowBias={undefined} shadowMapWidth={undefined} shadowMapHeight={undefined}            />
+            <primitive object={target} position={[0, -15, 0]} dispose={null} />
+            <Physics isPaused={app == "secondSection" && router.pathname === "/" ? false : true} gravity={[0, -20, 0]} broadphase="Naive">
+                <Plane rotation={[-Math.PI / 2, 0, 0]} position={[0,5,0]}/>
+                {text.map((item: any) =>
+                    <InstancedGeometry key={item} {...{ number, size: textSize, text: item }} />
+                )}
 
-        </Physics>
+            </Physics>
         </motion.group>
     </>)
 }

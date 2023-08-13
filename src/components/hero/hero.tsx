@@ -1,6 +1,6 @@
-import React from "react";
-import { motion } from "framer-motion";
-import Section from "../Section";
+import React, { useEffect, useRef } from "react";
+import { motion, useAnimationControls } from "framer-motion";
+import { useInView } from "framer-motion";
 import Link from "next/link";
 
 const variants = {
@@ -31,33 +31,39 @@ const variants = {
 };
 
 const Hero = ({headerPartOne, headerPartTwo, subHeader, text, buttonOne, buttonTwo}:any) => {
+const ref = useRef<any>(!null);
+const isInView = useInView(ref, {margin:"100px", amount:"some", once:true})
+const controls = useAnimationControls()  
+useEffect(()=>{
+  controls.start("animate")
+},[isInView])
   return (
     <>
-        <div className="lr__wrapper">
+        <motion.div className="lr__wrapper">
           <motion.div
             className="left-wrapper"
             variants={variants}
             initial="initial"
-            animate="animate"
+            animate={controls}
             exit="exit"
           >
-            <h1>
+            <motion.h1 className="sectionHeader" variants={{initial:{x:100}, animate:{x:0}, exit:{x:-100}}}>
             {headerPartOne}
               <br /> <strong>{headerPartTwo}</strong>
-            </h1>
-            <h3>{subHeader}</h3>
-            <p>
+            </motion.h1>
+            <motion.h3>{subHeader}</motion.h3>
+            <motion.p>
               {text}
-            </p>
-            <div className="button__wrapper no-flex">
+            </motion.p>
+            <motion.div className="button__wrapper no-flex">
               <Link href="/archive"><button type="button" className="btn__primary">{buttonOne}</button></Link>
               
                {buttonTwo ?  <a href="#contact"><button type="button" className="btn__outline">{buttonTwo}</button></a> : null}
               
-            </div>
+            </motion.div>
           </motion.div>
-          <div className="right-wrapper"></div>
-        </div>
+          <motion.div className="right-wrapper"></motion.div>
+        </motion.div>
     </>
   );
 };

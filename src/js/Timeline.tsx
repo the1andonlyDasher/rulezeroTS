@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { useEffect, useRef, useState, Suspense } from "react";
-import { Canvas, Vector3, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, Vector3, useFrame, useLoader, useThree } from "@react-three/fiber";
 import {
   useCursor,
   QuadraticBezierLine,
@@ -10,19 +10,26 @@ import {
   useScroll,
   ScrollControls,
   useAspect,
+  Html,
+  useTexture,
+  Merged,
 } from "@react-three/drei";
 import { easing } from "maath";
 import {
   MotionConfig,
   motion,
+  useAnimation,
   useAnimationControls,
   useCycle,
 } from "framer-motion";
 import { motion as motion3d } from "framer-motion-3d";
 import { proxy } from "valtio";
 import { atom, useAtom } from "jotai";
-import { imgs } from "@/pages/atoms";
+import { curObject, imgs, loadManager } from "@/pages/atoms";
 import Papa from "papaparse";
+import { useRouter } from "next/router";
+import { BufferGeometry } from "three";
+
 
 type planeProps = {
   position: Vector3 | { x: number, y: number, z: number };
@@ -35,16 +42,38 @@ type planeProps = {
 
 
 interface TLProps {
-  visible: Boolean
+  visible: boolean
 }
 
-const Timeline = ({visible}:TLProps) => {
+const Timeline = () => {
   const [fetching, fetch] = useState(true);
   const [array, setArray] = useState<any>([]);
   const [app, setApp] = useAtom<any>(imgs)
-  // const [currentLocation, setLocation] = useState(location)
+  const router = useRouter()
+  const [manager, setManager] = useAtom<any>(loadManager)
+  const [seen, See] = useState<any>(false)
+  const [textures] = useState<any>([]);
+  const controls = useAnimationControls();
+  const [disposed, setDisposed] = useState(false)
+  const [isInPage, setIsInPage] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(()=>{
+    setDisposed(false)
+    if(router.pathname === "/archive"){
+      setTimeout(()=>{
+        setIsInPage(true)
+      }, 1000)
+    } else {
+      setIsInPage(false)
+    }
+  }, [router])
+
+  function onComplete(){
+    setDisposed(!isInPage)
+  }
+
   useEffect(() => {
-    if(visible === true) {
     if (typeof window !== "undefined" && fetching) {
       var r: any,
         rx: any =
@@ -55,7 +84,7 @@ const Timeline = ({visible}:TLProps) => {
         {
           skipEmptyLines: "greedy",
           preview: 0,
-          worker: true,
+          worker: false,
           download: true,
           header: true,
           complete: (results) => {
@@ -87,26 +116,31 @@ const Timeline = ({visible}:TLProps) => {
                     date: d
                   });
                 }
-                
+
                 setArray(app)
+                See(true)
               }
             });
-            setTimeout(()=>{fetch(false)}, 5000)
-            
+            fetch(false)
+            app.forEach((item: any) => {
+              const texture: any = new THREE.TextureLoader(manager).load(item.url)
+              texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+              textures.push(texture)
+            })
+
           },
         }
       );
     }
-  }
-  }, [visible]);
+  }, []);
+
+
   const App = ({ images }: { images: any }) => {
-    const {size} = useThree();
-    const [w,h]  = useAspect(size.width, size.height)
+    const { size } = useThree();
+    const [w, h] = useAspect(size.width, size.height)
     const [app, setApp] = useAtom(imgs)
+    const click = useRef<any>(false)
     const unit = proxy({ value: 15 });
-
-
-
 
     const Frames = ({ images }: { images: any }) => {
       var p = new THREE.Vector3();
@@ -115,15 +149,15 @@ const Timeline = ({visible}:TLProps) => {
       const clicked = useRef<any>(null!);
       const scroll = useScroll();
 
-
-
-
       useEffect(() => {
+        // console.log(clicked)
         if (clicked.current) {
           clicked.current.updateWorldMatrix(true, true);
           clicked.current.getWorldQuaternion(q);
-        } else {
-          p.set(0, 10, 10.5);
+
+        }
+        else {
+          p.set(0, 10, 20);
           q.identity();
         }
       }, [clicked]);
@@ -137,27 +171,20 @@ const Timeline = ({visible}:TLProps) => {
       return (
         <group
           ref={ref}
-          onPointerEnter={(e) => {
-            ref.current.active = true;
+          onPointerEnter={(_e) => {
           }}
-          onPointerLeave={(e) => {
-            ref.current.active = false;
+          onPointerLeave={(_e) => {
           }}
-          onClick={(e) => (
+          onClick={(e) => {
             e.stopPropagation(),
-            // setLocation(
-            //   clicked.current === e.object ? "/" : "/item/" + e.object.name
-            // )
-            e.object.localToWorld(p.set(0, 0, 20)),
-            clicked.current === e.object
-              ? (ref.current.popUp = false)
-              : (ref.current.popUp = true)
-            // (object.current = e.object.name),
-            //   console.log(e.object.name, object.current)
-          )}
-          onPointerMissed={() =>
-            //  setLocation("/")
-            p.set(0, 10, 10.5)
+            click.current = true
+            e.object.localToWorld(p.set(0, 0, 10 + (5 / w * h)))
+          }}
+          onPointerMissed={() => {
+            p.set(0, 10, 0.5)
+            click.current = false
+
+          }
           }
         >
           <Line
@@ -171,28 +198,29 @@ const Timeline = ({visible}:TLProps) => {
             dashed={false}
           />
           {images.map((props: any, index: number) => {
-              const posX = props.position[0] > 0 ? Math.min((props.position[0] / 2) * (w/10), props.position[0]) : Math.max((props.position[0] / 2) * (w/10), props.position[0]);
-              return(
-                <Frame
-              name={"asd"}
-              text={props.text}
-              isActive={props.isActive}
-              popUp={props.popUp}
-              factor={Math.random() > 0.5 ? -1 : 1}
-              position={[posX, (props.position[1] / 2) * (h/10), props.position[2]]}
-              key={props.url + index}
-              url={props.url}
-              date={props.date}
-              start={[posX / 6, 0, -15 * index]}
-              end={[posX, props.position[1] - 4, -15 * index]}
-              points={[
-                [0, 0, -15 * index],
-                [posX, props.position[1] - 4, -15 * index],
-              ]}
-              {...props}
-            />
-              )
-            }
+            const posX = props.position[0] > 0 ? Math.min((props.position[0] / 2) * (w / 10), props.position[0]) : Math.max((props.position[0] / 2) * (w / 10), props.position[0]);
+            return (
+              <Frame
+                name={"asd"}
+                text={props.text}
+                isActive={props.isActive}
+                texture={textures[index]}
+                popUp={props.popUp}
+                factor={Math.random() > 0.5 ? -1 : 1}
+                position={[posX, (props.position[1] / 2) * (h / 10), props.position[2]]}
+                key={props.url + index}
+                url={props.url}
+                date={props.date}
+                start={[posX / 6, 0, -15 * index]}
+                end={[posX, props.position[1] - 4, -15 * index]}
+                points={[
+                  [0, 0, -15 * index],
+                  [posX, props.position[1] - 4, -15 * index],
+                ]}
+                {...props}
+              />
+            )
+          }
           )}
         </group>
       );
@@ -204,34 +232,35 @@ const Timeline = ({visible}:TLProps) => {
       const image = useRef<any>(null!);
       const text = useRef<any>(null!);
       const ref = useRef<any>(null!);
+      const group = useRef<any>(null!);
       const [hovering, hover] = useState(false);
       useCursor(hovering)
 
-      useFrame((state, dt) => {
-        easing.damp3(
-          image.current.scale,
-          [0.95 * (hovering ? 0.9 : 1), 0.925 * (hovering ? 0.875 : 1), 1],
-          0.1,
-          dt
-        );
-        ref.current.position.y =
-          props.position[1] + Math.sin(dt) * 0.3 * props.factor;
+       useFrame((state, dt) => {
+        ref.current.position.z <= -ref.current.parent.parent.position.z - 50 ? ref.current.visible = false : ref.current.visible = true
+       })
+      // useFrame((state, dt) => {
+      // ref.current.position.y =
+      //   props.position[1] + Math.sin(dt) * 0.3 * props.factor;
+      // ref.current.rotation.y = Math.sin(dt * 0.8) * 0.05 * props.factor;
+      // ref.current.rotation.x = Math.sin(dt * 1.2) * 0.05 * props.factor;
+      // ref.current.position.z <= -ref.current.parent.parent.position.z - 50
+      //   ? controls.start("exit")
+      //   : controls.start("visible");
+      // ref.current.position.z <= -ref.current.parent.parent.position.z - 50
+      //   ? controls_mesh.start("exit")
+      //   : controls_mesh.start("visible");
+      // });
+
+      useEffect(() => {
         text.current.material.opacity = hovering ? 1 : 0;
-        ref.current.rotation.y = Math.sin(dt * 0.8) * 0.05 * props.factor;
-        ref.current.rotation.x = Math.sin(dt * 1.2) * 0.05 * props.factor;
-        ref.current.position.z <= -ref.current.parent.parent.position.z - 50
-          ? controls.start("exit")
-          : controls.start("visible");
-        ref.current.position.z <= -ref.current.parent.parent.position.z - 50
-          ? controls_mesh.start("exit")
-          : controls_mesh.start("visible");
-      });
+      }, [hovering])
 
       const controls_mesh = useAnimationControls();
 
       const variants_mesh = {
         hidden: { scaleX: 0, scaleY: 0 },
-        visible: { scaleX: Math.min(11 * (w/10), 11), scaleY: Math.min(6 * (w/10), 6), transition: { type: "spring", stiffness: 500, damping: 30 } },
+        visible: { scaleX: Math.min(6 * (w / 10), 11), scaleY: Math.min(6 * (w / 10), 6), transition: { type: "spring", stiffness: 500, damping: 30 } },
         exit: { scaleX: 0, scaleY: 0, transition: { type: "spring", stiffness: 500, damping: 30 } },
       };
 
@@ -249,40 +278,34 @@ const Timeline = ({visible}:TLProps) => {
         exit: { opacity: 0 },
       };
 
-      const img_plane = new Image();
-      img_plane.crossOrigin = "";
-      img_plane.src = props.url;
-      const texture_plane = new THREE.Texture(img_plane);
-      texture_plane.wrapS = texture_plane.wrapT = THREE.RepeatWrapping;
-      img_plane.onload = () => {
-        texture_plane.needsUpdate = true;
-      };
-      const posX = props.position[0] > 0 ? Math.min((props.position[0] / 2) * (w/10), props.position[0]) : Math.max((props.position[0] / 2) * (w/10), props.position[0]);
+
+
+      const posX = props.position[0] > 0 ? Math.min((props.position[0] / 2) * (w / 10), props.position[0]) : Math.max((props.position[0] / 2) * (w / 10), props.position[0]);
 
       return (
-        <motion3d.group>
-          <motion3d.mesh
-            ref={ref}
-            variants={variants_mesh}
-            initial="hidden"
-            animate={controls_mesh}
+
+        <motion3d.group ref={group} >
+         <instancedMesh ref={ref} geometry={new THREE.PlaneGeometry} args={[undefined, undefined, 1]} 
+            scale={[Math.min(11 * (w / 10), 11), Math.min(6 * (w / 10), 6), 1]}
+            // variants={variants_mesh}
+            // initial="hidden"
+            // animate={controls_mesh}
             // exit={controls_mesh}
-            // isActive ={props.isActive}
+            //  isActive = {props.isActive}
             // popUp={props.popUp}
-            // onPointerOver={(e) => (e.stopPropagation(), hover(true))}
-            // onPointerOut={() => hover(false)}
+            onPointerOver={(e) => (e.stopPropagation(), hover(true))}
+            onPointerOut={() => hover(false)}
             position={[posX, props.position[1], props.position[2]]}
           >
-            <planeGeometry />
-            <motion3d.meshStandardMaterial
+            
+            <motion3d.meshBasicMaterial
               variants={variants}
               initial="hidden"
+              visible={!disposed}
               animate={controls}
               // exit={controls}
               transition={{ type: "tween", ease: "easeOut", duration: 0.25 }}
               color="#ffffff"
-              metalness={0}
-              roughness={0}
             // envMapIntensity={2}
             />
 
@@ -293,18 +316,10 @@ const Timeline = ({visible}:TLProps) => {
               scale={[0.95, 0.95, 0.95]}
             >
               <planeGeometry />
-              <motion3d.meshBasicMaterial map={texture_plane} />
+              <motion3d.meshBasicMaterial visible={!disposed} map={props.texture} />
             </motion3d.mesh>
-          </motion3d.mesh>
-          {/* <Text
-      maxWidth={0.1}
-      anchorX="left"
-      anchorY="top"
-      position={[0.55, GOLDENRATIO, 0]}
-      fontSize={0.025}
-    >
-      {title.split("-").join(" ")}
-    </Text> */}
+
+          </instancedMesh>
           <Text
             ref={text}
             maxWidth={10}
@@ -319,7 +334,7 @@ const Timeline = ({visible}:TLProps) => {
             anchorX="center"
             anchorY="middle"
           >
-            <meshBasicMaterial color={"white"} />
+            <meshBasicMaterial color={"white"} visible={!disposed}/>
             {props.title.split("-").join(" ")}
           </Text>
           <Text
@@ -335,7 +350,7 @@ const Timeline = ({visible}:TLProps) => {
             anchorX="center"
             anchorY="middle"
           >
-            <meshBasicMaterial color={"white"} />
+            <meshBasicMaterial color={"white"} visible={!disposed}/>
             {props.date.split("-").join(" ")}
           </Text>
           <QuadraticBezierLine
@@ -346,6 +361,7 @@ const Timeline = ({visible}:TLProps) => {
             needsUpdate={true}
             lineWidth={1}
             dashScale={2}
+            visible={!disposed}
             dashed
             fog
           ></QuadraticBezierLine>
@@ -358,16 +374,28 @@ const Timeline = ({visible}:TLProps) => {
 
     return (
       <>
-        <ScrollControls distance={0.1} pages={pageCount} damping={.5}>
+        <ScrollControls enabled={!click.current} distance={0.1} pages={pageCount} damping={.5}>
           <Frames images={app} />
         </ScrollControls>
       </>
     )
   }
 
+  useEffect(()=>{
+    setMounted(isInPage)
+    if(!isInPage){
+      controls.start({y:-100}).then(()=>setMounted(false))
+    } else {
+      controls.start({y:0, transition:{delay:1}})
+    }
+  }, [isInPage])
+
   return (<>
-  <Suspense fallback={null}>
-    {array && fetching === false && visible && <App images={array} />}
+
+    <Suspense fallback={<Html>Loading timeline...</Html>}>
+ <motion3d.group visible={!disposed} animate={controls} onAnimationComplete={onComplete}>
+        {mounted && <App images={array} />}
+        </motion3d.group>
     </Suspense>
   </>)
 }

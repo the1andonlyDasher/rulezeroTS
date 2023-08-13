@@ -1,8 +1,8 @@
 import Navbar from "./Navbar/navbar"
-import Footer from './Footer';
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Metadata } from "next";
+import { useRef } from "react";
 
 
 export const metadata: Metadata = {
@@ -13,11 +13,13 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: any) {
   const router = useRouter()
+  const ref = useRef<HTMLDivElement>(null)
+
   const variants = {
     initial: { opacity: 0 },
     enter: {
       opacity: 1,
-      transition: { staggerChildren: 0.5, delayChildren: 2, duration: 0.5 },
+      transition: { staggerChildren: 0.25, delayChildren: 0.25, duration: 0.5 },
     },
     exit: {
       opacity: 0,
@@ -25,7 +27,7 @@ export default function Layout({ children }: any) {
         staggerChildren: 0.5,
         staggerDirection: -1,
         duration: 0.5,
-        delay: 2,
+        delay: 0.25,
       },
     },
   };
@@ -47,15 +49,17 @@ export default function Layout({ children }: any) {
             block: "start",
             inline: "nearest",
           });
-          console.log("scrollToHash");
+          // console.log("scrollToHash");
         }
       }
       // else {
       //   window.scrollTo(0,0)
-      //   console.log("scrollTop")
+      //   // console.log("scrollTop")
       // }
     }
   };
+
+
   return (
     <>
 
@@ -70,6 +74,7 @@ export default function Layout({ children }: any) {
         }>
 
         <motion.div
+          ref={ref}
           key={router.route}
           variants={variants}
           initial="initial"
@@ -81,8 +86,9 @@ export default function Layout({ children }: any) {
           {children}
 
           </motion.div>
+
       </AnimatePresence>
-      <Footer/>
+
 
 
     </>

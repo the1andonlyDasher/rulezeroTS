@@ -154,8 +154,8 @@ form input:active {
 
 form input:focus-visible,
 textarea:focus-visible {
-  border: 1px solid var(--clr-contrast-200);
-  background-color: var(--clr-contrast-700);
+  border: 1px solid var(--clr-contrast-700);
+  background-color: var(--clr-contrast-200);
 }
 
 form .btn-group {
@@ -173,6 +173,9 @@ form button {
   border-radius: 2px;
   width: 100%;
   max-width: 300px;
+  @include mq(medium){
+    margin-right:auto;
+  }
 }
 
 form .btn-group .btn-group:nth-child(n + 2) {
@@ -190,67 +193,12 @@ form .btn-group .btn-group:nth-child(n + 2) {
   color: var(--clr-signal-red-100);
 }
 
-//---
-
-.form-identifier-fp_form-54 {
-  padding: 0;
-  width: 100%;
-  margin: 0;
-  max-width: 100%;
-}
-
-#fp_form-54 {
-  display: none;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: center;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  max-width: unset;
-  background-color: rgba(2555, 2555, 2555, 0.2);
-  backdrop-filter: blur(7px);
-  padding: 2rem 0;
-  margin: 0;
-  @include mq(large) {
-    display: flex;
-  }
-}
-
-#fp_form-54 fieldset {
-  width: calc(50% - 8rem - 1px);
-  padding: 2rem 4rem;
-  margin: 0;
-}
-
-#fp_form-54 fieldset:last-of-type {
-  border-left: 1px solid #fff;
-}
-
-.form-element .input label {
-  display: block;
-}
-
-#fp_form-54textarea {
-  min-height: 158px;
-}
-
-#fp_form-54 .form-actions {
-  width: 100%;
-  text-align: left;
-  padding: 1rem 4rem 0rem 4rem;
-}
-
-#fp_form-54 .form-actions button {
-  width: 50%;
-}
-
 .thanks__message {
   @extend %flex-center;
   min-height: 300px;
   display: none;
   flex-direction: column;
-  text-align: center;
+  text-align: left;
   width: 100%;
   font-size: var(--fs-sub-big);
   font-family: "Fira Sans", sans-serif;
