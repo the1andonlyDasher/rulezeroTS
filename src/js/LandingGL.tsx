@@ -80,9 +80,7 @@ export default function LandingGL() {
       setDisposed(!isInPage)
     }
 
-    useEffect(() => {
-        controls.start(isInPage ? {x:0} : { x: 100 })
-    }, [isInPage])
+
 
     useEffect(()=>{
         controls.start(loaded && app === "firstSection" ? { x: 0 } : app === "secondSection" ? { x: 100 } : { x: 10 })
@@ -93,7 +91,7 @@ export default function LandingGL() {
                 <Suspense fallback={null}>
                     <motion.group
                                 visible={!disposed}
-                                animate={{x:isInPage ? 0 : 100}}
+                                animate={{x:isInPage ? 0 : 200}}
                                 onAnimationComplete={onComplete}
                         position={[0, 0, 0]}
                         // rotation={[0, Math.PI, 0]}

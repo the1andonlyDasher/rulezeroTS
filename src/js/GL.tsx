@@ -16,6 +16,7 @@ import {
   Loader,
   Lightformer,
   GradientTexture,
+  CameraControls,
 } from "@react-three/drei";
 import {
   MotionConfig,
@@ -31,6 +32,9 @@ import { useAtom } from "jotai";
 import { loadManager, totalLoad } from "@/pages/atoms";
 import Image from "next/image";
 import { Input } from "./Input";
+import { Gallery } from "./Gallery";
+import { useRoute } from "wouter";
+import { easing } from "maath";
 
 
 
@@ -62,7 +66,7 @@ export const GL = () => {
   const router = useRouter()
   const [manager, setManager] = useAtom(loadManager)
   const [load, setLoad] = useAtom(totalLoad)
-
+  const wrapper = useRef<any>(!null)
   const cover = useRef<any>(!null)
   const bar = useRef<any>()
   const cover_controls = useAnimation()
@@ -89,7 +93,7 @@ export const GL = () => {
   }, [load]);
 
   const Camera = () => {
-    const { size } = useThree()
+    const { size}:any = useThree()
     const [w, h] = useAspect(size.width, size.height)
     const camera = useRef<any>(null!);
     const { ...cameraProps } = {
@@ -97,12 +101,12 @@ export const GL = () => {
       focus: 1
     };
 
-
     useFrame((state, dt) => {
       camera.current.position.x +=
         (mouseX - camera.current.position.x) * 0.05;
       camera.current.position.y +=
         (-mouseY - camera.current.position.y) * 0.05;
+      
     });
 
     // const cameraControls = useAnimationControls()
@@ -127,7 +131,7 @@ export const GL = () => {
         <PerspectiveCamera
           fov={75}
           onPointerMove={handleMove}
-          makeDefault
+          makeDefault={router.pathname.includes("/about") ? false : true}
           {...cameraProps}
         />
       </motion3d.mesh>
@@ -165,41 +169,14 @@ export const GL = () => {
 
     )
   }
-  const fac = 10
 
-  // const pexel = (id:any) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`
-const images = [
-  // Front
-  // { position: [0, 0, 1.5 * fac], rotation: [0, 0, 0], url: "/images/robot.png" },
-  // Back
-  { position: [-0.8* fac, 0, -0.6* fac], rotation: [0, 0, 0], 
-    url: "/images/robot.png" },
-  { position: [0.8* fac, 0, -0.6* fac], rotation: [0, 0, 0],
-     url: "/images/robot.png" },
-  // Left
-  { position: [-1.75* fac, 0, 0.25* fac], rotation: [0, Math.PI / 2.5, 0], 
-  url: "/images/robot.png" },
-  { position: [-2.15* fac, 0, 1.5* fac], rotation: [0, Math.PI / 2.5, 0], 
-  url: "/images/robot.png" },
-  { position: [-3* fac, 0, 2.75* fac], rotation: [0, Math.PI / 2.5, 0], 
-  url: "/images/robot.png"  },
-  // Right
-  { position: [1.75* fac, 0, 0.25* fac], rotation: [0, -Math.PI / 2.5, 0], 
-  url: "/images/robot.png"  },
-  { position: [2.15* fac, 0, 1.5* fac], rotation: [0, -Math.PI / 2.5, 0], 
-  url: "/images/robot.png"  },
-  { position: [3* fac, 0, 2.75* fac], rotation: [0, -Math.PI / 2.5, 0], 
-  url: "/images/robot.png"  }
-]
 
 const handleMove = (event: any) => {
   mouseY = (event.clientY - windowHalfY) / 100;
-  if(router.pathname === "/contact" || "/"){
-    mouseX = (event.clientX - windowHalfX) / 100;
-  } else {
-    mouseX = -(event.clientX - windowHalfX) / 100;
-  }
+  mouseX = (event.clientX - windowHalfX) / 100;
 };
+
+
 
   return (
     <>
@@ -210,23 +187,21 @@ const handleMove = (event: any) => {
       </motion.div>
       </motion.div>
     </motion.div>
-      <div id="canvasWrapper" className="canvas__wrapper" >
-      <MotionConfig transition={{ type: "tween" }}>  
-      <Canvas dpr={[1, 1.5]} eventPrefix="client" gl={{antialias:false}}>
+      <div id="canvasWrapper" ref={wrapper} className="canvas__wrapper" >
+      <Canvas dpr={[1, 1.5]}  gl={{antialias:false}} eventPrefix="client">
             <fog attach="fog" args={["#1e1f26", 30, 70]} ></fog>
             <Preload all />
             <Camera />
              <color attach={"background"} args={["#1e1f26"]} ></color> 
             <Suspense fallback={<Html>Loading experience...</Html>}>
+            <Gallery />
               <Timeline   />
               <LandingGL  />
-              {/* <Gallery images={images}/> */}
               {/* <Ground /> */}
             </Suspense>
             <ambientLight color="#eeeeee" intensity={1} />
             <Environment preset="dawn" />
           </Canvas>
-        </MotionConfig>
       </div>
     </>
   );

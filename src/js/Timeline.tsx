@@ -183,7 +183,6 @@ const Timeline = () => {
           onPointerMissed={() => {
             p.set(0, 10, 0.5)
             click.current = false
-
           }
           }
         >
@@ -237,7 +236,7 @@ const Timeline = () => {
       useCursor(hovering)
 
        useFrame((state, dt) => {
-        ref.current.position.z <= -ref.current.parent.parent.position.z - 50 ? ref.current.visible = false : ref.current.visible = true
+        ref.current.position.z <= -ref.current.parent.parent.position.z - 100 ? ref.current.visible = false : ref.current.visible = true
        })
       // useFrame((state, dt) => {
       // ref.current.position.y =
