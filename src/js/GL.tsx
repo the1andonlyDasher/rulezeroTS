@@ -131,7 +131,7 @@ export const GL = () => {
         <PerspectiveCamera
           fov={75}
           onPointerMove={handleMove}
-          makeDefault={router.pathname.includes("/about") ? false : true}
+          makeDefault
           {...cameraProps}
         />
       </motion3d.mesh>

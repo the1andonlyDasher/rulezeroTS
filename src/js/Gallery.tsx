@@ -41,10 +41,6 @@ function Frames({ images }: { images: any }) {
   const [disposed, setDisposed] = useState(false)
   const [isInPage, setIsInPage] = useState(false)
   const [location, setLocation] = useLocation()
-  var p = new THREE.Vector3();
-  var q = new THREE.Quaternion();
-  const clicked = useRef<any>(!null)
-  const ref = useRef<any>(null!)
   const [, params] = useRoute('/about/item/:id')
   const { size, camera } = useThree();
   size.updateStyle
@@ -60,6 +56,11 @@ function Frames({ images }: { images: any }) {
     );
   
     const points = curve.getPoints( images.length - 1 );
+
+    var p = new THREE.Vector3();
+    var q = new THREE.Quaternion();
+    const clicked = useRef<any>(!null)
+    const ref = useRef<any>(null!)
 
   useEffect(() => {
     clicked.current = ref.current.getObjectByName(params?.id)
@@ -89,8 +90,9 @@ function Frames({ images }: { images: any }) {
     }
   }, [router])
 
-  function onComplete() {
+  function onComplete(event:Event) {
     setDisposed(!isInPage)
+    console.log(event)
   }
 
 
@@ -107,7 +109,7 @@ function Frames({ images }: { images: any }) {
         variants={variants}
         animate={isInPage ? "enter" : "leave"}
         transition={{ staggerChildren: 0.2, delayChildren: 0.5 }}
-        onAnimationComplete={(e: any) => (onComplete())}
+        onAnimationComplete={(e: any) => (onComplete(e))}
         ref={ref}
         position={[0, 0, -30]}>
         {images.map((props: any, index: number) =>
