@@ -466,7 +466,7 @@ body {
 }
 
 body {
-  font-family: "Catamaran", sans-serif;
+  font-family: "Meera Inimai", sans-serif;
 }
 
 #root {
@@ -534,7 +534,7 @@ h3 {
 
 h4 {
   font-size: var(--fs-sub-small);
-  font-family: "Fira Sans", sans-serif;
+  font-family: "Prompt", sans-serif;
   font-weight: 900;
   line-height: 1.2;
 }
@@ -544,12 +544,12 @@ h5 {
   color: var(--clr-contrast-200);
   font-size: var(--fs-text);
   font-weight: inherit;
-  font-family: "Courier Prime", monospace;
+  font-family: "Cairo", monospace;
 }
 
 p {
   font-size: var(--fs-text);
-  font-family: "Catamaran", sans-serif;
+  font-family: "Meera Inimai", sans-serif;
   width: 100%;
   line-height: 1.5;
   font-weight: inherit;
@@ -562,7 +562,7 @@ a {
 
 .btn__primary,
 .btn__outline {
-  font-family: "Fira Sans", sans-serif;
+  font-family: "Prompt", sans-serif;
   border-width: 2px;
   text-transform: uppercase;
   border-radius: 3px;

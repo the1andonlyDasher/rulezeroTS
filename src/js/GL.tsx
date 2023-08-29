@@ -33,7 +33,7 @@ import { loadManager, totalLoad } from "@/pages/atoms";
 import Image from "next/image";
 import { Input } from "./Input";
 import { Gallery } from "./Gallery";
-import { useRoute } from "wouter";
+import { useLocation, useRoute } from "wouter";
 import { easing } from "maath";
 
 
@@ -63,7 +63,7 @@ let windowHalfY: any;
 
 
 export const GL = () => {
-  const router = useRouter()
+  const location = useRouter()
   const [manager, setManager] = useAtom(loadManager)
   const [load, setLoad] = useAtom(totalLoad)
   const wrapper = useRef<any>(!null)
@@ -76,11 +76,17 @@ export const GL = () => {
       	console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.', load );
         bar.current.style.width = (itemsLoaded / itemsTotal * 100) + '%'
         if ((itemsLoaded / itemsTotal * 100) === 100){
-          setTimeout(()=>{ setLoad(true)},1000)
-          setLoad(true)
+
         }
       }
-    load === true && cover_controls.start({opacity:0, transition:{type:"tween", ease:"easeOut"}}).then(()=>{cover_controls.start({display:"none"})})
+     manager.onLoad = function(){
+      setTimeout(()=>{ setLoad(true)},1000)
+     } 
+
+     load === true && cover_controls.start({opacity:0, transition:{delay:.1,type:"tween", ease:"easeOut"}}).then(()=>{cover_controls.start({display:"none"})})
+
+
+
    
     if (typeof window !== "undefined") {
       mouseX = 0;
@@ -91,6 +97,8 @@ export const GL = () => {
     }
     document.addEventListener("mousemove", handleMove)
   }, [load]);
+
+
 
   const Camera = () => {
     const { size}:any = useThree()
@@ -172,8 +180,14 @@ export const GL = () => {
 
 
 const handleMove = (event: any) => {
-  mouseY = (event.clientY - windowHalfY) / 100;
-  mouseX = (event.clientX - windowHalfX) / 100;
+  if(location.pathname.includes("/about")){
+    mouseY = (event.clientY - windowHalfY) / 200;
+    mouseX = (event.clientX - windowHalfX) / 200;
+  }
+    else {
+      mouseY = (event.clientY - windowHalfY) / 100;
+      mouseX = (event.clientX - windowHalfX) / 100;
+    }
 };
 
 
