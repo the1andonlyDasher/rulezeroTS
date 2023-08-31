@@ -1,7 +1,7 @@
 import React, { useRef, forwardRef, ReactNode, ReactComponentElement, ReactElement, useEffect, useState } from "react";
 import { motion, useAnimationControls, useInView } from "framer-motion";
 import { useAtom } from "jotai";
-import { ready } from "@/pages/atoms";
+
 
 const section_variants = {
   initial: {

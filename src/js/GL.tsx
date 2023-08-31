@@ -208,7 +208,7 @@ const handleMove = (event: any) => {
             <Camera />
              <color attach={"background"} args={["#1e1f26"]} ></color> 
             <Suspense fallback={<Html>Loading experience...</Html>}>
-            <Gallery />
+            {/* <Gallery /> */}
               <Timeline   />
               <LandingGL  />
               {/* <Ground /> */}
