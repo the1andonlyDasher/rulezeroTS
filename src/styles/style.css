@@ -1544,6 +1544,7 @@ div[data-scroll-content] .frame:first-child header {
   flex-wrap: wrap;
   align-items: center;
   gap: 2rem;
+  margin: 2rem auto;
 }
 .cards .card {
   position: relative;
@@ -1569,6 +1570,13 @@ div[data-scroll-content] .frame:first-child header {
   height: 80%;
   top: -5%;
   width: 100%;
+}
+.cards .card .name {
+  display: flex;
+  padding: 1rem;
+  position: absolute;
+  bottom: 0;
+  color: var(--clr-contrast-100);
 }
 
 .white {

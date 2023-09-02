@@ -50,11 +50,12 @@
 .cards{
   display: flex; 
   width: 100%; 
-  justify-content: center; 
+  justify-content: space-between; 
   flex-direction: row; 
   flex-wrap: wrap; 
   align-items:center;
   gap: 2rem;
+  margin:2rem auto;
   .card{
     @extend %trans;
     position: relative;
@@ -81,6 +82,13 @@
       top: -5%;
       width: 100%;
  
+    }
+    .name{
+      display:flex; 
+      padding:1rem;; 
+      position:absolute;
+      bottom:0;
+      color: var(--clr-contrast-100)
     }
   } 
 }
