@@ -29,6 +29,7 @@ import { curObject, imgs, loadManager } from "@/pages/atoms";
 import Papa from "papaparse";
 import { useRouter } from "next/router";
 import { BufferGeometry } from "three";
+import { Box, Flex } from "@react-three/flex";
 
 
 type planeProps = {
@@ -284,6 +285,7 @@ const Timeline = () => {
       return (
 
         <motion3d.group ref={group} >
+   
          <instancedMesh ref={ref} geometry={new THREE.PlaneGeometry} args={[undefined, undefined, 1]} 
             scale={[Math.min(11 * (w / 10), 11), Math.min(6 * (w / 10), 6), 1]}
             // variants={variants_mesh}
@@ -319,6 +321,7 @@ const Timeline = () => {
             </motion3d.mesh>
 
           </instancedMesh>
+
           <Text
             ref={text}
             maxWidth={10}
@@ -364,6 +367,7 @@ const Timeline = () => {
             dashed
             fog
           ></QuadraticBezierLine>
+   
         </motion3d.group>
       );
     };

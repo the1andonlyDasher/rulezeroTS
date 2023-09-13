@@ -49,7 +49,7 @@ function Section({sectionName,ref, id, text, header, children}:sectionProps) {
         data-section-name={sectionName}
         initial="initial"
         whileInView="enter"
-        viewport={{ margin: "100px 0px 100px 0px", amount:"all" }}
+        viewport={{ margin: "100px 0px 100px 0px", amount:"all", once:true }}
         exit="exit"
         ref={ref}
         id={id}

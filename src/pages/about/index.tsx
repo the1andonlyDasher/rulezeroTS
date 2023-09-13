@@ -4,6 +4,7 @@ import { images } from "@/js/images";
 import { motion, useAnimation } from "framer-motion";
 import { useEffect } from "react";
 import Link from "next/link";
+import Footer from "@/components/Footer";
 
 const cards_variants = {
   initial: { opacity: 0, scale: 0 },
@@ -45,12 +46,12 @@ export default function About() {
               <motion.div onHoverStart={() => controls.start("visible")} onHoverEnd={() => controls.start("hidden")} variants={card_variants} className="card" key={index}>
                 <motion.div className="img" style={{ backgroundImage: `url(${img.url})`, clipPath: `${img.clip}` }}></motion.div>
                 <motion.div className="name" initial="hidden" animate={controls} variants={name_variants}><h4>{img.creator}</h4></motion.div>
-                <motion.div className="name" initial="hidden" animate={controls} variants={button_variants}><Link href={`/about/${img.creator}`}><h5>Read more</h5></Link></motion.div>
+                <motion.div className="name" initial="hidden" animate={controls} variants={button_variants}><Link href={`/about/${img.id}`}><h5>Read more</h5></Link></motion.div>
               </motion.div>)
           })}
         </motion.div>
       )} />
-
+<Footer/>
     </>
   )
 }

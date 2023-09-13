@@ -1471,13 +1471,13 @@ div[data-scroll-content] .frame:first-child header {
   font-size: var(--fs-text);
 }
 
-.footer-links, .footer {
+.socials, .footer-links, .footer {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.footer-links li {
+.socials a svg, .socials a::before, .socials a, .socials, .footer-links li {
   transition: 0.5s ease-in-out;
   -moz-transition: 0.5s ease-in-out;
   -o-transition: 0.5s ease-in-out;
@@ -1527,6 +1527,39 @@ div[data-scroll-content] .frame:first-child header {
   font-size: var(--fs-text);
 }
 
+.socials {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+}
+.socials a {
+  position: relative;
+  padding: var(--space-s);
+}
+.socials a::before {
+  content: "";
+  position: absolute;
+  clip-path: circle(0% at 50% 50%);
+  background-color: #131415;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+.socials a svg {
+  height: var(--space-m);
+  color: var(--clr-primary-200);
+}
+.socials a:hover svg {
+  color: var(--clr-contrast-100);
+}
+.socials a:hover::before {
+  clip-path: circle(47% at 50% 50%);
+}
+
 /* base classes */
 .cards .card .img, .cards .card {
   transition: 0.5s ease-in-out;
@@ -1539,7 +1572,7 @@ div[data-scroll-content] .frame:first-child header {
 .cards {
   display: flex;
   width: 100%;
-  justify-content: center;
+  justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
@@ -2081,34 +2114,32 @@ div[data-scroll-content] .frame:first-child header {
 .navbar {
   font-size: 1.5rem;
   color: var(--p-color);
-  padding: 1rem;
   width: 100%;
   height: 100px;
   z-index: 10;
   position: fixed;
   top: 0;
   left: 0;
-  padding: 0 1.5rem 0 1.5rem;
+  padding: 1rem;
 }
 @media screen and (min-width: 500px) {
   .navbar {
-    padding: 0 2.5rem 0 2.5rem;
+    padding: 1.5rem;
   }
 }
 @media screen and (min-width: 880px) {
   .navbar {
-    height: 120px;
-    padding: 0 5% 0 5%;
+    padding: 2rem;
   }
 }
 @media screen and (min-width: 1024px) {
   .navbar {
-    padding: 0 10% 0 10%;
+    padding: 1rem 10% 1rem 10%;
   }
 }
 @media screen and (min-width: 1600px) {
   .navbar {
-    padding: 0 15% 0 15%;
+    padding: 1rem 15% 1rem 15%;
   }
 }
 
@@ -2161,6 +2192,7 @@ div[data-scroll-content] .frame:first-child header {
 .navbar__logo img {
   height: 100%;
   width: 100%;
+  min-height: clamp(3rem, 5vw, 5rem);
 }
 
 .current {

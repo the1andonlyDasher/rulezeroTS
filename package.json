@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@emailjs/browser": "^3.11.0",
+    "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-regular-svg-icons": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -42,6 +43,7 @@
     "valtio": "^1.10.4"
   },
   "devDependencies": {
+    "@fortawesome/free-brands-svg-icons": "^6.4.2",
     "@react-spring/core": "^9.7.2",
     "@react-spring/three": "^9.7.2",
     "@types/papaparse": "^5.3.7",
