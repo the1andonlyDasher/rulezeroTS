@@ -232,11 +232,16 @@ const Timeline = () => {
       const image = useRef<any>(null!);
       const text = useRef<any>(null!);
       const ref = useRef<any>(null!);
+      const button = useRef<any>(null!);
       const group = useRef<any>(null!);
       const [hovering, hover] = useState(false);
+      const [clicked, setClick] = useState(false)
       useCursor(hovering)
 
+ 
+
        useFrame((state, dt) => {
+        button.current.material.opacity = clicked ? 1 : 0;
         ref.current.position.z <= -ref.current.parent.parent.position.z - 100 ? ref.current.visible = false : ref.current.visible = true
        })
       // useFrame((state, dt) => {
@@ -253,7 +258,7 @@ const Timeline = () => {
       // });
 
       useEffect(() => {
-        text.current.material.opacity = hovering ? 1 : 0;
+        text.current.material.opacity = hovering && clicked===false ? 1 : 0;
       }, [hovering])
 
       const controls_mesh = useAnimationControls();
@@ -267,9 +272,9 @@ const Timeline = () => {
       const controls = useAnimationControls();
 
       const button_variants = {
-        hidden: { opacity: 0 },
-        visible: { opacity: 1 },
-        exit: { opacity: 0 },
+        hidden: { scale: 0 },
+        visible: { scale: 1 },
+        exit: { scale: 0 },
       };
 
       const variants = {
@@ -294,8 +299,10 @@ const Timeline = () => {
             // exit={controls_mesh}
             //  isActive = {props.isActive}
             // popUp={props.popUp}
-            onPointerOver={(e) => (e.stopPropagation(), hover(true))}
-            onPointerOut={() => hover(false)}
+            onPointerOver={(e) => (e.stopPropagation(), hover(clicked ? false : true))}
+            onPointerOut={() => hover(clicked ? false : false)}
+            onClick={()=>setClick(true)}
+            onPointerMissed={()=> setClick(false)}
             position={[posX, props.position[1], props.position[2]]}
           >
             
@@ -321,7 +328,32 @@ const Timeline = () => {
             </motion3d.mesh>
 
           </instancedMesh>
-
+          <motion3d.mesh
+          variants={button_variants}
+          transition={{duration: 0.5}}
+          animate={clicked ? "visible" : "hidden"}
+              ref={button}
+              position={props.end}
+              scale={[1,1,1]}
+              visible={clicked}
+              onPointerOver={(e) => (e.stopPropagation(), hover(true))}
+              onPointerOut={() => hover(false)}
+            >
+              <planeGeometry args={[5,1.5,1]}/>
+              <motion3d.meshPhongMaterial color={"#fff"}/>
+              <Text
+            maxWidth={10}
+            characters="abcdefghijklmnopqrstuvwxyz0123456789!"
+            fontSize={0.6}
+            position={[0,0,0]}
+            font={"/fonts/prompt-v10-latin-900italic.woff"}
+            anchorX="center"
+            anchorY="middle"
+          >
+            <meshBasicMaterial color={"#222"} visible={!disposed}/>
+            {"Watch now!".split("-").join(" ")}
+          </Text>
+            </motion3d.mesh>
           <Text
             ref={text}
             maxWidth={10}

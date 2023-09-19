@@ -2,7 +2,7 @@ import Sec from "@/components/Section";
 import Head from "next/head";
 import { images } from "@/js/images";
 import { motion, useAnimation } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Footer from "@/components/Footer";
 
@@ -29,7 +29,7 @@ const name_variants = {
 }
 
 export default function About() {
-
+const [tapped, setTapped] = useState(false);
   return (
     <>
       <Head>
@@ -43,7 +43,7 @@ export default function About() {
           {images.map((img: any, index: number) => {
             const controls = useAnimation();
             return (
-              <motion.div onHoverStart={() => controls.start("visible")} onHoverEnd={() => controls.start("hidden")} variants={card_variants} className="card" key={index}>
+              <motion.div onTap={()=>{setTapped(!tapped), controls.start(tapped ? "visible" : "hidden")}} onMouseEnter={() => controls.start("visible")} onMouseLeave={() => controls.start("hidden")} variants={card_variants} className="card" key={index}>
                 <motion.div className="img" style={{ backgroundImage: `url(${img.url})`, clipPath: `${img.clip}` }}></motion.div>
                 <motion.div className="name" initial="hidden" animate={controls} variants={name_variants}><h4>{img.creator}</h4></motion.div>
                 <motion.div className="name" initial="hidden" animate={controls} variants={button_variants}><Link href={`/about/${img.id}`}><h5>Read more</h5></Link></motion.div>
