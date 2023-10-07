@@ -123,9 +123,9 @@ export default function Pill({ position }: pillProps) {
                 intensity={app === "secondSection" ? 30 : 0}
                 opacity={app === "secondSection" ? 0.2 : 0}
                 target={target}
-                position={[0, 35, 0]} shadowCameraFov={undefined} shadowCameraLeft={undefined} shadowCameraRight={undefined} shadowCameraTop={undefined} shadowCameraBottom={undefined} shadowCameraNear={undefined} shadowCameraFar={undefined} shadowBias={undefined} shadowMapWidth={undefined} shadowMapHeight={undefined}            />
+                position={[0, 35, 0]}              />
             <primitive object={target} position={[0, -15, 0]} dispose={null} />
-            <Physics isPaused={app == "secondSection" && router.pathname === "/" ? false : true} gravity={[0, -20, 0]} broadphase="Naive">
+            <Physics isPaused={false} gravity={[0, -20, 0]} broadphase="Naive">
                 <Plane rotation={[-Math.PI / 2, 0, 0]} position={[0,5,0]}/>
                 {text.map((item: any) =>
                     <InstancedGeometry key={item} {...{ number, size: textSize, text: item }} />

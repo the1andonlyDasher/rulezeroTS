@@ -8,10 +8,24 @@ const section_variants = {
     transition: { staggerChildren: 0.2 },
   },
   enter: {
-    transition: { staggerChildren: 0.2, delayChildren: 0.35 },
+    transition: { staggerChildren: 0.2, },
   },
   exit: {
     transition: { staggerChildren: 0.2 },
+  },
+};
+
+const text_variants = {
+  initial: { opacity: 0, x:100 },
+  enter: {
+    opacity: 1,
+    x: 0,
+    transition: { ease:"easeIn", duration: 0.5 },
+  },
+  exit: {
+    opacity: 0,
+    x:-100,
+    transition: { ease:"easeOut", duration: 0.5 },
   },
 };
 
@@ -20,7 +34,7 @@ const header_variants = {
   enter: {
     opacity: 1,
     x: 0,
-    transition: { ease:"easeIn", duration: 0.5, delay: 1 },
+    transition: { ease:"easeIn", duration: 0.5 },
   },
   exit: {
     opacity: 0,
@@ -61,7 +75,7 @@ function Section({sectionName,ref, id, text, header, children}:sectionProps) {
             <motion.h2 variants={header_variants}>{header}</motion.h2>
           ) : null}
           {text ? (
-            <motion.p variants={header_variants}>{text}</motion.p>
+            <motion.p variants={text_variants}>{text}</motion.p>
           ) : null}
           {children}
         </motion.div>

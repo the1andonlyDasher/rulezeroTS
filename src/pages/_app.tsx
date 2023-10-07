@@ -1,4 +1,4 @@
-import '@/styles/style.css'
+import '@/styles/scss/style.scss'
 import type { AppProps } from 'next/app'
 import Layout from '@/components/Layout';
 import React, { useEffect, useRef, useState } from 'react';
