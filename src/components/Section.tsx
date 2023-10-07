@@ -19,12 +19,13 @@ const text_variants = {
   initial: { opacity: 0, x:100 },
   enter: {
     opacity: 1,
-    x: 0,
+    rotate: "15deg",
     transition: { ease:"easeIn", duration: 0.5 },
   },
   exit: {
     opacity: 0,
-    x:-100,
+    rotate: "0deg",
+
     transition: { ease:"easeOut", duration: 0.5 },
   },
 };
@@ -63,12 +64,11 @@ function Section({sectionName,ref, id, text, header, children}:sectionProps) {
         data-section-name={sectionName}
         initial="initial"
         whileInView="enter"
-        viewport={{ margin: "100px 0px 100px 0px", amount:"some", once:true }}
+        viewport={{ margin: "100px 0px 100px 0px", amount:"all", once:false }}
         exit="exit"
         ref={ref}
         id={id}
         variants={section_variants}
-
       >
         <motion.div  variants={section_variants} className="__s__b">
           {header ? (

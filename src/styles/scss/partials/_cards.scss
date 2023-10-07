@@ -57,11 +57,11 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 2rem;
-  margin: 2rem auto;
+margin-top: 4rem;
   .card {
     @extend %trans;
     position: relative;
-    height: clamp(100px, 40vh, 350px);
+    height: clamp(100px, 40vh, 300px);
     width: 100%;
     border: 1px solid #333;
     padding: 1rem;
@@ -88,10 +88,14 @@
     }
     .name {
       display: flex;
-      padding: 1rem;
+      padding:0.5rem 1rem;
+      flex: 1 1 100%;
       position: absolute;
       bottom: 0;
       color: var(--clr-contrast-100);
+      @include mq(medium){
+        background-color: transparent;
+      }
     }
   }
 }

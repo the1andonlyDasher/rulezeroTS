@@ -92,6 +92,7 @@ const Timeline = () => {
             console.log("Parsing complete:", results);
             results.data.map((data: any, index) => {
               r = data.Link.match(rx);
+              var l = data.Link
               var t = data.Title;
               var d = data.Dates;
               if (fetching) {
@@ -113,6 +114,7 @@ const Timeline = () => {
                     rotation: [0, 0, 0],
                     url: `https://img.youtube.com/vi/${r[1]}/mqdefault.jpg`,
                     title: t,
+                    link: l,
                     name: r[1],
                     date: d
                   });
@@ -233,6 +235,8 @@ const Timeline = () => {
       const text = useRef<any>(null!);
       const ref = useRef<any>(null!);
       const button = useRef<any>(null!);
+      const matButton = useRef<any>(null!);
+      const router = useRouter()
       const group = useRef<any>(null!);
       const [hovering, hover] = useState(false);
       const [clicked, setClick] = useState(false)
@@ -333,22 +337,23 @@ const Timeline = () => {
           transition={{duration: 0.5}}
           animate={clicked ? "visible" : "hidden"}
               ref={button}
-              position={props.end}
+              position={[props.end[0], props.end[1], props.end[2] + 0.2]}
               scale={[1,1,1]}
               visible={clicked}
               onPointerOver={(e) => (e.stopPropagation(), hover(true))}
               onPointerOut={() => hover(false)}
             >
               <planeGeometry args={[5,1.5,1]}/>
-              <motion3d.meshPhongMaterial color={"#fff"}/>
+              <motion3d.meshBasicMaterial color={hovering ? "grey" : "white"} />
               <Text
             maxWidth={10}
             characters="abcdefghijklmnopqrstuvwxyz0123456789!"
             fontSize={0.6}
-            position={[0,0,0]}
+            position={[0,0,0.1]}
             font={"/fonts/prompt-v10-latin-900italic.woff"}
             anchorX="center"
             anchorY="middle"
+            onClick={()=>{router.push(`${props.link}`)}}
           >
             <meshBasicMaterial color={"#222"} visible={!disposed}/>
             {"Watch now!".split("-").join(" ")}
@@ -426,7 +431,7 @@ const Timeline = () => {
   }, [isInPage])
 
   return (<>
-
+<directionalLight intensity={10}/>
     <Suspense fallback={<Html>Loading timeline...</Html>}>
  <motion3d.group visible={!disposed} animate={controls} onAnimationComplete={onComplete}>
         {mounted && <App images={array} />}

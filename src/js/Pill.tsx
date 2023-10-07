@@ -50,16 +50,17 @@ export default function Pill({ position }: pillProps) {
         const [ref, { at }] = useBox(
             () => ({
                 args,
-                mass: 0.25,
-                position: [Math.random() + 2, Math.random() + 40, Math.random() - 0.5],
+                mass: 1.5,
+                
+                position: [Math.random() + 2, Math.random() + 30, Math.random() - 0.5],
             }),
             useRef<THREE.InstancedMesh>(null),
         )
-        useFrame(() => app === "firstSection" ? at(0).position.set(Math.random() + 2, Math.random() + 40, Math.random() - 0.5) : null)
+        useEffect(() => {app === "firstSection" ? at(0).position.set(Math.random() + 2, Math.random() + 40, Math.random() - 0.5) : null}, [app])
         return (
 
             <instancedMesh ref={ref} geometry={textGeo(text)} args={[undefined, undefined, number]} >
-                <meshLambertMaterial color={"grey"} />
+                <meshLambertMaterial color={"white"} />
             </instancedMesh>
         )
     }
@@ -67,17 +68,17 @@ export default function Pill({ position }: pillProps) {
     function Plane(props: PlaneProps) {
         const [ref] = usePlane(() => ({ ...props }), useRef<Mesh>(null))
         return (
-            <mesh ref={ref} receiveShadow>
-                <planeGeometry args={[40, 40]} />
+            <mesh ref={ref}>
+                <planeGeometry args={[50, 40]} />
                 <shadowMaterial color="#171717" />
             </mesh>
         )
     }
 
 
-    const [number] = useState(1)
-    const [textSize] = useState(1)
-    const [text] = useState(["Praxeology", "Game", "Seduction", "Health", "Advice", "Fitness", "Money", "Frame", "Dating", "Relationships"])
+    const [number] = useState<any>(2)
+    const [textSize] = useState<any>(1)
+    const [text] = useState<any>(["Praxeology", "Game", "Seduction", "Health", "Advice", "Fitness", "Money", "Frame", "Dating", "Relationships"])
     const group = useRef<any>(!null);
     const top_half = useRef<any>(!null);
     const bottom_half = useRef<any>(!null);
@@ -85,7 +86,7 @@ export default function Pill({ position }: pillProps) {
     const { nodes, materials }: any = useGLTF("/models/RPill.glb")
     const { size } = useThree()
     const [vpWidth, vpHeight] = useAspect(size.width, size.height);
-    const InstancedGeometry = Boxes
+    const InstancedGeometry = Boxes;
 
     return (<>
         <Flex
@@ -105,11 +106,12 @@ export default function Pill({ position }: pillProps) {
                             { x: 0, z: -20, scale: 10 } :
                             { x: 100, scale: 0 }}>
                     <motion.mesh initial={{scale:0}} exit={{scale:0}}  animate={app == "secondSection" ? { x: -vpWidth / 20, y: vpHeight / 30, rotateZ: 0.45, scale:1 } : { x: 0, y: 0, rotateZ: 0, scale:1  }} receiveShadow  ref={top_half} geometry={nodes.cap_top.geometry} material={materials.red_mat} />
-                    <motion.mesh initial={{scale:0}} exit={{scale:0}}  animate={app == "secondSection" ? { x: vpWidth / 20, y: -vpHeight / 20, rotateZ: 1.95, scale:1 } : { x: 0, y: 0, rotateZ: 0, scale:1  }} receiveShadow ref={bottom_half} geometry={nodes.cap_bottom.geometry} material={materials.white_mat} />
+                    <motion.mesh initial={{scale:0}} exit={{scale:0}}  animate={app == "secondSection" ? { x: vpWidth / 20, y: -vpHeight / 20, rotateZ: 1.95, scale:1 } : { x: 0, y: 0, rotateZ: 0, scale:1  }} receiveShadow ref={bottom_half} geometry={nodes.cap_bottom.geometry} material={materials.red_mat} />
                 </motion.group>
             </Box>
         </Flex>
-        <motion.group initial={{ y: -10 }} animate={{ y: 0 }} exit={{ y: -10 }}>
+
+        <motion.group >
             <SpotLight
                 castShadow
                 penumbra={0.2}
@@ -120,13 +122,13 @@ export default function Pill({ position }: pillProps) {
                 color={"red"}
                 attenuation={30}
                 anglePower={4}
-                intensity={app === "secondSection" ? 30 : 0}
+                intensity={app === "secondSection" ? 3000 : 0}
                 opacity={app === "secondSection" ? 0.2 : 0}
                 target={target}
-                position={[0, 35, 0]}              />
+                position={[0, 35, 0]} />
             <primitive object={target} position={[0, -15, 0]} dispose={null} />
-            <Physics isPaused={false} gravity={[0, -20, 0]} broadphase="Naive">
-                <Plane rotation={[-Math.PI / 2, 0, 0]} position={[0,5,0]}/>
+            <Physics isPaused={app == "secondSection" && router.pathname === "/" ? false : true} gravity={[0, -20, 0]} broadphase="Naive">
+                <Plane rotation={[-Math.PI / 2, 0, 0]} position={[0,0,0]}/>
                 {text.map((item: any) =>
                     <InstancedGeometry key={item} {...{ number, size: textSize, text: item }} />
                 )}

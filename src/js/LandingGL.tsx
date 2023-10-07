@@ -39,7 +39,7 @@ function VideoText({ position, width }: any) {
             position={position}>
             RULE ZERO
             <meshBasicMaterial toneMapped={false}>
-                <videoTexture attach="map" args={[video]} encoding={THREE.sRGBEncoding} />
+                <videoTexture attach="map" args={[video]} />
             </meshBasicMaterial>
         </Text>
 
@@ -110,7 +110,8 @@ export default function LandingGL() {
                             intensity={30}
                             opacity={0.2}
                             target={target}
-                            position={[5, 35, 0]} shadowCameraFov={undefined} shadowCameraLeft={undefined} shadowCameraRight={undefined} shadowCameraTop={undefined} shadowCameraBottom={undefined} shadowCameraNear={undefined} shadowCameraFar={undefined} shadowBias={undefined} shadowMapWidth={undefined} shadowMapHeight={undefined} />
+                            visible={app === "firstSection" ? true : false}
+                            position={[5, 35, 0]}  />
 
                         <Flex
                             justify="flex-start"

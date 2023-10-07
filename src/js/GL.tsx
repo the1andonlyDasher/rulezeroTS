@@ -180,14 +180,8 @@ export const GL = () => {
 
 
 const handleMove = (event: any) => {
-  if(location.pathname.includes("/about")){
-    mouseY = (event.clientY - windowHalfY) / 200;
-    mouseX = (event.clientX - windowHalfX) / 200;
-  }
-    else {
       mouseY = (event.clientY - windowHalfY) / 100;
       mouseX = (event.clientX - windowHalfX) / 100;
-    }
 };
 
 
@@ -197,21 +191,19 @@ const handleMove = (event: any) => {
     <motion.div id="loader" ref={cover} animate={cover_controls} style={{ backgroundColor:"#1e1f26",zIndex: 999,top:0, left:0,width:"100%", height:"100%", display:"flex",  position:"fixed", justifyContent:"center", alignItems:"center", flexDirection:"column"}}>
       <motion.div initial={{x:200, scale:0, opacity:1}} animate={load ? {x:-200, opacity: 0} : {x:0, scale:1, opacity:1}}><Image src="/images/maxresdefault.png" width={200}  height={120} alt="RuleZero logo" /></motion.div>
       <motion.div style={{height:"10px", margin:"2rem", width:"400px", border:" 1px solid #111"}}>
-      <motion.div ref={bar} style={{height:"10px", background:"ivory", width:0}} animate={load && {x:200, oapcity: 0}}>
+      <motion.div ref={bar} style={{height:"10px", background:"ivory", width:0, maxWidth:"90%"}} animate={load && {x:200, oapcity: 0}}>
       </motion.div>
       </motion.div>
     </motion.div>
       <div id="canvasWrapper" ref={wrapper} className="canvas__wrapper" >
-      <Canvas dpr={[1, 1.5]}  gl={{antialias:false}} eventPrefix="client">
+      <Canvas dpr={[1, 1.5]}  gl={{antialias:false}} >
             <fog attach="fog" args={["#1e1f26", 30, 70]} ></fog>
             <Preload all />
-            <Camera />
+            <Camera  />
              <color attach={"background"} args={["#1e1f26"]} ></color> 
             <Suspense fallback={<Html>Loading experience...</Html>}>
-            {/* <Gallery /> */}
               <Timeline   />
               <LandingGL  />
-              {/* <Ground /> */}
             </Suspense>
             <ambientLight color="#eeeeee" intensity={1} />
             <Environment preset="dawn" />

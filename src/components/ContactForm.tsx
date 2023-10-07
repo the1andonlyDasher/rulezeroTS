@@ -5,29 +5,15 @@ import Sec from "./Section";
 emailjs.init("lPNDYXO-4WREGEgyS");
 
 type props = {
-  title?: string, 
-  subtitle?: string, 
-  sectionName?: string, 
+  title?: string,
+  subtitle?: string,
+  sectionName?: string,
   id?: string
 }
 
 interface contactProps {
   props: props
 }
-
-const SvgComponent = (props:any) => (
-  <svg
-    width={3.988}
-    height={6.983}
-    viewBox="0 0 1.055 1.848"
-    xmlSpace="preserve"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
-    <path d="M1.016.831a.13.13 0 0 1 0 .185l-.793.794a.131.131 0 0 1-.186-.185L.736.924.037.223A.131.131 0 0 1 .223.037z" />
-  </svg>
-);
-
 
 const ContactForm = ({ props }: contactProps) => {
   const form = useRef<HTMLFormElement>(null);
@@ -39,21 +25,25 @@ const ContactForm = ({ props }: contactProps) => {
   const inView = useInView(form, { once: true, margin: "100px 0px 100px 0px" });
 
   const variants = {
-    initial: { opacity: 0},
+    initial: { opacity: 0, x: -10 },
     enter: {
       opacity: 1,
+      x: 0,
       transition: { ease: "easeIn", duration: 0.5 },
     },
-    exit: { opacity: 0},
+    exit: {
+      x: 10, opacity: 0,
+      transition: { ease: "easeOut", duration: 0.5 },
+    },
   }
 
   const formVariants = {
-    initial: { opacity: 0},
+    initial: { opacity: 0, },
     enter: {
       opacity: 1,
-      transition: { ease: "easeIn", duration: 0.5, staggerChildren: 0.2 },
+      transition: { ease: "easeIn", duration: 0.5, staggerChildren: 0.25 },
     },
-    exit: { opacity: 0},
+    exit: { opacity: 0, transition: { ease: "easeOut", duration: 0.5, staggerChildren: 0.25 } },
   };
   const messageVariants = {
     initial: { opacity: 0 },
@@ -67,13 +57,13 @@ const ContactForm = ({ props }: contactProps) => {
 
   const [status, setStatus] = useState("Send");
 
-  const bringBackform = async (e:any) => {
+  const bringBackform = async (e: any) => {
     e.preventDefault();
     await messageControls.start("exit");
     return await controlsForm.start("enter");
   };
 
-  const testMail = (e:any) => {
+  const testMail = (e: any) => {
     e.preventDefault();
     setStatus("Sending...");
     setTimeout(() => {
@@ -87,9 +77,9 @@ const ContactForm = ({ props }: contactProps) => {
       sequence();
     }, 1000);
   };
-  const sendEmail = (e:any) => {
+  const sendEmail = (e: any) => {
     e.preventDefault();
-    if(form.current == null) return;
+    if (form.current == null) return;
     setStatus("Sending...");
     emailjs
       .sendForm(
@@ -99,7 +89,7 @@ const ContactForm = ({ props }: contactProps) => {
         "lPNDYXO-4WREGEgyS"
       )
       .then(
-        (result:any) => {
+        (result: any) => {
           setStatus("Sent!");
           setTimeout(() => {
             setStatus("Send");
@@ -109,7 +99,7 @@ const ContactForm = ({ props }: contactProps) => {
           setEmail("")
           setMessage("")
         },
-        (error:any) => {
+        (error: any) => {
           setStatus("Oops...");
           alert("Unable to send e-mail...");
         }
@@ -124,77 +114,77 @@ const ContactForm = ({ props }: contactProps) => {
 
   return (
     <>
-       <Sec sectionName={props.sectionName}>
-      <div className="__s__b">
-        <h3 data-before={props.title}>{props.title}</h3>
-        <p>{props.subtitle}</p>
-      <motion.div
-        className="thanks__message"
-        variants={messageVariants}
-        initial="initial"
-        animate={messageControls}
-        exit="exit"
-      >
-        <h4>Cheers!</h4>
-        <p>We'll take care of it and will respond soon.</p>
-        <button className="btn__outline" onClick={bringBackform}>
-          Forgot anything?
-        </button>
-      </motion.div>
-      <motion.form
-        ref={form}
-        onSubmit={sendEmail}
-        variants={formVariants}
-        initial="initial"
-        animate={controlsForm}
-        exit="exit"
-      >
-        <input type="hidden" name="contact_number"></input>
-        <motion.div variants={variants}>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            name="user_name"
-            // className="bg-[#21212122] rounded-[2px] border border-[#222] text-neutral-50"
-            value={firstName}
-            placeholder={"Name"} // ...force the input's value to match the state variable...
-            onChange={e => setFirstName(e.target.value)} 
-            required
-          />
-        </motion.div>
-        <motion.div variants={variants}>
-          <label htmlFor="email">E-Mail:</label>
-          <input
-            type="email"
-            id="email"
-            name="user_email"
-            // className="bg-[#21212122] rounded-[2px] border border-[#222] text-neutral-50"
-            value={email}
-            placeholder="E-Mail"
-            onChange={e => setEmail(e.target.value)}
-            required
-            aria-describedby="emailHelp"
-          />
-        </motion.div>
-        <motion.div variants={variants}>
-          <label htmlFor="message">Message:</label>
-          <textarea
-            value={message}
-            placeholder="Your message..."
-            onChange={e => setMessage(e.target.value)}
-            name="message"
-            // className="bg-[#21212122] rounded-[2px] border border-[#222] text-neutral-50"
-            id="message"
-            required
-            rows={5}
-          />
-        </motion.div>
-        <motion.button variants={variants} className="btn__primary" type="submit">
-          {status}
-        </motion.button>
-      </motion.form>
-      </div>
+      <Sec sectionName={props.sectionName}>
+        <div className="__s__b">
+          <h3 data-before={props.title}>{props.title}</h3>
+          <p>{props.subtitle}</p>
+          <motion.div
+            className="thanks__message"
+            variants={messageVariants}
+            initial="initial"
+            animate={messageControls}
+            exit="exit"
+          >
+            <h4>Cheers!</h4>
+            <p>We'll take care of it and will respond soon.</p>
+            <button className="btn__outline" onClick={bringBackform}>
+              Forgot anything?
+            </button>
+          </motion.div>
+          <motion.form
+            ref={form}
+            onSubmit={sendEmail}
+            variants={formVariants}
+            initial="initial"
+            animate={controlsForm}
+            exit="exit"
+          >
+            <input type="hidden" name="contact_number"></input>
+            <motion.div variants={variants}>
+              <label htmlFor="name">Name:</label>
+              <input
+                type="text"
+                id="name"
+                name="user_name"
+                // className="bg-[#21212122] rounded-[2px] border border-[#222] text-neutral-50"
+                value={firstName}
+                placeholder={"Name"} // ...force the input's value to match the state variable...
+                onChange={e => setFirstName(e.target.value)}
+                required
+              />
+            </motion.div>
+            <motion.div variants={variants}>
+              <label htmlFor="email">E-Mail:</label>
+              <input
+                type="email"
+                id="email"
+                name="user_email"
+                // className="bg-[#21212122] rounded-[2px] border border-[#222] text-neutral-50"
+                value={email}
+                placeholder="E-Mail"
+                onChange={e => setEmail(e.target.value)}
+                required
+                aria-describedby="emailHelp"
+              />
+            </motion.div>
+            <motion.div variants={variants}>
+              <label htmlFor="message">Message:</label>
+              <textarea
+                value={message}
+                placeholder="Your message..."
+                onChange={e => setMessage(e.target.value)}
+                name="message"
+                // className="bg-[#21212122] rounded-[2px] border border-[#222] text-neutral-50"
+                id="message"
+                required
+                rows={5}
+              />
+            </motion.div>
+            <motion.button variants={variants} className="btn__primary" type="submit">
+              {status}
+            </motion.button>
+          </motion.form>
+        </div>
       </Sec>
     </>
   );

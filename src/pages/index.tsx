@@ -27,8 +27,8 @@ const secondSec = useRef<any>(!null)
       <Hero
         headerPartOne="Actionable"
         headerPartTwo="Information"
-        subHeader="Swapping notes and talking shop"
-        text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut."
+        subHeader="Male sexual strategy. Positive male identity."
+        text="Success really boils down to one thing: rational self-interest. We swap notes on how men can put themselves first and navigate modern dating."
         buttonOne="Watch now!"
         buttonTwo="Contact us"
       />
@@ -39,8 +39,8 @@ const secondSec = useRef<any>(!null)
       <Hero
       headerPartOne="What the #@-!"
       headerPartTwo="is Rule Zero?"
-      subHeader="Find out what we're all about"
-      text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut."
+      subHeader="Find out what RZ is all about"
+      text="Rule Zero is a panel of men coming from various backgrounds talking about intersexual dynamics and all things related."
       buttonOne="Explore"
     
       />

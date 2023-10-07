@@ -108,7 +108,7 @@
     }
     svg {
   @extend %trans;
-      height: var(--space-m);
+      height: clamp(1rem, 10vw, 2rem);
       color: var(--clr-primary-200);
     }
 
