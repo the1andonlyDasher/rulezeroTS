@@ -99,9 +99,10 @@ h1,
 h2,
 h3,
 h4,
+p,
 h5 {
   text-align: left;
-  margin: 0.5rem auto;
+  margin: clamp(0.3em, 0.5rem, 0.4em) 0;
   width: 100%;
 }
 
@@ -158,24 +159,35 @@ h5 {
 }
 
 p {
-  font-size: var(--fs-text);
+  font-size: clamp(1.1rem, 4vw, 1.35rem);
   font-family: $ff-text;
   width: 100%;
   line-height: 1.5;
   font-weight: inherit;
   color: var(--clr-contrast-400);
   max-width: 60ch;
-  margin-right:auto;
+  margin-right: auto;
+}
+
+p.text-small {
+  font-size: clamp(0.75rem, 5vw, 1.1rem);
+  color: var(--clr-contrast-400);
+  margin: 0.25em 0;
 }
 
 a {
   text-decoration: none;
+  color: inherit;
+  &.text-link {
+    color: var(--clr-contrast-100);
+  }
 }
 
 .btn__primary,
 .btn__outline {
+  @extend %trans;
   font-family: $ff-header;
-  border-width: 2px;
+  border: var(--clr-contrast-100) 2px solid;
   text-transform: uppercase;
   border-radius: 3px;
   position: relative;
@@ -184,24 +196,73 @@ a {
   font-weight: 700;
   padding: var(--space-s) var(--space-l);
   overflow: hidden;
-  @include mq(medium){
+  @include mq(medium) {
     margin-right: auto;
     max-width: 300px;
+  }
+  &::after,
+  &::before {
+    @extend %flex-center, %absolute-full, %trans;
+    position: absolute;
+    content: "";
   }
 }
 
 .btn__primary {
-  background-color: var(--clr-contrast-100);
-  border-color: var(--clr-contrast-100);
-  color: var(--clr-primary-main);
+  background-color: transparent;
+  border-color: transparent;
+  border: none;
+  color: var(--clr-contrast-800);
   position: relative;
+  &::after {
+    background-color: var(--clr-contrast-100);
+    z-index: -1;
+    transform-origin: center;
+    opacity: 1;
+  }
+  &::before {
+    background-color: var(--clr-contrast-800);
+    z-index: -1;
+    transform-origin: center;
+    opacity: 0;
+  }
+  &:hover {
+    color: var(--clr-contrast-100);
+  }
+  &:hover::after,
+  &:active::after {
+    rotate: 180deg;
+    opacity: 0;
+  }
+  &:hover::before,
+  &:active::before {
+    rotate: -180deg;
+    opacity: 1;
+  }
 }
 
 .btn__outline {
   background-color: transparent;
-  border-color: var(--clr-contrast-100);
   color: var(--clr-contrast-100);
   position: relative;
+  &::before {
+    background-color: var(--clr-contrast-800);
+    transform: translateX("0rem");
+    z-index: -1;
+    transform-origin: center;
+    scale: 0;
+    opacity: 0;
+  }
+  &:hover,
+  &:active {
+    color: var(--clr-contrast-100);
+    border-color: var(--clr-contrast-800);
+  }
+  &:hover::before,
+  &:active::before {
+    scale: 1;
+    opacity: 1;
+  }
 }
 
 .btn-inner {
@@ -215,7 +276,6 @@ a {
   color: var(--clr-contrast-100);
   margin: 0;
   align-items: center;
-
 }
 
 .main {
@@ -225,6 +285,9 @@ a {
   height: 100%;
   width: 100vw;
   overflow: hidden;
+  .int-ob__wrapper:first-of-type {
+    padding-top: 5rem;
+  }
 }
 
 .main section {
@@ -252,30 +315,20 @@ a {
     @extend %flex-center;
     flex-direction: column;
     justify-content: center;
+    align-items: baseline;
     width: 100%;
     max-width: 1200px;
     margin: 0;
     flex: 1 1 100%;
     // margin: 7rem 0;
     // margin: 10dvh 0;
-    @include mq(medium){
-      justify-content: center;
-    }
   }
-   &section:nth-child(1){
+  &section:nth-child(1) {
     margin-top: 2rem;
   }
-  h1.sectionHeader{
+  h1.sectionHeader {
     white-space: nowrap;
   }
-}
-
-.main section:first-of-type {
-  padding-top: 120px;
-}
-
-.main section:last-of-type {
-  padding-bottom: 100px;
 }
 
 #data-scroll-content {
@@ -364,29 +417,33 @@ div[data-scroll-content] .frame:first-child {
   }
 }
 
-.button__wrapper{
+.button__wrapper {
   display: flex;
   gap: var(--space-s);
+  width: 100%;
   justify-content: center;
   flex-wrap: wrap;
+  margin: 2em auto;
   padding: 0;
   a {
     display: flex;
     flex: 1 1 auto;
   }
-  .btn__primary{
+  .btn__primary {
     font-size: clamp(0.75rem, 5vw, 1.25rem);
   }
-  .secondary{
+  .secondary {
     font-size: clamp(0.75rem, 5vw, 1rem);
   }
-  .btn__primary, .secondary, .btn__outline{
+  .btn__primary,
+  .secondary,
+  .btn__outline {
     margin: 0;
     flex: 1 1 auto;
   }
 }
 
-.no-flex{
+.no-flex {
   flex: unset;
 }
 

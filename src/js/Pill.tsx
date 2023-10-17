@@ -51,12 +51,16 @@ export default function Pill({ position }: pillProps) {
             () => ({
                 args,
                 mass: 1.5,
-                
                 position: [Math.random() + 2, Math.random() + 30, Math.random() - 0.5],
             }),
-            useRef<THREE.InstancedMesh>(null),
+            useRef<any>(null),
         )
-        useEffect(() => {app === "firstSection" ? at(0).position.set(Math.random() + 2, Math.random() + 40, Math.random() - 0.5) : null}, [app])
+        useEffect(() => {
+            ref.current.setMatrixAt(1, new THREE.Matrix4())
+            ref.current.instanceMatrix.needsUpdate = true
+        }, [])
+
+        useEffect(() => { app === "firstSection" ? at(0).position.set(Math.random() + 2, Math.random() + 40, Math.random() - 0.5) : null }, [app])
         return (
 
             <instancedMesh ref={ref} geometry={textGeo(text)} args={[undefined, undefined, number]} >
@@ -76,8 +80,8 @@ export default function Pill({ position }: pillProps) {
     }
 
 
-    const [number] = useState<any>(2)
-    const [textSize] = useState<any>(1)
+    const [number] = useState<any>(1)
+    const [textSize] = useState<any>(0.8)
     const [text] = useState<any>(["Praxeology", "Game", "Seduction", "Health", "Advice", "Fitness", "Money", "Frame", "Dating", "Relationships"])
     const group = useRef<any>(!null);
     const top_half = useRef<any>(!null);
@@ -86,7 +90,8 @@ export default function Pill({ position }: pillProps) {
     const { nodes, materials }: any = useGLTF("/models/RPill.glb")
     const { size } = useThree()
     const [vpWidth, vpHeight] = useAspect(size.width, size.height);
-    const InstancedGeometry = Boxes;
+    const InstacedMeshes = Boxes;
+
 
     return (<>
         <Flex
@@ -100,13 +105,13 @@ export default function Pill({ position }: pillProps) {
         >
             <Box padding={-1} alignContent='center' flexGrow={1} flexBasis={1} flexShrink={0} flexDirection='column'>
                 <motion.group ref={group} scale={10} position={position} rotation={[0.45, 0, 0.45]}
-                    animate={ app === "firstSection" ?
+                    animate={app === "firstSection" ?
                         { x: 0, scale: 10, transition: { delay: 1 } } :
                         app === "secondSection" ?
                             { x: 0, z: -20, scale: 10 } :
                             { x: 100, scale: 0 }}>
-                    <motion.mesh initial={{scale:0}} exit={{scale:0}}  animate={app == "secondSection" ? { x: -vpWidth / 20, y: vpHeight / 30, rotateZ: 0.45, scale:1 } : { x: 0, y: 0, rotateZ: 0, scale:1  }} receiveShadow  ref={top_half} geometry={nodes.cap_top.geometry} material={materials.red_mat} />
-                    <motion.mesh initial={{scale:0}} exit={{scale:0}}  animate={app == "secondSection" ? { x: vpWidth / 20, y: -vpHeight / 20, rotateZ: 1.95, scale:1 } : { x: 0, y: 0, rotateZ: 0, scale:1  }} receiveShadow ref={bottom_half} geometry={nodes.cap_bottom.geometry} material={materials.red_mat} />
+                    <motion.mesh initial={{ scale: 0 }} exit={{ scale: 0 }} animate={app == "secondSection" ? { x: -vpWidth / 20, y: vpHeight / 30, rotateZ: 0.45, scale: 1 } : { x: 0, y: 0, rotateZ: 0, scale: 1 }} receiveShadow ref={top_half} geometry={nodes.cap_top.geometry} material={materials.red_mat} />
+                    <motion.mesh initial={{ scale: 0 }} exit={{ scale: 0 }} animate={app == "secondSection" ? { x: vpWidth / 20, y: -vpHeight / 20, rotateZ: 1.95, scale: 1 } : { x: 0, y: 0, rotateZ: 0, scale: 1 }} receiveShadow ref={bottom_half} geometry={nodes.cap_bottom.geometry} material={materials.red_mat} />
                 </motion.group>
             </Box>
         </Flex>
@@ -127,10 +132,10 @@ export default function Pill({ position }: pillProps) {
                 target={target}
                 position={[0, 35, 0]} />
             <primitive object={target} position={[0, -15, 0]} dispose={null} />
-            <Physics isPaused={app == "secondSection" && router.pathname === "/" ? false : true} gravity={[0, -20, 0]} broadphase="Naive">
-                <Plane rotation={[-Math.PI / 2, 0, 0]} position={[0,0,0]}/>
+            <Physics isPaused={app == "secondSection" && router.pathname === "/" ? false : true} gravity={[0, -20, 0]} broadphase='Naive'>
+                <Plane rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} />
                 {text.map((item: any) =>
-                    <InstancedGeometry key={item} {...{ number, size: textSize, text: item }} />
+                    <InstacedMeshes key={item} {...{ number, size: textSize, text: item }} />
                 )}
 
             </Physics>

@@ -11,9 +11,9 @@ import { useRef } from 'react';
 
 
 export default function Home() {
-const [app, setApp] = useAtom(loc)
-const firstSec = useRef<any>(!null)
-const secondSec = useRef<any>(!null)
+  const [app, setApp] = useAtom(loc)
+  const firstSec = useRef<any>(!null)
+  const secondSec = useRef<any>(!null)
   return (
     <>
       <Head>
@@ -23,30 +23,33 @@ const secondSec = useRef<any>(!null)
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <InView className='int-ob__wrapper' threshold={0.5} rootMargin='100px' onChange={(inView, entry) => { inView ? (setApp(`${entry.target.firstElementChild?.getAttribute("data-section-name")}`)) : null }}>
-      <Sec sectionName="firstSection" ref={firstSec} children={
-      <Hero
-        headerPartOne="Actionable"
-        headerPartTwo="Information"
-        subHeader="Male sexual strategy. Positive male identity."
-        text="Success really boils down to one thing: rational self-interest. We swap notes on how men can put themselves first and navigate modern dating."
-        buttonOne="Watch now!"
-        buttonTwo="Contact us"
-      />
-      } ></Sec>
+        <Sec sectionName="firstSection" ref={firstSec} children={
+          <Hero
+            headerPartOne="Actionable"
+            headerPartTwo="Information"
+            subHeader="Male sexual strategy. Positive male identity."
+            text="Success really boils down to one thing: rational self-interest. We swap notes on how men can put themselves first and navigate modern dating."
+            buttonOne="Watch now!"
+            linkOne="/archive"
+            buttonTwo="Contact us"
+            linkTwo="/contact"
+          />
+        } ></Sec>
       </InView>
       <InView className='int-ob__wrapper' threshold={0.5} rootMargin='100px' onChange={(inView, entry) => { inView ? (setApp(`${entry.target.firstElementChild?.getAttribute("data-section-name")}`)) : null }}>
-      <Sec sectionName="secondSection" ref={secondSec} children={
-      <Hero
-      headerPartOne="What the #@-!"
-      headerPartTwo="is Rule Zero?"
-      subHeader="Find out what RZ is all about"
-      text="Rule Zero is a panel of men coming from various backgrounds talking about intersexual dynamics and all things related."
-      buttonOne="Explore"
-    
-      />
-      } ></Sec>
+        <Sec sectionName="secondSection" ref={secondSec} children={
+          <Hero
+            headerPartOne="What the #@-!"
+            headerPartTwo="is Rule Zero?"
+            subHeader="Find out what RZ is all about"
+            text="Rule Zero is a panel of men coming from various backgrounds talking about intersexual dynamics and all things related."
+            buttonOne="Explore"
+            linkOne="/about"
+
+          />
+        } ></Sec>
       </InView>
-      <Footer/>
+      <Footer />
     </>
   )
 }

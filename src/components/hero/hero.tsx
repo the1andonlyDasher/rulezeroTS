@@ -73,7 +73,7 @@ const variants = {
   },
 };
 
-const Hero = ({ headerPartOne, headerPartTwo, subHeader, text, buttonOne, buttonTwo }: any) => {
+const Hero = ({ headerPartOne, headerPartTwo, subHeader, text, buttonOne, buttonTwo, linkOne, linkTwo }: any) => {
   const ref = useRef<any>(!null);
   const isInView = useInView(ref, { margin: "100px", amount: "some", once: true })
   const controls = useAnimationControls()
@@ -88,7 +88,7 @@ const Hero = ({ headerPartOne, headerPartTwo, subHeader, text, buttonOne, button
           variants={section_variants}
           initial="initial"
           whileInView="enter"
-        viewport={{ margin: "100px 0px 100px 0px", amount:"all", once:true }}
+          viewport={{ margin: "100px 0px 100px 0px", amount: 0.25, once: true }}
           exit="exit"
         >
           <motion.h1 className="sectionHeader" variants={header_variants}>
@@ -100,9 +100,9 @@ const Hero = ({ headerPartOne, headerPartTwo, subHeader, text, buttonOne, button
             {text}
           </motion.p>
           <motion.div variants={text_variants} className="button__wrapper no-flex">
-            <Link href="/archive"><button type="button" className="btn__primary">{buttonOne}</button></Link>
+            <Link href={linkOne}><button type="button" className="btn__primary">{buttonOne}</button></Link>
 
-            {buttonTwo ? <Link href="/contact"><button type="button" className="btn__outline">{buttonTwo}</button></Link> : null}
+            {buttonTwo ? <Link href={linkTwo}><button type="button" className="btn__outline">{buttonTwo}</button></Link> : null}
 
           </motion.div>
         </motion.div>

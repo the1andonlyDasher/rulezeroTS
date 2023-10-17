@@ -43,9 +43,11 @@
     "@fortawesome/free-brands-svg-icons": "^6.4.2",
     "@react-spring/core": "^9.7.2",
     "@react-spring/three": "^9.7.2",
+    "@types/cors": "^2.8.14",
     "@types/papaparse": "^5.3.7",
     "@use-gesture/react": "^10.2.27",
     "jotai": "^2.4.3",
     "wouter": "^2.11.0"
-  }
+  },
+  "browserlist": "defaults"
 }
