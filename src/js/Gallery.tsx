@@ -96,7 +96,7 @@ function Frames({ images }: { images: any }) {
       clicked.current.parent.parent.localToWorld(p.set(0, 0, 10 + (5 / w * h)))
       clicked.current.parent.parent.getWorldQuaternion(q)
     }
-  }, [clicked])
+  }, [clicked, p, h, params?.id, q, w],)
 
 
   useFrame((state, dt) => {
@@ -174,11 +174,11 @@ function Picture({ position, children, creator, id, bg, bg2, url, c = new THREE.
           onPointerOver={(e) => hover(true)} onPointerOut={() => hover(false)}>
           <roundedPlaneGeometry args={[width, height, 0.4]} />
           <MeshPortalMaterial ref={portal} events={params?.id === id} side={THREE.FrontSide}>
-            <mesh ref={card} position={[0,0,0]}>
+            <mesh ref={card} position={[0, 0, 0]}>
               <meshBasicMaterial attach={"material"} map={texture} />
               <planeGeometry attach={"geometry"} args={[12, 15]} />
             </mesh>
-            <GradientTexture attach="background" colors={[bg, bg2]} stops={[0, 1]} /> 
+            <GradientTexture attach="background" colors={[bg, bg2]} stops={[0, 1]} />
             {children}
           </MeshPortalMaterial>
           <Text font={"/fonts/prompt-v10-latin-900italic.woff"} fontSize={0.72} maxWidth={2} anchorY="top" anchorX="left" lineHeight={1.2} position={[1.5, 4.5, 0.01]} material-toneMapped={false}>
