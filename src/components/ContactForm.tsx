@@ -115,7 +115,7 @@ const ContactForm = ({ props }: contactProps) => {
   return (
     <>
       <Sec sectionName={props.sectionName}>
-        <div className="__s__b">
+        <>
           <h3 data-before={props.title}>{props.title}</h3>
           <p>{props.subtitle}</p>
           <motion.div
@@ -184,7 +184,7 @@ const ContactForm = ({ props }: contactProps) => {
               {status}
             </motion.button>
           </motion.form>
-        </div>
+        </>
       </Sec>
     </>
   );

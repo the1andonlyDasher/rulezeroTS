@@ -28,41 +28,30 @@ const name_variants = {
   visible: { y: 20, opacity: 0 }
 }
 
-interface cardProps {
-  img: any;
-  index: number;
-}
-
-
-
 export default function About() {
   const [tapped, setTapped] = useState(false);
-
-  const AboutCard: React.FC<cardProps> = ({ img, index }) => {
+  const Cards = (images.map((img: any, index: number) => {
     const controls = useAnimation();
-    return (<>
+    return (
       <motion.div onTap={() => { setTapped(!tapped), controls.start(tapped ? "visible" : "hidden") }} onMouseEnter={() => controls.start("visible")} onMouseLeave={() => controls.start("hidden")} variants={card_variants} className="card" key={index}>
         <motion.div className="img" style={{ backgroundImage: `url(${img.url})`, clipPath: `${img.clip}` }}></motion.div>
         <motion.div className="name" initial="hidden" animate={controls} variants={name_variants}><h4>{img.creator}</h4></motion.div>
         <motion.div className="name" initial="hidden" animate={controls} variants={button_variants}><Link href={`/about/${img.id}`}><h5>Read more</h5></Link></motion.div>
-      </motion.div>
-    </>)
-  }
+      </motion.div>)
+  }))
   return (
     <>
       <Head>
         <title>Rule Zero About Us</title>
         <meta name="description" content="About Us subpage for Rule Zero" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.webp" />
       </Head>
-      <Sec >
+      <Sec children={(
         <motion.div variants={cards_variants} className="cards">
-          {images.map((img: any, index: number) =>
-            <AboutCard key={index} img={img} index={index} />
-          )}
+          {Cards}
         </motion.div>
-      </Sec>
+      )} />
       <Footer />
     </>
   )

@@ -57,7 +57,6 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 2rem;
-margin-top: 4rem;
   .card {
     @extend %trans;
     position: relative;
@@ -88,12 +87,12 @@ margin-top: 4rem;
     }
     .name {
       display: flex;
-      padding:0.5rem 1rem;
+      padding: 0.5rem 1rem;
       flex: 1 1 100%;
       position: absolute;
       bottom: 0;
       color: var(--clr-contrast-100);
-      @include mq(medium){
+      @include mq(medium) {
         background-color: transparent;
       }
     }

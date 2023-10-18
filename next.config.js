@@ -25,9 +25,27 @@ const nextConfig = {
     ];
   },
   reactStrictMode: true,
+  output: "export",
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
   },
 };
 
 module.exports = nextConfig;
+
+/** @type {import('next').NextConfig} */
+
+const withPWA = require("next-pwa")({
+  dest: "public",
+  disable: false,
+  register: true,
+  mode: "production",
+
+  // disable: process.env.NODE_ENV === 'development',
+  // register: true,
+  // scope: '/app',
+  // sw: 'service-worker.js',
+  //...
+});
+
+module.exports = withPWA(nextConfig);

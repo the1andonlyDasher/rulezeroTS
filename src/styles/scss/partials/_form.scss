@@ -87,12 +87,11 @@
 
 form {
   @extend %flex-center;
-  flex: 1 1 100%;
   margin: 0 auto 0 0;
+  padding: 1rem 0;
   flex-direction: column;
   width: 100%;
   margin: 0;
-  flex: 1 1 auto;
   min-width: 250px;
   color: var(--clr-contrast-100);
 }

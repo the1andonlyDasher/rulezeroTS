@@ -285,9 +285,6 @@ a {
   height: 100%;
   width: 100vw;
   overflow: hidden;
-  .int-ob__wrapper:first-of-type {
-    padding-top: 5rem;
-  }
 }
 
 .main section {
@@ -306,10 +303,10 @@ a {
     padding: 2rem;
   }
   @include mq(large) {
-    padding: 150px 10% 1rem 10%;
+    padding: 1rem 10% 1rem 10%;
   }
   @include mq(xl) {
-    padding: 150px 15% 1rem 15%;
+    padding: 1rem 15% 1rem 15%;
   }
   .__s__b {
     @extend %flex-center;
@@ -322,6 +319,9 @@ a {
     flex: 1 1 100%;
     // margin: 7rem 0;
     // margin: 10dvh 0;
+    @include mq(medium) {
+      align-items: center;
+    }
   }
   &section:nth-child(1) {
     margin-top: 2rem;

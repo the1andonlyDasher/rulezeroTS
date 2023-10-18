@@ -20,7 +20,8 @@ export default function Home() {
         <title>Rule Zero Archive</title>
         <meta name="description" content="Rule Zero Archive" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.webp" />
+
       </Head>
       <InView className='int-ob__wrapper' threshold={0.5} rootMargin='100px' onChange={(inView, entry) => { inView ? (setApp(`${entry.target.firstElementChild?.getAttribute("data-section-name")}`)) : null }}>
         <Sec sectionName="firstSection" ref={firstSec}>

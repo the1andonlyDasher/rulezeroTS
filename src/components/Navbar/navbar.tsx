@@ -10,7 +10,7 @@ import NavbarToggle from "./NavbarToggle";
 import logo from "/images/maxresdefault.png"
 
 
-const Navbar = ({ logo, alt, children }:any) => {
+const Navbar = ({ logo, alt, children }: any) => {
   const navbarMain = useRef<any>(!null);
   const [isShrunk, setShrunk] = useState(false);
   useEffect(() => {
@@ -51,14 +51,14 @@ const Navbar = ({ logo, alt, children }:any) => {
 
 
   const variants = {
-    closed:{},
-    open:{}
+    closed: {},
+    open: {}
   };
 
   const image_variants = {
-    initial: { scale: 0, opacity: 0},
-    enter: {scale: [0, 1.2 ,1], opacity: 1},
-    exit: {scale: 0, opacity: 0},
+    initial: { scale: 0, opacity: 0 },
+    enter: { scale: [0, 1.2, 1], opacity: 1 },
+    exit: { scale: 0, opacity: 0 },
   }
 
   const [isOpen, toggleOpen] = useCycle(false, true);
@@ -82,19 +82,19 @@ const Navbar = ({ logo, alt, children }:any) => {
           href="/"
           variants={image_variants} initial="hidden" animate="enter" exit="exit"
         >
-          <Image  src={"/images/maxresdefault.png"} width={500} height={500} alt={alt} />
+          <Image src={"/images/resdefault.webp"} width={500} height={500} alt={"website logo"} />
         </motion.a>
         <Navigation>
-            {navitems.map((i, index) => (
-              <NavItem clickLink={null} key={i} name={i} href={hrefs[index]} />
-            ))}
-          </Navigation>
-          <MobileNav>
-            {navitems.map((i, index) => (
-              <Mnav toggle={()=> toggleOpen()} key={i} name={i} href={hrefs[index]} />
-            ))}
-          </MobileNav>
-          <NavbarToggle toggle={() => toggleOpen()} />
+          {navitems.map((i, index) => (
+            <NavItem clickLink={null} key={i} name={i} href={hrefs[index]} />
+          ))}
+        </Navigation>
+        <MobileNav>
+          {navitems.map((i, index) => (
+            <Mnav toggle={() => toggleOpen()} key={i} name={i} href={hrefs[index]} />
+          ))}
+        </MobileNav>
+        <NavbarToggle toggle={() => toggleOpen()} />
       </div>
     </motion.nav>
   );
