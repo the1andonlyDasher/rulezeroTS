@@ -56,13 +56,13 @@ export default function About() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Sec children={(
+      <Sec >
         <motion.div variants={cards_variants} className="cards">
           {images.map((img: any, index: number) =>
-            <AboutCard func={setTapped(!tapped)} img={img} tapped={tapped} index={index} />
+            <AboutCard key={index} func={setTapped(!tapped)} img={img} tapped={tapped} index={index} />
           )}
         </motion.div>
-      )} />
+      </Sec>
       <Footer />
     </>
   )
