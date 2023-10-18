@@ -1,7 +1,11 @@
 
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar/navbar'
+import { motion } from 'framer-motion';
+import { useAtom } from 'jotai';
 import { Html, Head, Main, NextScript } from 'next/document'
+import { useEffect, useRef, useState } from 'react';
+import { cursor } from './atoms';
 
 
 

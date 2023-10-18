@@ -28,7 +28,7 @@
   background-color: transparent;
   position: relative;
   cursor: pointer;
-  width: 2.5rem;
+  width: 3rem;
   aspect-ratio: 1;
   z-index: 999;
   border: none;
@@ -39,7 +39,7 @@
     position: absolute;
     height: 4px;
     border-radius: 5px;
-    width: 100%;
+    max-width: 100%;
     background-color: var(--clr-dark-color);
     // transform-origin: center;
     // transform: translate(0, 0) rotate(0deg);

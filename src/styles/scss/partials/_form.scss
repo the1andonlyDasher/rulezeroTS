@@ -136,16 +136,16 @@ form .input {
 form label {
   font-weight: 500;
   padding-bottom: var(--space-xs);
-  font-size: var(--fs-text);
+  font-size: clamp(0.5rem, 10vw, 1.25rem);
 }
 
 form :is(input, select, textarea) {
   padding: var(--space-xs);
-  font-size: var(--fs-text-small);
+  font-size: var(--fs-text);
   border: 1px solid hsl(0deg 0% 12%);
   color: var(--clr-contrast-400);
   font-weight: 500;
-  background-color: var(--clr-contrast-800);
+  background-color: var(--clr-contrast-750);
 }
 
 form input:active {
@@ -156,6 +156,7 @@ form input:focus-visible,
 textarea:focus-visible {
   border: 1px solid var(--clr-contrast-700);
   background-color: var(--clr-contrast-200);
+  color: var(--clr-contrast-750);
 }
 
 form .btn-group {
@@ -173,8 +174,8 @@ form button {
   border-radius: 2px;
   width: 100%;
   max-width: 300px;
-  @include mq(medium){
-    margin-right:auto;
+  @include mq(medium) {
+    margin-right: auto;
   }
 }
 

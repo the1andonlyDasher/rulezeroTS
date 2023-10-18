@@ -29,6 +29,7 @@ import { curObject, imgs, loadManager } from "@/pages/atoms";
 import Papa from "papaparse";
 import { useRouter } from "next/router";
 import { BufferGeometry } from "three";
+import { Box, Flex } from "@react-three/flex";
 
 
 type planeProps = {
@@ -58,81 +59,86 @@ const Timeline = () => {
   const [isInPage, setIsInPage] = useState(false)
   const [mounted, setMounted] = useState(false)
 
-  useEffect(()=>{
+  useEffect(() => {
     setDisposed(false)
-    if(router.pathname === "/archive"){
-      setTimeout(()=>{
+    if (router.pathname === "/archive") {
+      setTimeout(() => {
         setIsInPage(true)
       }, 1000)
     } else {
       setIsInPage(false)
+      setDisposed(true)
     }
   }, [router])
 
-  function onComplete(){
+  function onComplete() {
     setDisposed(!isInPage)
   }
 
   useEffect(() => {
-    if (typeof window !== "undefined" && fetching) {
-      var r: any,
-        rx: any =
-          /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
+    if (router.pathname.includes("/archive")) {
+      if (typeof window !== "undefined" && fetching) {
+        var r: any,
+          rx: any =
+            /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
 
-      Papa.parse(
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSloYeSqI6BpICcq9gG5a3KRhXv99DKlrj9XmEAIvmX0BxWw-olhU9J9kDG0LvM976e8jYblR0THwkj/pub?output=csv",
-        {
-          skipEmptyLines: "greedy",
-          preview: 0,
-          worker: false,
-          download: true,
-          header: true,
-          complete: (results) => {
-            console.log("Parsing complete:", results);
-            results.data.map((data: any, index) => {
-              r = data.Link.match(rx);
-              var t = data.Title;
-              var d = data.Dates;
-              if (fetching) {
-                if (!app.find((item: any) => item.name === r[1])) {
-                  app.push({
-                    position: [
-                      index % 2
-                        ? -(Math.random() < 0.5
-                          ? 15 + Math.random() * 5
-                          : 15 + Math.random() * 5)
-                        : Math.random() < 0.5
-                          ? 15
-                          : 15,
-                      Math.random() < 0.5
-                        ? 10 + Math.random() * 5
-                        : 10 + Math.random() * 5,
-                      -15 * index,
-                    ],
-                    rotation: [0, 0, 0],
-                    url: `https://img.youtube.com/vi/${r[1]}/mqdefault.jpg`,
-                    title: t,
-                    name: r[1],
-                    date: d
-                  });
+        Papa.parse(
+          "https://docs.google.com/spreadsheets/d/e/2PACX-1vSloYeSqI6BpICcq9gG5a3KRhXv99DKlrj9XmEAIvmX0BxWw-olhU9J9kDG0LvM976e8jYblR0THwkj/pub?output=csv",
+          {
+            skipEmptyLines: "greedy",
+            preview: 0,
+            worker: false,
+            download: true,
+            header: true,
+            complete: (results) => {
+              console.log("Parsing complete:", results);
+              results.data.map((data: any, index) => {
+                r = data.Link.match(rx);
+                var l = data.Link
+                var t = data.Title;
+                var d = data.Dates;
+                if (fetching) {
+                  if (!app.find((item: any) => item.name === r[1])) {
+                    app.push({
+                      position: [
+                        index % 2
+                          ? -(Math.random() < 0.5
+                            ? 15 + Math.random() * 5
+                            : 15 + Math.random() * 5)
+                          : Math.random() < 0.5
+                            ? 15
+                            : 15,
+                        Math.random() < 0.5
+                          ? 10 + Math.random() * 5
+                          : 10 + Math.random() * 5,
+                        -15 * index,
+                      ],
+                      rotation: [0, 0, 0],
+                      url: `https://img.youtube.com/vi/${r[1]}/mqdefault.jpg`,
+                      title: t,
+                      link: l,
+                      name: r[1],
+                      date: d
+                    });
+                  }
+
+                  setArray(app)
+                  See(true)
                 }
+              });
+              fetch(false)
+              app.forEach((item: any) => {
+                const texture: any = new THREE.TextureLoader(manager).load(item.url)
+                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+                textures.push(texture)
+              })
 
-                setArray(app)
-                See(true)
-              }
-            });
-            fetch(false)
-            app.forEach((item: any) => {
-              const texture: any = new THREE.TextureLoader(manager).load(item.url)
-              texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-              textures.push(texture)
-            })
-
-          },
-        }
-      );
+            },
+          }
+        );
+      }
     }
-  }, []);
+  }, [router.pathname]);
 
 
   const App = ({ images }: { images: any }) => {
@@ -177,13 +183,12 @@ const Timeline = () => {
           }}
           onClick={(e) => {
             e.stopPropagation(),
-            click.current = true
+              click.current = true
             e.object.localToWorld(p.set(0, 0, 10 + (5 / w * h)))
           }}
           onPointerMissed={() => {
             p.set(0, 10, 0.5)
             click.current = false
-
           }
           }
         >
@@ -232,13 +237,20 @@ const Timeline = () => {
       const image = useRef<any>(null!);
       const text = useRef<any>(null!);
       const ref = useRef<any>(null!);
+      const button = useRef<any>(null!);
+      const matButton = useRef<any>(null!);
+      const router = useRouter()
       const group = useRef<any>(null!);
       const [hovering, hover] = useState(false);
+      const [clicked, setClick] = useState(false)
       useCursor(hovering)
 
-       useFrame((state, dt) => {
-        ref.current.position.z <= -ref.current.parent.parent.position.z - 50 ? ref.current.visible = false : ref.current.visible = true
-       })
+
+
+      useFrame((state, dt) => {
+        button.current.material.opacity = clicked ? 1 : 0;
+        ref.current.position.z <= -ref.current.parent.parent.position.z - 100 ? ref.current.visible = false : ref.current.visible = true
+      })
       // useFrame((state, dt) => {
       // ref.current.position.y =
       //   props.position[1] + Math.sin(dt) * 0.3 * props.factor;
@@ -253,7 +265,7 @@ const Timeline = () => {
       // });
 
       useEffect(() => {
-        text.current.material.opacity = hovering ? 1 : 0;
+        text.current.material.opacity = hovering && clicked === false ? 1 : 0;
       }, [hovering])
 
       const controls_mesh = useAnimationControls();
@@ -267,9 +279,9 @@ const Timeline = () => {
       const controls = useAnimationControls();
 
       const button_variants = {
-        hidden: { opacity: 0 },
-        visible: { opacity: 1 },
-        exit: { opacity: 0 },
+        hidden: { scale: 0 },
+        visible: { scale: 1 },
+        exit: { scale: 0 },
       };
 
       const variants = {
@@ -285,7 +297,8 @@ const Timeline = () => {
       return (
 
         <motion3d.group ref={group} >
-         <instancedMesh ref={ref} geometry={new THREE.PlaneGeometry} args={[undefined, undefined, 1]} 
+
+          <instancedMesh ref={ref} geometry={new THREE.PlaneGeometry} args={[undefined, undefined, 1]}
             scale={[Math.min(11 * (w / 10), 11), Math.min(6 * (w / 10), 6), 1]}
             // variants={variants_mesh}
             // initial="hidden"
@@ -293,11 +306,13 @@ const Timeline = () => {
             // exit={controls_mesh}
             //  isActive = {props.isActive}
             // popUp={props.popUp}
-            onPointerOver={(e) => (e.stopPropagation(), hover(true))}
-            onPointerOut={() => hover(false)}
+            onPointerOver={(e) => (e.stopPropagation(), hover(clicked ? false : true))}
+            onPointerOut={() => hover(clicked ? false : false)}
+            onClick={() => setClick(true)}
+            onPointerMissed={() => setClick(false)}
             position={[posX, props.position[1], props.position[2]]}
           >
-            
+
             <motion3d.meshBasicMaterial
               variants={variants}
               initial="hidden"
@@ -320,6 +335,33 @@ const Timeline = () => {
             </motion3d.mesh>
 
           </instancedMesh>
+          <motion3d.mesh
+            variants={button_variants}
+            transition={{ duration: 0.5 }}
+            animate={clicked ? "visible" : "hidden"}
+            ref={button}
+            position={[props.end[0], props.end[1], props.end[2] + 0.2]}
+            scale={[1, 1, 1]}
+            visible={clicked}
+            onPointerOver={(e) => (e.stopPropagation(), hover(true))}
+            onPointerOut={() => hover(false)}
+          >
+            <planeGeometry args={[5, 1.5, 1]} />
+            <motion3d.meshBasicMaterial color={hovering ? "grey" : "white"} />
+            <Text
+              maxWidth={10}
+              characters="abcdefghijklmnopqrstuvwxyz0123456789!"
+              fontSize={0.6}
+              position={[0, 0, 0.1]}
+              font={"/fonts/prompt-v10-latin-900italic.woff"}
+              anchorX="center"
+              anchorY="middle"
+              onClick={() => { router.push(`${props.link}`) }}
+            >
+              <meshBasicMaterial color={"#222"} visible={!disposed} />
+              {"Watch now!".split("-").join(" ")}
+            </Text>
+          </motion3d.mesh>
           <Text
             ref={text}
             maxWidth={10}
@@ -334,7 +376,7 @@ const Timeline = () => {
             anchorX="center"
             anchorY="middle"
           >
-            <meshBasicMaterial color={"white"} visible={!disposed}/>
+            <meshBasicMaterial color={"white"} visible={!disposed} />
             {props.title.split("-").join(" ")}
           </Text>
           <Text
@@ -350,7 +392,7 @@ const Timeline = () => {
             anchorX="center"
             anchorY="middle"
           >
-            <meshBasicMaterial color={"white"} visible={!disposed}/>
+            <meshBasicMaterial color={"white"} visible={!disposed} />
             {props.date.split("-").join(" ")}
           </Text>
           <QuadraticBezierLine
@@ -365,6 +407,7 @@ const Timeline = () => {
             dashed
             fog
           ></QuadraticBezierLine>
+
         </motion3d.group>
       );
     };
@@ -381,21 +424,21 @@ const Timeline = () => {
     )
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     setMounted(isInPage)
-    if(!isInPage){
-      controls.start({y:-100}).then(()=>setMounted(false))
+    if (!isInPage) {
+      controls.start({ y: -100 }).then(() => setMounted(false))
     } else {
-      controls.start({y:0, transition:{delay:1}})
+      controls.start({ y: 0, transition: { delay: 1 } })
     }
   }, [isInPage])
 
   return (<>
-
+    <directionalLight intensity={10} />
     <Suspense fallback={<Html>Loading timeline...</Html>}>
- <motion3d.group visible={!disposed} animate={controls} onAnimationComplete={onComplete}>
+      <motion3d.group visible={!disposed} animate={controls} onAnimationComplete={onComplete}>
         {mounted && <App images={array} />}
-        </motion3d.group>
+      </motion3d.group>
     </Suspense>
   </>)
 }

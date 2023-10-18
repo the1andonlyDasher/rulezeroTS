@@ -26,26 +26,24 @@
   @extend %trans;
   font-size: 1.5rem;
   color: var(--p-color);
-  padding: 1rem;
   width: 100%;
   height: 100px;
   z-index: 10;
   position: fixed;
   top: 0;
   left: 0;
-  padding: 0 1.5rem 0 1.5rem;
+  padding: 1rem;
   @include mq(small) {
-    padding: 0 2.5rem 0 2.5rem;
+    padding: 1.5rem;
   }
   @include mq(medium) {
-    height: 120px;
-    padding: 0 5% 0 5%;
+    padding: 2rem;
   }
   @include mq(large) {
-    padding: 0 10% 0 10%;
+    padding: 1rem 10% 1rem 10%;
   }
   @include mq(xl) {
-    padding: 0 15% 0 15%;
+    padding: 1rem 15% 1rem 15%;
   }
 }
 
@@ -102,6 +100,7 @@
 .navbar__logo img {
   height: 100%;
   width: 100%;
+  min-height: clamp(3rem, 5vw, 5rem);
 }
 
 .current {
@@ -216,6 +215,14 @@ a {
   display: flex;
   align-items: center;
   margin: 1rem auto;
+  padding-left: 1em;
+  @include mq(medium){
+  padding-left: 1.5em;
+}
+
+@include mq(large) {
+  padding-left: 2em;
+}
   // &:first-of-type a{
   //   padding-left: 0
   // }
@@ -231,361 +238,45 @@ a {
   display: flex;
   align-items: center;
   padding: 0;
-  height: 100%;
   color: var(--clr-contrast-100);
   text-decoration: none;
-  font-size: clamp(1.5rem, 15vw, 2rem);
+  font-size: clamp(1rem, 15vw, 2rem);
   font-weight: 800;
+  font-family: "Prompt", sans-serif;
+  text-transform: uppercase;
+  overflow: hidden;
+  padding: 0.2em;
 
-  border-radius: 3px;
-  font-family: "Fira Sans", sans-serif;
-  animation: empty 1s infinite;
+  &::after{
+    @extend %trans;
+    content:"";
+    width: 100%;
+    position: absolute;
+    height: 3px;
+    border-radius: 1px;
+    background-color: var(--clr-primary-200);
+    left:-100%;
+    bottom: 0;
+  }
 
   &:hover,
   &:active {
-    animation: line 5s infinite;
     cursor: pointer;
   }
 
   &:hover::after,
-  &:active::after {
-    animation: glitchMain 6s infinite;
-    color: var(--clr-primary-200);
-    animation-timing-function: step-start;
-    opacity: 0.5;
-    transform: translate(-20px, -10px);
+  &:active::after{
+    left:0
   }
 
-  &:hover::before,
-  &:active::before {
-    animation: glitchMain 9s infinite;
-    color: var(--clr-primary-400);
-    animation-timing-function: step-start;
-    opacity: 0.5;
-    transform: translate(8px, 10px);
-  }
 
   @include mq(medium) {
-    font-size: clamp(1rem, 5vw, 1.5rem);
-    padding: 1rem;
+    font-size: clamp(1rem, 5vw, 1.25rem);
   }
 
-  @include mq(large) {
-    padding: 1.5rem;
-  }
 }
 
-@keyframes line {
-  0% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      0 100%,
-      0 100%,
-      100% 100%,
-      100% 100%,
-      0 100%,
-      0 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
 
-  1% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      0 100%,
-      0 92%,
-      100% 92%,
-      100% 97%,
-      0 97%,
-      0 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  99% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      0 100%,
-      0 5%,
-      100% 5%,
-      100% 11%,
-      0 11%,
-      0 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  100% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      0 100%,
-      0 5%,
-      100% 5%,
-      100% 0,
-      0 0,
-      0 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-}
-
-@keyframes glitchMain {
-  0% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      25% 100%,
-      25% 25%,
-      75% 25%,
-      75% 75%,
-      25% 75%,
-      25% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  9% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      23% 100%,
-      23% 33%,
-      100% 33%,
-      100% 100%,
-      25% 100%,
-      25% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  10% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      8% 100%,
-      7% 13%,
-      39% 13%,
-      40% 76%,
-      7% 76%,
-      8% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  12% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      25% 100%,
-      25% 25%,
-      75% 25%,
-      75% 75%,
-      25% 75%,
-      25% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  20% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      23% 100%,
-      23% 33%,
-      100% 33%,
-      100% 100%,
-      25% 100%,
-      25% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  50% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      25% 100%,
-      25% 25%,
-      75% 25%,
-      75% 75%,
-      25% 75%,
-      25% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  55% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      23% 100%,
-      23% 33%,
-      100% 33%,
-      100% 100%,
-      25% 100%,
-      25% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  58% {
-    clip-path: inset(5% 20% 15% 10%);
-  }
-
-  60% {
-    clip-path: inset(5% 20% 15% 10%);
-  }
-
-  61% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      8% 100%,
-      7% 13%,
-      39% 13%,
-      40% 76%,
-      7% 76%,
-      8% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  70% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      25% 100%,
-      26% 0,
-      100% 0,
-      100% 75%,
-      25% 75%,
-      25% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  75% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      25% 100%,
-      25% 25%,
-      75% 25%,
-      75% 75%,
-      25% 75%,
-      25% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  77% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      8% 100%,
-      7% 13%,
-      39% 13%,
-      40% 76%,
-      7% 76%,
-      8% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  80% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      23% 100%,
-      23% 33%,
-      100% 33%,
-      100% 100%,
-      25% 100%,
-      25% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  85% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      25% 100%,
-      25% 25%,
-      75% 25%,
-      75% 75%,
-      25% 75%,
-      25% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  90% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      0 100%,
-      0 25%,
-      100% 25%,
-      100% 75%,
-      0 75%,
-      0 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  95% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      25% 100%,
-      25% 0,
-      74% 0,
-      75% 100%,
-      26% 100%,
-      25% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-
-  100% {
-    clip-path: polygon(
-      0% 0%,
-      0% 100%,
-      8% 100%,
-      7% 13%,
-      39% 13%,
-      40% 76%,
-      7% 76%,
-      8% 100%,
-      100% 100%,
-      100% 0%
-    );
-  }
-}
 
 .white li a {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
@@ -594,23 +285,6 @@ a {
     color: var(--clr-primary-200);
     background-color: rgba(14, 22, 36, 0.1);
   }
-}
-
-.nav-items-desktop li .nav-link::after,
-.nav-items-desktop li .nav-link::before {
-  transition: ease-in-out 0.5s;
-  content: attr(data-link-text);
-  animation: empty 1s infinite;
-  font-weight: 800;
-  font-size: var(--fs-sub-small);
-  display: flex;
-  opacity: 0;
-  z-index: -1;
-  align-items: center;
-  position: absolute;
-}
-
-@keyframes empty {
 }
 
 .shrunk {

@@ -2,33 +2,32 @@ import React, { useEffect } from "react";
 import Link from "next/link";
 
 const Footer = () => {
-  useEffect(()=>{
-    // console.log("footer mounted")
-  })
+  const date = new Date()
+
   return (
     <>
       <footer className="footer">
-        <h5>Rule Zero © 2023</h5>
-        <ul className="footer-links">
-          <li>
+        <h5>© {date.getFullYear()} Rule Zero. All Rights Reserved.</h5>
+        <div className="footer-links">
+          <div>
             <Link
               data-link-text="Impressum"
               className="btn__outline"
-              href={"/Impressum"}
+              href={"/datapolicy"}
             >
-              Company Details
+              Data Policy
             </Link>
-          </li>
-          <li>
+          </div>
+          <div>
             <Link
               data-link-text="Datenschutz"
               className="btn__outline"
-              href={"/Datenschutz"}
+              href={"/fairuse"}
             >
-              Privacy
+              Fair Use
             </Link>
-          </li>
-        </ul>
+          </div>
+        </div>
       </footer>
     </>
   );
