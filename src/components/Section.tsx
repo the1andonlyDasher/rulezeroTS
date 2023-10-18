@@ -82,8 +82,9 @@ function Section({ sectionName, ref, id, text, header, children }: sectionProps)
     </motion.section>
   );
 }
-Section.displayName = "Section"
+
 
 const Sec = forwardRef<ReactElement, sectionProps>((props, ref) => <Section {...props}></Section>);
+Sec.displayName = "Section"
 
 export default Sec;

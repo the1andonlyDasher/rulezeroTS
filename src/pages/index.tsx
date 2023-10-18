@@ -23,7 +23,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <InView className='int-ob__wrapper' threshold={0.5} rootMargin='100px' onChange={(inView, entry) => { inView ? (setApp(`${entry.target.firstElementChild?.getAttribute("data-section-name")}`)) : null }}>
-        <Sec sectionName="firstSection" ref={firstSec} children={
+        <Sec sectionName="firstSection" ref={firstSec}>
           <Hero
             headerPartOne="Actionable"
             headerPartTwo="Information"
@@ -34,10 +34,10 @@ export default function Home() {
             buttonTwo="Contact us"
             linkTwo="/contact"
           />
-        } ></Sec>
+        </Sec>
       </InView>
       <InView className='int-ob__wrapper' threshold={0.5} rootMargin='100px' onChange={(inView, entry) => { inView ? (setApp(`${entry.target.firstElementChild?.getAttribute("data-section-name")}`)) : null }}>
-        <Sec sectionName="secondSection" ref={secondSec} children={
+        <Sec sectionName="secondSection" ref={secondSec}>
           <Hero
             headerPartOne="What the #@-!"
             headerPartTwo="is Rule Zero?"
@@ -47,7 +47,7 @@ export default function Home() {
             linkOne="/about"
 
           />
-        } ></Sec>
+        </Sec>
       </InView>
       <Footer />
     </>
