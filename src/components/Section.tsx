@@ -70,7 +70,7 @@ function Section({ sectionName, ref, id, text, header, children }: sectionProps)
       id={id}
       variants={section_variants}
     >
-      <motion.div variants={section_variants} >
+      <motion.div variants={section_variants} className="__s__b">
         {header ? (
           <motion.h2 variants={header_variants}>{header}</motion.h2>
         ) : null}
