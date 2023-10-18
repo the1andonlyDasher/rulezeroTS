@@ -49,5 +49,5 @@
     "jotai": "^2.4.3",
     "wouter": "^2.11.0"
   },
-  "browserlist": "defaults"
+  "browserslist": "defaults"
 }
