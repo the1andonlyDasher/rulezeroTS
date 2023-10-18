@@ -3,7 +3,7 @@ import Hero from '@/components/hero/hero';
 import { InView } from "react-intersection-observer";
 import Sec from '@/components/Section';
 import { useAtom } from 'jotai';
-import { loc } from './atoms';
+import { loc } from '../js/atoms';
 import Footer from '@/components/Footer';
 import { useRef } from 'react';
 

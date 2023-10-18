@@ -25,7 +25,7 @@ import {
 import { motion as motion3d } from "framer-motion-3d";
 import { proxy } from "valtio";
 import { atom, useAtom } from "jotai";
-import { curObject, imgs, loadManager } from "@/pages/atoms";
+import { curObject, imgs, loadManager } from "@/js/atoms";
 import Papa from "papaparse";
 import { useRouter } from "next/router";
 import { BufferGeometry } from "three";

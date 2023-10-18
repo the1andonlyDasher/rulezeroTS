@@ -7,7 +7,7 @@ import { Flex, Box as FlexBox } from '@react-three/flex'
 import { motion } from 'framer-motion-3d'
 import { MotionConfig, useAnimation, useAnimationControls } from 'framer-motion'
 import Pill from './Pill'
-import { loc } from '@/pages/atoms'
+import { loc } from '@/js/atoms'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/router'
 
@@ -64,25 +64,25 @@ export default function LandingGL() {
     const [disposed, setDisposed] = useState(false)
     const [isInPage, setIsInPage] = useState(false)
 
-  
-    useEffect(()=>{
-      setDisposed(false)
-      if(router.pathname === "/"){
-        setTimeout(()=>{
-            setIsInPage(true)
-          }, 1000)
-      } else {
-        setIsInPage(false)
-      }
+
+    useEffect(() => {
+        setDisposed(false)
+        if (router.pathname === "/") {
+            setTimeout(() => {
+                setIsInPage(true)
+            }, 1000)
+        } else {
+            setIsInPage(false)
+        }
     }, [router])
-  
-    function onComplete(){
-      setDisposed(!isInPage)
+
+    function onComplete() {
+        setDisposed(!isInPage)
     }
 
 
 
-    useEffect(()=>{
+    useEffect(() => {
         controls.start(loaded && app === "firstSection" ? { x: 0 } : app === "secondSection" ? { x: 100 } : { x: 10 })
     }, [app])
     return (
@@ -90,12 +90,12 @@ export default function LandingGL() {
             <MotionConfig transition={{ type: "spring", stiffness: 150, damping: 50, bounce: 0.25, mass: 0.5, }}>
                 <Suspense fallback={null}>
                     <motion.group
-                                visible={!disposed}
-                                animate={{x:isInPage ? 0 : 200}}
-                                onAnimationComplete={onComplete}
+                        visible={!disposed}
+                        animate={{ x: isInPage ? 0 : 200 }}
+                        onAnimationComplete={onComplete}
                         position={[0, 0, 0]}
-                        // rotation={[0, Math.PI, 0]}
-                        >
+                    // rotation={[0, Math.PI, 0]}
+                    >
                         <SpotLight
                             ref={light}
                             castShadow
@@ -111,7 +111,7 @@ export default function LandingGL() {
                             opacity={0.2}
                             target={target}
                             visible={app === "firstSection" ? true : false}
-                            position={[5, 35, 0]}  />
+                            position={[5, 35, 0]} />
 
                         <Flex
                             justify="flex-start"

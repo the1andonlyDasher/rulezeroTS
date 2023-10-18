@@ -1,4 +1,4 @@
-import { loadManager, totalLoad } from "@/pages/atoms";
+import { loadManager, totalLoad } from "@/js/atoms";
 import { motion, useAnimation } from "framer-motion";
 import { useAtom } from "jotai";
 import { useEffect, useRef } from "react";

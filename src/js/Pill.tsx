@@ -8,7 +8,7 @@ import { motion } from 'framer-motion-3d'
 import { Physics, PlaneProps, Triplet, useBox, usePlane } from '@react-three/cannon'
 import { Color, Mesh } from 'three'
 import { geometry } from 'maath';
-import { loc } from '@/pages/atoms';
+import { loc } from '@/js/atoms';
 import { useAtom } from 'jotai';
 import { Box, Flex } from '@react-three/flex';
 import { useRouter } from 'next/router';
