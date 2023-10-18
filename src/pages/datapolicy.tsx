@@ -3,11 +3,11 @@ import Sec from "@/components/Section"
 
 export default function DataPolicy() {
     return (<>
-        <Sec header="Data Protection Policy" children={(<>
+        <Sec header="Data Protection Policy">
             <div>
 
             </div>
-        </>)} />
+        </Sec>
         <Footer />
     </>)
 }

@@ -126,7 +126,7 @@ const ContactForm = ({ props }: contactProps) => {
             exit="exit"
           >
             <h4>Cheers!</h4>
-            <p>We'll take care of it and will respond soon.</p>
+            <p>We&apos;ll take care of it and will respond soon.</p>
             <button className="btn__outline" onClick={bringBackform}>
               Forgot anything?
             </button>

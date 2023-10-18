@@ -83,6 +83,8 @@ function Section({ sectionName, ref, id, text, header, children }: sectionProps)
   );
 }
 
+
 const Sec = forwardRef<ReactElement, sectionProps>((props, ref) => <Section {...props}></Section>);
+Sec.displayName = "Section"
 
 export default Sec;

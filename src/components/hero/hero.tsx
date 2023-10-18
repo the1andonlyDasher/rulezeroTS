@@ -79,7 +79,7 @@ const Hero = ({ headerPartOne, headerPartTwo, subHeader, text, buttonOne, button
   const controls = useAnimationControls()
   useEffect(() => {
     controls.start("animate")
-  }, [isInView])
+  }, [isInView, controls])
   return (
     <>
       <motion.div className="lr__wrapper">

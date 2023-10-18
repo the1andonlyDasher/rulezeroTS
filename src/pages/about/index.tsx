@@ -28,6 +28,24 @@ const name_variants = {
   visible: { y: 20, opacity: 0 }
 }
 
+interface cardProps {
+  func: any;
+  tapped: any;
+  img: any;
+  index: number;
+}
+
+const AboutCard: React.FC<cardProps> = ({ func, tapped, img, index }) => {
+  const controls = useAnimation();
+  return (<>
+    <motion.div onTap={() => { func(), controls.start(tapped ? "visible" : "hidden") }} onMouseEnter={() => controls.start("visible")} onMouseLeave={() => controls.start("hidden")} variants={card_variants} className="card" key={index}>
+      <motion.div className="img" style={{ backgroundImage: `url(${img.url})`, clipPath: `${img.clip}` }}></motion.div>
+      <motion.div className="name" initial="hidden" animate={controls} variants={name_variants}><h4>{img.creator}</h4></motion.div>
+      <motion.div className="name" initial="hidden" animate={controls} variants={button_variants}><Link href={`/about/${img.id}`}><h5>Read more</h5></Link></motion.div>
+    </motion.div>
+  </>)
+}
+
 export default function About() {
   const [tapped, setTapped] = useState(false);
   return (
@@ -40,15 +58,9 @@ export default function About() {
       </Head>
       <Sec children={(
         <motion.div variants={cards_variants} className="cards">
-          {images.map((img: any, index: number) => {
-            const controls = useAnimation();
-            return (
-              <motion.div onTap={() => { setTapped(!tapped), controls.start(tapped ? "visible" : "hidden") }} onMouseEnter={() => controls.start("visible")} onMouseLeave={() => controls.start("hidden")} variants={card_variants} className="card" key={index}>
-                <motion.div className="img" style={{ backgroundImage: `url(${img.url})`, clipPath: `${img.clip}` }}></motion.div>
-                <motion.div className="name" initial="hidden" animate={controls} variants={name_variants}><h4>{img.creator}</h4></motion.div>
-                <motion.div className="name" initial="hidden" animate={controls} variants={button_variants}><Link href={`/about/${img.id}`}><h5>Read more</h5></Link></motion.div>
-              </motion.div>)
-          })}
+          {images.map((img: any, index: number) =>
+            <AboutCard func={setTapped(!tapped)} img={img} tapped={tapped} index={index} />
+          )}
         </motion.div>
       )} />
       <Footer />
