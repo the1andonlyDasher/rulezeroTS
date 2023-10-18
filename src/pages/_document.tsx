@@ -13,7 +13,11 @@ import { cursor } from '../js/atoms';
 export default function Document() {
   return (
     <Html lang="en">
-      <Head />
+      <Head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icon.png"></link>
+        <meta name="theme-color" content="#71718e" />
+      </Head>
       <body>
         <Main />
         <NextScript />
