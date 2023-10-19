@@ -10,20 +10,9 @@ import { motion as motion3d, } from "framer-motion-3d";
 import Timeline from "./Timeline";
 import { useRouter } from 'next/router';
 import LandingGL from "./LandingGL";
-import { Vector3 } from "three/src/math/Vector3"
+import * as THREE from "three";
 
-interface plane {
-  props: planeProps;
-}
 
-type planeProps = {
-  position: Vector3 | { x: number, y: number, z: number };
-  rotation: Vector3 | { x: number, y: number, z: number };
-  url: string;
-  title: string;
-  name: string;
-  date: string;
-}
 let mouseX: any;
 let mouseY: any;
 let windowHalfX: any;
@@ -34,11 +23,8 @@ let windowHalfY: any;
 
 
 export const GL = () => {
-  const location = useRouter()
 
   const wrapper = useRef<any>(!null)
-
-
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -58,7 +44,7 @@ export const GL = () => {
     const [w, h] = useAspect(size.width, size.height)
     const camera = useRef<any>(null!);
     const { ...cameraProps } = {
-      position: new Vector3(0, w / 6, 20),
+      position: new THREE.Vector3(0, w / 6, 20),
       focus: 1
     };
 

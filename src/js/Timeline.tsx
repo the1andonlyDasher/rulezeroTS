@@ -23,9 +23,7 @@ import Papa from "papaparse";
 import { useRouter } from "next/router";
 import { TextureLoader } from "three/src/loaders/TextureLoader";
 import { RepeatWrapping } from "three/src/constants";
-import { Vector3 } from "three/src/math/Vector3";
-import { Quaternion } from "three/src/math/Quaternion";
-import { PlaneGeometry } from "three/src/geometries/PlaneGeometry";
+import * as THREE from "three"
 
 
 const Timeline = () => {
@@ -131,8 +129,8 @@ const Timeline = () => {
     const unit = proxy({ value: 15 });
 
     const Frames = ({ images }: { images: any }) => {
-      var p = new Vector3();
-      var q = new Quaternion();
+      var p = new THREE.Vector3();
+      var q = new THREE.Quaternion();
       const ref = useRef<any>(null!);
       const clicked = useRef<any>(null!);
       const scroll = useScroll();
@@ -269,7 +267,7 @@ const Timeline = () => {
 
         <motion3d.group ref={group} >
 
-          <instancedMesh ref={ref} geometry={new PlaneGeometry} args={[undefined, undefined, 1]}
+          <instancedMesh ref={ref} geometry={new THREE.PlaneGeometry} args={[undefined, undefined, 1]}
             scale={[Math.min(11 * (w / 10), 11), Math.min(6 * (w / 10), 6), 1]}
             onPointerOver={(e) => (e.stopPropagation(), hover(clicked ? false : true))}
             onPointerOut={() => hover(clicked ? false : false)}
