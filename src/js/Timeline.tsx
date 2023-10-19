@@ -1,35 +1,31 @@
-import * as THREE from "three";
+
 import { useEffect, useRef, useState, Suspense } from "react";
-import { Canvas, Vector3, useFrame, useLoader, useThree } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import {
   useCursor,
   QuadraticBezierLine,
-  Image as FiberImage,
   Text,
   Line,
   useScroll,
   ScrollControls,
   useAspect,
   Html,
-  useTexture,
-  Merged,
 } from "@react-three/drei";
 import { easing } from "maath";
 import {
-  MotionConfig,
-  motion,
-  useAnimation,
   useAnimationControls,
-  useCycle,
 } from "framer-motion";
 import { motion as motion3d } from "framer-motion-3d";
 import { proxy } from "valtio";
-import { atom, useAtom } from "jotai";
-import { curObject, imgs, loadManager } from "@/js/atoms";
+import { useAtom } from "jotai";
+import { imgs, loadManager } from "@/js/atoms";
 import Papa from "papaparse";
 import { useRouter } from "next/router";
-import { BufferGeometry } from "three";
-import { Box, Flex } from "@react-three/flex";
+import { TextureLoader } from "three/src/loaders/TextureLoader";
+import { RepeatWrapping } from "three/src/constants";
+import { Vector3 } from "three/src/math/Vector3";
+import { Quaternion } from "three/src/math/Quaternion";
+import { PlaneGeometry } from "three/src/geometries/PlaneGeometry";
 
 
 type planeProps = {
@@ -128,8 +124,8 @@ const Timeline = () => {
               });
               fetch(false)
               app.forEach((item: any) => {
-                const texture: any = new THREE.TextureLoader(manager).load(item.url)
-                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+                const texture: any = new TextureLoader(manager).load(item.url)
+                texture.wrapS = texture.wrapT = RepeatWrapping;
                 textures.push(texture)
               })
 
@@ -149,8 +145,8 @@ const Timeline = () => {
     const unit = proxy({ value: 15 });
 
     const Frames = ({ images }: { images: any }) => {
-      var p = new THREE.Vector3();
-      var q = new THREE.Quaternion();
+      var p = new Vector3();
+      var q = new Quaternion();
       const ref = useRef<any>(null!);
       const clicked = useRef<any>(null!);
       const scroll = useScroll();
@@ -251,18 +247,7 @@ const Timeline = () => {
         button.current.material.opacity = clicked ? 1 : 0;
         ref.current.position.z <= -ref.current.parent.parent.position.z - 100 ? ref.current.visible = false : ref.current.visible = true
       })
-      // useFrame((state, dt) => {
-      // ref.current.position.y =
-      //   props.position[1] + Math.sin(dt) * 0.3 * props.factor;
-      // ref.current.rotation.y = Math.sin(dt * 0.8) * 0.05 * props.factor;
-      // ref.current.rotation.x = Math.sin(dt * 1.2) * 0.05 * props.factor;
-      // ref.current.position.z <= -ref.current.parent.parent.position.z - 50
-      //   ? controls.start("exit")
-      //   : controls.start("visible");
-      // ref.current.position.z <= -ref.current.parent.parent.position.z - 50
-      //   ? controls_mesh.start("exit")
-      //   : controls_mesh.start("visible");
-      // });
+
 
       useEffect(() => {
         text.current.material.opacity = hovering && clicked === false ? 1 : 0;
@@ -298,14 +283,8 @@ const Timeline = () => {
 
         <motion3d.group ref={group} >
 
-          <instancedMesh ref={ref} geometry={new THREE.PlaneGeometry} args={[undefined, undefined, 1]}
+          <instancedMesh ref={ref} geometry={new PlaneGeometry} args={[undefined, undefined, 1]}
             scale={[Math.min(11 * (w / 10), 11), Math.min(6 * (w / 10), 6), 1]}
-            // variants={variants_mesh}
-            // initial="hidden"
-            // animate={controls_mesh}
-            // exit={controls_mesh}
-            //  isActive = {props.isActive}
-            // popUp={props.popUp}
             onPointerOver={(e) => (e.stopPropagation(), hover(clicked ? false : true))}
             onPointerOut={() => hover(clicked ? false : false)}
             onClick={() => setClick(true)}

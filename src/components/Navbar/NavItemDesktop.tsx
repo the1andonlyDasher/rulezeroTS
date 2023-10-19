@@ -1,9 +1,9 @@
-import React, { useRef, useEffect, useState }  from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from "framer-motion";
 import Link from 'next/link';
 
 const variants = {
-    initial: {
+  initial: {
     x: 50,
     opacity: 0,
 
@@ -12,7 +12,7 @@ const variants = {
     x: 0,
     opacity: 1,
   },
-  exit:{
+  exit: {
     x: 50,
     opacity: 0,
   },
@@ -24,7 +24,7 @@ type NavItemProps = {
   clickLink?: any;
 }
 
-export const NavItem = ({href,name, clickLink}:NavItemProps) => {
+export const NavItem = ({ href, name, clickLink }: NavItemProps) => {
   const [isShrunk, setShrunk] = useState(false);
   useEffect(() => {
     const handler = () => {
@@ -49,22 +49,22 @@ export const NavItem = ({href,name, clickLink}:NavItemProps) => {
     window.addEventListener("scroll", handler);
     return () => window.removeEventListener("scroll", handler);
   }, []);
-    return (
-        <>
+  return (
+    <>
       <motion.li
-      className="navItem"
-      variants={variants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      transition={{
-        type: "tween",
-        duration: 0.75
-    }}
+        className="navItem"
+        variants={variants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        transition={{
+          type: "tween",
+          duration: 0.75
+        }}
       >
         <Link aria-label={name} scroll={false} className={isShrunk ? "nav-link black" : "nav-link"} href={`${href}`} onClick={clickLink}>{name}</Link>
       </motion.li>
-      </>
-    );
-  };
+    </>
+  );
+};
 

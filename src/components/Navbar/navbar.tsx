@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { motion, useCycle } from "framer-motion";
 import { NavItem } from "@/components/Navbar/NavItemDesktop";
@@ -7,7 +6,7 @@ import Navigation from "@/components/Navbar/Navigation";
 import MobileNav from "@/components/Navbar/MobileNav";
 import { NavItem as Mnav } from "@/components/Navbar/NavItemMobile";
 import NavbarToggle from "./NavbarToggle";
-import logo from "/images/maxresdefault.png"
+
 
 
 const Navbar = ({ logo, alt, children }: any) => {

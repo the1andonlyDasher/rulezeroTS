@@ -1,15 +1,15 @@
-import * as THREE from 'three'
-import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
-import { Text, useTexture, MeshReflectorMaterial, SpotLight, RoundedBox, useAspect } from '@react-three/drei'
-import { DepthOfField, EffectComposer } from '@react-three/postprocessing'
+
+import React, { Suspense, useEffect, useRef, useState } from 'react'
+import { useThree } from '@react-three/fiber'
+import { Text, SpotLight, useAspect } from '@react-three/drei'
 import { Flex, Box as FlexBox } from '@react-three/flex'
 import { motion } from 'framer-motion-3d'
-import { MotionConfig, useAnimation, useAnimationControls } from 'framer-motion'
+import { MotionConfig, useAnimation } from 'framer-motion'
 import Pill from './Pill'
 import { loc } from '@/js/atoms'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/router'
+import { Object3D } from 'three/src/core/Object3D'
 
 
 
@@ -60,7 +60,7 @@ export default function LandingGL() {
     const { size } = useThree()
     size.updateStyle = true;
     const [vpWidth, vpHeight] = useAspect(size.width, size.height);
-    const [target] = useState(() => new THREE.Object3D())
+    const [target] = useState(() => new Object3D())
     const [disposed, setDisposed] = useState(false)
     const [isInPage, setIsInPage] = useState(false)
 

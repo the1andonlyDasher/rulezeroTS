@@ -1,7 +1,4 @@
-import Hero from "@/components/hero/hero";
-import { useAtom } from "jotai";
 import Head from "next/head";
-import { useEffect } from "react";
 
 export default function Archive() {
   return (

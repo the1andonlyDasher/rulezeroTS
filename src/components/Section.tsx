@@ -1,6 +1,5 @@
-import React, { useRef, forwardRef, ReactNode, ReactComponentElement, ReactElement, useEffect, useState } from "react";
-import { motion, useAnimationControls, useInView } from "framer-motion";
-import { useAtom } from "jotai";
+import React, { forwardRef, ReactElement } from "react";
+import { motion } from "framer-motion";
 
 
 const section_variants = {

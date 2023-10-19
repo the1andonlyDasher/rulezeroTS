@@ -1,17 +1,18 @@
-import * as THREE from 'three'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
-import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Vector3, useFrame, extend, useThree } from '@react-three/fiber'
-import { Instance, SpotLight, Text3D, useAspect, useGLTF } from '@react-three/drei'
+import React, { useEffect, useRef, useState } from 'react'
+import { Vector3, useThree } from '@react-three/fiber'
+import { SpotLight, useAspect, useGLTF } from '@react-three/drei'
 import { motion } from 'framer-motion-3d'
-import { Physics, PlaneProps, Triplet, useBox, usePlane } from '@react-three/cannon'
-import { Color, Mesh } from 'three'
+import { Physics, PlaneProps, useBox, usePlane } from '@react-three/cannon'
+import { Mesh } from 'three'
 import { loc } from '@/js/atoms';
 import { useAtom } from 'jotai';
 import { Box, Flex } from '@react-three/flex';
 import { useRouter } from 'next/router';
-import { useAnimation, useAnimationControls } from 'framer-motion';
+import { useAnimation } from 'framer-motion';
+import { Object3D } from 'three/src/core/Object3D'
+
 
 type pillProps = {
     position: Vector3
@@ -82,7 +83,7 @@ export default function Pill({ position }: pillProps) {
     const group = useRef<any>(!null);
     const top_half = useRef<any>(!null);
     const bottom_half = useRef<any>(!null);
-    const [target] = useState(() => new THREE.Object3D())
+    const [target] = useState(() => new Object3D())
     const { nodes, materials }: any = useGLTF("/models/RPill.glb")
     const { size } = useThree()
     const [vpWidth, vpHeight] = useAspect(size.width, size.height);

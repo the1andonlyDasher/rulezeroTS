@@ -1,6 +1,5 @@
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
-import Hero from "@/components/hero/hero";
 import Head from "next/head";
 
 export default function Archive() {
