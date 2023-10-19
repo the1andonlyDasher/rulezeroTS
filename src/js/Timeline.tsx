@@ -38,6 +38,10 @@ const Timeline = () => {
   const [disposed, setDisposed] = useState(false)
   const [isInPage, setIsInPage] = useState(false)
   const [mounted, setMounted] = useState(false)
+  function getTex(text: any) {
+    const tex = useTexture(text);
+    return tex
+  }
 
   useEffect(() => {
     setDisposed(false)
@@ -108,7 +112,7 @@ const Timeline = () => {
               });
               fetch(false)
               app.forEach((item: any) => {
-                const texture: any = useTexture(`${item.url}`)
+                const texture: any = getTex(`${item.url}`)
                 textures.push(texture)
               })
 
