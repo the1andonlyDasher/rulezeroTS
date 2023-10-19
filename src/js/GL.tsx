@@ -4,21 +4,37 @@ import {
   Html,
   PerspectiveCamera,
   Preload,
-  useAspect
+  useAspect,
 } from "@react-three/drei";
 import { motion as motion3d, } from "framer-motion-3d";
 import Timeline from "./Timeline";
+import { useRouter } from 'next/router';
 import LandingGL from "./LandingGL";
-import { Vector3 } from "three/src/math/Vector3";
+import { Vector3 } from "three/src/math/Vector3"
 
+interface plane {
+  props: planeProps;
+}
 
+type planeProps = {
+  position: Vector3 | { x: number, y: number, z: number };
+  rotation: Vector3 | { x: number, y: number, z: number };
+  url: string;
+  title: string;
+  name: string;
+  date: string;
+}
 let mouseX: any;
 let mouseY: any;
 let windowHalfX: any;
 let windowHalfY: any;
 
 
+
+
+
 export const GL = () => {
+  const location = useRouter()
 
   const wrapper = useRef<any>(!null)
 
@@ -54,9 +70,24 @@ export const GL = () => {
 
     });
 
+    // const cameraControls = useAnimationControls()
+    // const cameraVariants = {
+    //   "/":{rotateY:-Math.PI},
+    //   "/archive":{rotateY:0},
+    //   "/contact": {rotateY:-Math.PI/2},
+    //   "/about": {rotateY:Math.PI/2}
+    // }
+
+    // useEffect(()=>{
+    //   cameraControls.start(`${router.pathname}`)
+    // },[router.pathname])
 
     return (
       <motion3d.mesh ref={camera}
+      // initial={{rotateY:-Math.PI}}
+      // variants={cameraVariants}
+      // position={[0, 0, 0]}
+      // animate={cameraControls}
       >
         <PerspectiveCamera
           fov={75}
@@ -67,6 +98,7 @@ export const GL = () => {
       </motion3d.mesh>
     );
   };
+
 
   const handleMove = (event: any) => {
     mouseY = (event.clientY - windowHalfY) / 100;
