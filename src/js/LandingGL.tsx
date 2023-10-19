@@ -18,7 +18,7 @@ import { useRouter } from 'next/router'
 
 function VideoText({ position, width }: any) {
 
-    const [video] = useState(() => Object.assign(document.createElement('video'), { src: '/videos/RuleZero.webm.mp4', crossOrigin: 'Anonymous', loop: true, muted: true }))
+    const [video] = useState(() => Object.assign(document.createElement('video'), { src: '/videos/RuleZero.webm', crossOrigin: 'Anonymous', loop: true, muted: true }))
     useEffect(() => void video.play(), [video])
     return (
 
