@@ -31,8 +31,6 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
-
 /** @type {import('next').NextConfig} */
 
 const withPWA = require("next-pwa")({
@@ -48,4 +46,10 @@ const withPWA = require("next-pwa")({
   //...
 });
 
-module.exports = withPWA(nextConfig);
+// module.exports = withPWA(nextConfig);
+
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
+module.exports = withBundleAnalyzer({});

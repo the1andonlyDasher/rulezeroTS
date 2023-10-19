@@ -31,7 +31,7 @@ export default function FairUse() {
                         that go beyond &quot;fair use,&quot; you must obtain permission from the
                         copyright owner. If your copyrighted material appears on this
                         web site and you disagree with our assessment that it
-                        constitutes &quot;fair use,&quot; <Link className="text-link" href="/contact">contact us</Link>
+                        constitutes &quot;fair use,&quot; <Link prefetch={false} className="text-link" href="/contact">contact us</Link>
                     </p>
                 </>
             </Sec>

@@ -8,9 +8,8 @@ import {
 } from "@react-three/drei";
 import { motion as motion3d, } from "framer-motion-3d";
 import Timeline from "./Timeline";
-import { useRouter } from 'next/router';
 import LandingGL from "./LandingGL";
-import * as THREE from "three";
+import { Vector3 } from "../vendor/src/three.custom"
 
 
 let mouseX: any;
@@ -43,8 +42,9 @@ export const GL = () => {
     const { size }: any = useThree()
     const [w, h] = useAspect(size.width, size.height)
     const camera = useRef<any>(null!);
+    const p: any = new Vector3(0, w / 6, 20)
     const { ...cameraProps } = {
-      position: new THREE.Vector3(0, w / 6, 20),
+      position: p,
       focus: 1
     };
 

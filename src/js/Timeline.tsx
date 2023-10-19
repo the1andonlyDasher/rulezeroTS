@@ -21,9 +21,8 @@ import { useAtom } from "jotai";
 import { imgs, loadManager } from "@/js/atoms";
 import Papa from "papaparse";
 import { useRouter } from "next/router";
-import { TextureLoader } from "three/src/loaders/TextureLoader";
-import { RepeatWrapping } from "three/src/constants";
-import * as THREE from "three"
+import { PlaneGeometry, Quaternion, Vector3, RepeatWrapping, TextureLoader } from "@/vendor/src/three.custom";
+
 
 
 const Timeline = () => {
@@ -129,8 +128,8 @@ const Timeline = () => {
     const unit = proxy({ value: 15 });
 
     const Frames = ({ images }: { images: any }) => {
-      var p = new THREE.Vector3();
-      var q = new THREE.Quaternion();
+      var p: any = new Vector3();
+      var q: any = new Quaternion();
       const ref = useRef<any>(null!);
       const clicked = useRef<any>(null!);
       const scroll = useScroll();
@@ -260,14 +259,14 @@ const Timeline = () => {
       };
 
 
-
+      const geo: any = new PlaneGeometry
       const posX = props.position[0] > 0 ? Math.min((props.position[0] / 2) * (w / 10), props.position[0]) : Math.max((props.position[0] / 2) * (w / 10), props.position[0]);
 
       return (
 
         <motion3d.group ref={group} >
 
-          <instancedMesh ref={ref} geometry={new THREE.PlaneGeometry} args={[undefined, undefined, 1]}
+          <instancedMesh ref={ref} geometry={geo} args={[undefined, undefined, 1]}
             scale={[Math.min(11 * (w / 10), 11), Math.min(6 * (w / 10), 6), 1]}
             onPointerOver={(e) => (e.stopPropagation(), hover(clicked ? false : true))}
             onPointerOut={() => hover(clicked ? false : false)}
