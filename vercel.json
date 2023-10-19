@@ -9,7 +9,7 @@
                 },
                 {
                     "key": "Access-Control-Allow-Origin",
-                    "value": "*"
+                    "value": "https://rulezero-ts.vercel.app/archive"
                 },
                 {
                     "key": "Access-Control-Allow-Methods",

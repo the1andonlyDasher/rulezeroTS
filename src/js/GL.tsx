@@ -157,7 +157,6 @@ export const GL = () => {
             <LandingGL />
           </Suspense>
           <ambientLight color="#eeeeee" intensity={1} />
-          <Environment preset="dawn" />
         </Canvas>
       </div>
     </>
