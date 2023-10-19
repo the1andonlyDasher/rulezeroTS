@@ -25,7 +25,6 @@ const nextConfig = {
   //   ];
   // },
   reactStrictMode: true,
-  compress: true,
   output: "export",
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],

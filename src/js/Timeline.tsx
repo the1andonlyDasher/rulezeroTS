@@ -28,20 +28,6 @@ import { Quaternion } from "three/src/math/Quaternion";
 import { PlaneGeometry } from "three/src/geometries/PlaneGeometry";
 
 
-type planeProps = {
-  position: Vector3 | { x: number, y: number, z: number };
-  rotation: Vector3 | { x: number, y: number, z: number };
-  url: string;
-  title: string;
-  name: string;
-  date: string;
-}
-
-
-interface TLProps {
-  visible: boolean
-}
-
 const Timeline = () => {
   const [fetching, fetch] = useState(true);
   const [array, setArray] = useState<any>([]);
@@ -310,7 +296,7 @@ const Timeline = () => {
               scale={[0.95, 0.95, 0.95]}
             >
               <planeGeometry />
-              <motion3d.meshBasicMaterial visible={!disposed} map={props.texture} />
+              <motion3d.meshBasicMaterial toneMapped={false} reflectivity={0} visible={!disposed} map={props.texture} />
             </motion3d.mesh>
 
           </instancedMesh>

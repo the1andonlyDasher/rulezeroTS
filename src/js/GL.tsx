@@ -8,7 +8,6 @@ import {
 } from "@react-three/drei";
 import { motion as motion3d, } from "framer-motion-3d";
 import Timeline from "./Timeline";
-import { useRouter } from 'next/router';
 import LandingGL from "./LandingGL";
 import { Vector3 } from "three/src/math/Vector3";
 
@@ -55,24 +54,9 @@ export const GL = () => {
 
     });
 
-    // const cameraControls = useAnimationControls()
-    // const cameraVariants = {
-    //   "/":{rotateY:-Math.PI},
-    //   "/archive":{rotateY:0},
-    //   "/contact": {rotateY:-Math.PI/2},
-    //   "/about": {rotateY:Math.PI/2}
-    // }
-
-    // useEffect(()=>{
-    //   cameraControls.start(`${router.pathname}`)
-    // },[router.pathname])
 
     return (
       <motion3d.mesh ref={camera}
-      // initial={{rotateY:-Math.PI}}
-      // variants={cameraVariants}
-      // position={[0, 0, 0]}
-      // animate={cameraControls}
       >
         <PerspectiveCamera
           fov={75}
