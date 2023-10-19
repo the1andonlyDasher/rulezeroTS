@@ -1,5 +1,5 @@
 import { useEffect, useRef, Suspense } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree, Vector3 } from "@react-three/fiber";
 import {
   Html,
   PerspectiveCamera,
@@ -9,7 +9,7 @@ import {
 import { motion as motion3d, } from "framer-motion-3d";
 import Timeline from "./Timeline";
 import LandingGL from "./LandingGL";
-import { Vector3 } from "../vendor/src/three.custom"
+
 
 
 let mouseX: any;
@@ -42,9 +42,9 @@ export const GL = () => {
     const { size }: any = useThree()
     const [w, h] = useAspect(size.width, size.height)
     const camera = useRef<any>(null!);
-    const p: any = new Vector3(0, w / 6, 20)
+    var p: Vector3 = ([0, w / 6, 20])
     const { ...cameraProps } = {
-      position: p,
+      position: p = [0, w / 6, 20],
       focus: 1
     };
 

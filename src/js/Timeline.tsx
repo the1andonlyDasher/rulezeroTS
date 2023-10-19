@@ -10,6 +10,7 @@ import {
   ScrollControls,
   useAspect,
   Html,
+  useTexture,
 } from "@react-three/drei";
 import { easing } from "maath";
 import {
@@ -21,8 +22,8 @@ import { useAtom } from "jotai";
 import { imgs, loadManager } from "@/js/atoms";
 import Papa from "papaparse";
 import { useRouter } from "next/router";
-import { PlaneGeometry, Quaternion, Vector3, RepeatWrapping, TextureLoader } from "@/vendor/src/three.custom";
-
+import { Vector3 } from "../vendor/Vector3"
+import { Quaternion } from "../vendor/Quaternion"
 
 
 const Timeline = () => {
@@ -107,8 +108,7 @@ const Timeline = () => {
               });
               fetch(false)
               app.forEach((item: any) => {
-                const texture: any = new TextureLoader(manager).load(item.url)
-                texture.wrapS = texture.wrapT = RepeatWrapping;
+                const texture: any = useTexture(`${item.url}`)
                 textures.push(texture)
               })
 
@@ -128,8 +128,8 @@ const Timeline = () => {
     const unit = proxy({ value: 15 });
 
     const Frames = ({ images }: { images: any }) => {
-      var p: any = new Vector3();
-      var q: any = new Quaternion();
+      const p: any = new Vector3();
+      const q: any = new Quaternion();
       const ref = useRef<any>(null!);
       const clicked = useRef<any>(null!);
       const scroll = useScroll();
@@ -142,15 +142,17 @@ const Timeline = () => {
 
         }
         else {
-          p.set(0, 10, 20);
+          p.set(0, w / 6, 20);
           q.identity();
         }
       }, [clicked]);
 
       useFrame((state, dt) => {
-        ref.current.position.z = scroll.offset * (app.length * unit.value) - 20;
-        easing.damp3(state.camera.position, p, 0.4, dt);
-        easing.dampQ(state.camera.quaternion, q, 0.4, dt);
+        if (router.pathname === "/archive") {
+          ref.current.position.z = scroll.offset * (app.length * unit.value) - 20;
+          easing.damp3(state.camera.position, p, 0.4, dt);
+          easing.dampQ(state.camera.quaternion, q, 0.4, dt);
+        }
       });
 
       return (
@@ -166,7 +168,7 @@ const Timeline = () => {
             e.object.localToWorld(p.set(0, 0, 10 + (5 / w * h)))
           }}
           onPointerMissed={() => {
-            p.set(0, 10, 0.5)
+            p.set(0, w / 6, 20)
             click.current = false
           }
           }
@@ -259,14 +261,14 @@ const Timeline = () => {
       };
 
 
-      const geo: any = new PlaneGeometry
+
       const posX = props.position[0] > 0 ? Math.min((props.position[0] / 2) * (w / 10), props.position[0]) : Math.max((props.position[0] / 2) * (w / 10), props.position[0]);
 
       return (
 
         <motion3d.group ref={group} >
 
-          <instancedMesh ref={ref} geometry={geo} args={[undefined, undefined, 1]}
+          <instancedMesh ref={ref} args={[undefined, undefined, 1]}
             scale={[Math.min(11 * (w / 10), 11), Math.min(6 * (w / 10), 6), 1]}
             onPointerOver={(e) => (e.stopPropagation(), hover(clicked ? false : true))}
             onPointerOut={() => hover(clicked ? false : false)}
@@ -274,7 +276,7 @@ const Timeline = () => {
             onPointerMissed={() => setClick(false)}
             position={[posX, props.position[1], props.position[2]]}
           >
-
+            <planeGeometry />
             <motion3d.meshBasicMaterial
               variants={variants}
               initial="hidden"
