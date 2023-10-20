@@ -4,6 +4,7 @@ const ThreeMinifierPlugin = require("@yushijinhun/three-minifier-webpack");
 const nextConfig = {
   reactStrictMode: true,
   output: "export",
+  compress: true,
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
   },
@@ -13,9 +14,10 @@ const nextConfig = {
       const threeMinifier = new ThreeMinifierPlugin();
       config.plugins.unshift(threeMinifier);
       config.resolve.plugins.unshift(threeMinifier.resolver);
-      // config.resolve.alias["three$"] = path.resolve(
-      //   "../vendor/three-exports.js"
-      // );
+      // config.resolve.alias = {
+      //   ...config.resolve.alias,
+      //   three: path.resolve(__dirname, "../vendor/three-exports"),
+      // };
     }
     return config;
   },

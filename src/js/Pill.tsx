@@ -1,5 +1,5 @@
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import React, { useEffect, useRef, useState } from 'react'
 import { Vector3, useThree } from '@react-three/fiber'
 import { SpotLight, useAspect, useGLTF } from '@react-three/drei'
@@ -12,6 +12,7 @@ import { Box, Flex } from '@react-three/flex';
 import { useRouter } from 'next/router';
 import { useAnimation } from 'framer-motion';
 import { Object3D } from 'three'
+
 
 
 type pillProps = {
