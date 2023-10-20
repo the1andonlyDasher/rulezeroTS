@@ -9,7 +9,7 @@ import Pill from './Pill'
 import { loc } from '@/js/atoms'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/router'
-import { Object3D } from 'three'
+import { Object3D } from 'three/src/core/Object3D'
 
 
 
