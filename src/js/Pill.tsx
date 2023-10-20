@@ -1,5 +1,5 @@
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+
+import { FontLoader, TextGeometry } from 'three-stdlib'
 import React, { useEffect, useRef, useState } from 'react'
 import { Vector3, useThree } from '@react-three/fiber'
 import { SpotLight, useAspect, useGLTF } from '@react-three/drei'
