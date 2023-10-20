@@ -21,9 +21,7 @@ import { useAtom } from "jotai";
 import { imgs, loadManager } from "@/js/atoms";
 import Papa from "papaparse";
 import { useRouter } from "next/router";
-import { Vector3 } from "three"
-import { Quaternion } from "three"
-import { TextureLoader } from "three"
+import { Vector3, Quaternion, TextureLoader } from '../vendor/three-export'
 
 
 

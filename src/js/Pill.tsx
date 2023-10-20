@@ -5,13 +5,12 @@ import { Vector3, useThree } from '@react-three/fiber'
 import { SpotLight, useAspect, useGLTF } from '@react-three/drei'
 import { motion } from 'framer-motion-3d'
 import { Physics, PlaneProps, useBox, usePlane } from '@react-three/cannon'
-import { Mesh } from 'three/src/objects/Mesh'
 import { loc } from '@/js/atoms';
 import { useAtom } from 'jotai';
 import { Box, Flex } from '@react-three/flex';
 import { useRouter } from 'next/router';
 import { useAnimation } from 'framer-motion';
-import { Object3D } from 'three/src/core/Object3D'
+import { Object3D, Mesh } from '../vendor/three-export'
 
 
 

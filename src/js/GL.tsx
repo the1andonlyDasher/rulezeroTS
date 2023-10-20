@@ -11,8 +11,6 @@ import Timeline from "./Timeline";
 import LandingGL from "./LandingGL";
 
 
-
-
 let mouseX: any;
 let mouseY: any;
 let windowHalfX: any;
