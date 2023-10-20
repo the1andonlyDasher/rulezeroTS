@@ -12,7 +12,10 @@ export function middleware() {
 
   // add the CORS headers to the response
   res.headers.append("Access-Control-Allow-Credentials", "true");
-  res.headers.append("Access-Control-Allow-Origin", "*"); // replace this your actual origin
+  res.headers.append(
+    "Access-Control-Allow-Origin",
+    "https://rulezero-ts.vercel.app/"
+  ); // replace this your actual origin
   res.headers.append(
     "Access-Control-Allow-Methods",
     "GET,DELETE,PATCH,POST,PUT"
