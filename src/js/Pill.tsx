@@ -11,7 +11,7 @@ import { useAtom } from 'jotai';
 import { Box, Flex } from '@react-three/flex';
 import { useRouter } from 'next/router';
 import { useAnimation } from 'framer-motion';
-import { Object3D } from 'three/src/core/Object3D'
+import { Object3D } from 'three'
 
 
 type pillProps = {

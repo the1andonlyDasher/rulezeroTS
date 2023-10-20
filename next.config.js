@@ -13,6 +13,9 @@ const nextConfig = {
       const threeMinifier = new ThreeMinifierPlugin();
       config.plugins.unshift(threeMinifier);
       config.resolve.plugins.unshift(threeMinifier.resolver);
+      // config.resolve.alias["three$"] = path.resolve(
+      //   "../vendor/three-exports.js"
+      // );
     }
     return config;
   },
@@ -33,13 +36,11 @@ const withPWA = require("next-pwa")({
   //...
 });
 
-module.exports = withPWA(nextConfig);
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
 
-// const withBundleAnalyzer = require("@next/bundle-analyzer")({
-//   enabled: process.env.ANALYZE === "true",
-// });
-
-// module.exports = withBundleAnalyzer({});
+// module.exports = withBundleAnalyzer(nextConfig);
 
 // module.exports = {
 //   webpack: (config, { isServer, dev }) => {
@@ -52,3 +53,5 @@ module.exports = withPWA(nextConfig);
 //     return config;
 //   },
 // };
+
+module.exports = withBundleAnalyzer(withPWA(nextConfig));

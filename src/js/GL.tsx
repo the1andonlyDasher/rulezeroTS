@@ -12,6 +12,7 @@ import LandingGL from "./LandingGL";
 
 
 
+
 let mouseX: any;
 let mouseY: any;
 let windowHalfX: any;
@@ -93,6 +94,8 @@ export const GL = () => {
 
 
 
+
+
   return (
     <>
 
@@ -112,6 +115,7 @@ export const GL = () => {
     </>
   );
 };
+
 
 
 
