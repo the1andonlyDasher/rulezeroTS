@@ -10,7 +10,6 @@ import {
   ScrollControls,
   useAspect,
   Html,
-  useTexture,
 } from "@react-three/drei";
 import { easing } from "maath";
 import {
@@ -22,8 +21,9 @@ import { useAtom } from "jotai";
 import { imgs, loadManager } from "@/js/atoms";
 import Papa from "papaparse";
 import { useRouter } from "next/router";
-import { Vector3 } from "../vendor/Vector3"
-import { Quaternion } from "../vendor/Quaternion"
+import { Vector3 } from "three"
+import { Quaternion } from "three"
+import { TextureLoader } from "three"
 
 
 const Timeline = () => {
@@ -38,10 +38,6 @@ const Timeline = () => {
   const [disposed, setDisposed] = useState(false)
   const [isInPage, setIsInPage] = useState(false)
   const [mounted, setMounted] = useState(false)
-  function getTex(text: any) {
-    const tex = useTexture(text);
-    return tex
-  }
 
   useEffect(() => {
     setDisposed(false)
@@ -112,7 +108,7 @@ const Timeline = () => {
               });
               fetch(false)
               app.forEach((item: any) => {
-                const texture: any = getTex(`${item.url}`)
+                const texture: any = new TextureLoader(manager).load(`${item.url}`);
                 textures.push(texture)
               })
 
@@ -263,8 +259,6 @@ const Timeline = () => {
         visible: { opacity: 1 },
         exit: { opacity: 0 },
       };
-
-
 
       const posX = props.position[0] > 0 ? Math.min((props.position[0] / 2) * (w / 10), props.position[0]) : Math.max((props.position[0] / 2) * (w / 10), props.position[0]);
 

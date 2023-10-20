@@ -1,33 +1,20 @@
 /** @type {import('next').NextConfig} */
 const path = require("path");
+const ThreeMinifierPlugin = require("@yushijinhun/three-minifier-webpack");
 const nextConfig = {
-  // async headers() {
-  //   return [
-  //     {
-  //       source: "/api/(.*)",
-  //       headers: [
-  //         { key: "Access-Control-Allow-Credentials", value: "true" },
-  //         {
-  //           key: "Access-Control-Allow-Origin",
-  //           value: "http://localhost:3000/archive",
-  //         },
-  //         {
-  //           key: "Access-Control-Allow-Methods",
-  //           value: "GET,OPTIONS,PATCH,DELETE,POST,PUT",
-  //         },
-  //         {
-  //           key: "Access-Control-Allow-Headers",
-  //           value:
-  //             "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
-  //         },
-  //       ],
-  //     },
-  //   ];
-  // },
   reactStrictMode: true,
   output: "export",
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
+  },
+  webpack: (config, { isServer, dev }) => {
+    if (!isServer && !dev) {
+      config.cache = false;
+      const threeMinifier = new ThreeMinifierPlugin();
+      config.plugins.unshift(threeMinifier);
+      config.resolve.plugins.unshift(threeMinifier.resolver);
+    }
+    return config;
   },
 };
 
@@ -53,3 +40,15 @@ module.exports = withPWA(nextConfig);
 // });
 
 // module.exports = withBundleAnalyzer({});
+
+// module.exports = {
+//   webpack: (config, { isServer, dev }) => {
+//     if (!isServer && !dev) {
+//       config.cache = false;
+//       const threeMinifier = new ThreeMinifierPlugin();
+//       config.plugins.unshift(threeMinifier);
+//       config.resolve.plugins.unshift(threeMinifier.resolver);
+//     }
+//     return config;
+//   },
+// };
