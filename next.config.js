@@ -8,6 +8,14 @@ const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://rulezero-ts.vercel.app/:path*",
+      },
+    ];
+  },
   webpack: (config, { isServer, dev }) => {
     if (!isServer && !dev) {
       config.cache = false;
