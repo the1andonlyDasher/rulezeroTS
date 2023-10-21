@@ -111,9 +111,9 @@ const Timeline = () => {
                 img.crossOrigin = ""
                 img.src = `${item.url}`
                 console.log(img)
-                const texture: any = new TextureLoader(manager).load(`${item.url}`)
+                const texture: any = new TextureLoader(manager).load(img.src)
                 texture.crossOrigin = ""
-                textures.push(texture)
+                textures.push(img)
               })
 
             },
