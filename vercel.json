@@ -1,7 +1,7 @@
 {
     "headers": [
         {
-            "source": "/api/(.*)",
+            "src": "/(.*)",
             "headers": [
                 {
                     "key": "Access-Control-Allow-Credentials",
@@ -9,7 +9,7 @@
                 },
                 {
                     "key": "Access-Control-Allow-Origin",
-                    "value": "https://rulezero-ts.vercel.app/archive"
+                    "value": "https://rulezero-ts.vercel.app"
                 },
                 {
                     "key": "Access-Control-Allow-Methods",

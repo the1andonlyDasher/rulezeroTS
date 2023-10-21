@@ -12,12 +12,12 @@ const nextConfig = {
     return [
       {
         // matching all API routes
-        source: "/api/:path*",
+        source: "/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://rulezero-ts.vercel.app/archive",
+            value: "https://rulezero-ts.vercel.app",
           },
           {
             key: "Access-Control-Allow-Methods",
