@@ -16,7 +16,7 @@ const nextConfig = {
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://rulezero-ts.vercel.app",
+            value: "https://rulezero-ts.vercel.app/archive",
           },
           {
             key: "Access-Control-Allow-Methods",

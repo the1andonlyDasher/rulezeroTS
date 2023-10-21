@@ -8,7 +8,7 @@ export function middleware() {
   res.headers.append("Access-Control-Allow-Credentials", "true");
   res.headers.append(
     "Access-Control-Allow-Origin",
-    "https://rulezero-ts.vercel.app"
+    "https://rulezero-ts.vercel.app/archive"
   ); // replace this your actual origin
   res.headers.append(
     "Access-Control-Allow-Methods",
