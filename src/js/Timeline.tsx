@@ -107,6 +107,10 @@ const Timeline = () => {
               });
               fetch(false)
               app.forEach((item: any) => {
+                const img = new Image();
+                img.crossOrigin = ""
+                img.src = `${item.url}`
+                console.log(img)
                 const texture: any = new TextureLoader(manager).load(`${item.url}`)
                 texture.crossOrigin = ""
                 textures.push(texture)
