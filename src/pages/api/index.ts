@@ -1,6 +1,6 @@
 import NextCors from "nextjs-cors";
 
-async function handler(req: any, res: any) {
+export async function handler(req: any, res: any) {
   // Run the cors middleware
   // nextjs-cors uses the cors package, so we invite you to check the documentation https://github.com/expressjs/cors
   await NextCors(req, res, {
