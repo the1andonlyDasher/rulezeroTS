@@ -24,5 +24,5 @@ export function middleware() {
 
 // specify the path regex to apply the middleware to
 export const config = {
-  matcher: "/:path*",
+  matcher: "/_next/:path",
 };
