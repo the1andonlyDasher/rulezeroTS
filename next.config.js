@@ -4,7 +4,7 @@ const ThreeMinifierPlugin = require("@yushijinhun/three-minifier-webpack");
 const nextConfig = {
   reactStrictMode: true,
   compress: true,
-  output: "export",
+  // output: "export",
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
   },
