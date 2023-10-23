@@ -5,4 +5,5 @@ export { Quaternion } from "three/src/math/Quaternion.js";
 export { TextureLoader } from "three/src/loaders/TextureLoader";
 export { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 export { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
+export { ImageLoader } from "three/src/loaders/ImageLoader";
 export { Mesh } from "three/src/objects/Mesh";

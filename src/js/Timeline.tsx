@@ -22,7 +22,9 @@ import { useAtom } from "jotai";
 import { imgs, loadManager } from "@/js/atoms";
 import Papa from "papaparse";
 import { useRouter } from "next/router";
-import { Vector3, Quaternion, TextureLoader } from '../vendor/three-export'
+import { Vector3, Quaternion, ImageLoader } from '../vendor/three-export'
+
+import { Texture } from "three";
 
 
 
@@ -98,7 +100,7 @@ const Timeline = () => {
                         -15 * index,
                       ],
                       rotation: [0, 0, 0],
-                      url: `https://img.youtube.com/vi/${r[1]}/mqdefault.jpg`,
+                      url: `https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.fotocommunity.com%2Ffuchs-453389a4-f116-499d-98bf-c13de6787126.jpg%3Fheight%3D1000&f=1&nofb=1&ipt=e17a7b56fe5c02bce1c2288c281ab6034f8573991c83eb1b989bfc78a4b22b2e&ipo=images`,
                       title: t,
                       link: l,
                       name: r[1],
@@ -112,10 +114,20 @@ const Timeline = () => {
               });
               fetch(false)
               app.forEach((item: any) => {
-                const img = new Image()
-                img.src = item.url;
-                textures.push(img)
-                const texture: any = new TextureLoader(manager).load(`${item.url}`)
+                const texture = new Texture();
+
+
+                const loader = new ImageLoader(manager);
+                loader.setCrossOrigin("anonymous");
+                loader.setPath(item.url)
+                loader.setRequestHeader({ "Access-Control-Allow-Origin": "*" })
+                loader.setRequestHeader({ "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT" })
+                loader.setRequestHeader({ "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" })
+
+                loader.load(item.url, function (image) {
+                  texture.image = image;
+                  texture.needsUpdate = false;
+                });
                 textures.push(texture)
               })
 
@@ -296,10 +308,7 @@ const Timeline = () => {
             // envMapIntensity={2}
             />
 
-            {/* <Image url={props.url} toneMapped={false} position={[0, 0, 0.1]} ref={image} scale={0.95} name={props.name} /> */}
-
-
-            {/* <motion3d.mesh
+            <motion3d.mesh
               ref={image}
               name={props.name}
               position={[0, 0, 0.1]}
@@ -307,7 +316,7 @@ const Timeline = () => {
             >
               <planeGeometry />
               <motion3d.meshBasicMaterial toneMapped={false} reflectivity={0} visible={!disposed} map={props.texture} />
-            </motion3d.mesh> */}
+            </motion3d.mesh>
 
           </instancedMesh>
           <motion3d.mesh
