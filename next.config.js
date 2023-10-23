@@ -4,7 +4,6 @@ const ThreeMinifierPlugin = require("@yushijinhun/three-minifier-webpack");
 const nextConfig = {
   reactStrictMode: true,
   compress: true,
-
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
   },
@@ -12,7 +11,7 @@ const nextConfig = {
     return [
       {
         // matching all API routes
-        source: "/api/(.*)",
+        source: "/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
           { key: "Access-Control-Allow-Origin", value: "*" },
@@ -51,11 +50,12 @@ const withPWA = require("next-pwa")({
   disable: false,
   register: true,
   mode: "production",
+  swSrc: "service-worker.js",
 });
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
 
-module.exports = nextConfig;
-// module.exports = withBundleAnalyzer(nextConfig);
+// module.exports = nextConfig;
+module.exports = withBundleAnalyzer(withPWA(nextConfig));

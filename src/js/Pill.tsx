@@ -58,7 +58,7 @@ export default function Pill({ position }: pillProps) {
         return (
 
             <mesh ref={ref} geometry={textGeo(text)} >
-                <meshLambertMaterial toneMapped={false} color={"white"} />
+                <meshLambertMaterial toneMapped={false} color={"#6b191d"} />
             </mesh>
         )
     }

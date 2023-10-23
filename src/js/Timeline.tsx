@@ -10,6 +10,7 @@ import {
   ScrollControls,
   useAspect,
   Html,
+  Image as DreiImage
 } from "@react-three/drei";
 import { easing } from "maath";
 import {
@@ -25,6 +26,7 @@ import { Vector3, Quaternion, TextureLoader } from '../vendor/three-export'
 
 
 
+
 const Timeline = () => {
   const [fetching, fetch] = useState(true);
   const [array, setArray] = useState<any>([]);
@@ -32,11 +34,13 @@ const Timeline = () => {
   const router = useRouter()
   const [manager, setManager] = useAtom<any>(loadManager)
   const [seen, See] = useState<any>(false)
-  const [textures] = useState<any>([]);
+  const [textures, setTextures] = useState<any>([]);
   const controls = useAnimationControls();
   const [disposed, setDisposed] = useState(false)
   const [isInPage, setIsInPage] = useState(false)
   const [mounted, setMounted] = useState(false)
+
+
 
   useEffect(() => {
     setDisposed(false)
@@ -55,6 +59,7 @@ const Timeline = () => {
   }
 
   useEffect(() => {
+
     if (router.pathname.includes("/archive")) {
       if (typeof window !== "undefined" && fetching) {
         var r: any,
@@ -107,13 +112,11 @@ const Timeline = () => {
               });
               fetch(false)
               app.forEach((item: any) => {
-                const img = new Image();
-                img.crossOrigin = ""
-                img.src = `${item.url}`
-                console.log(img)
-                const texture: any = new TextureLoader(manager).load(img.src)
-                texture.crossOrigin = ""
+                const img = new Image()
+                img.src = item.url;
                 textures.push(img)
+                const texture: any = new TextureLoader(manager).load(`${item.url}`)
+                textures.push(texture)
               })
 
             },
@@ -121,7 +124,10 @@ const Timeline = () => {
         );
       }
     }
+    console.log(textures)
   }, [router.pathname]);
+
+
 
 
   const App = ({ images }: { images: any }) => {
@@ -290,7 +296,10 @@ const Timeline = () => {
             // envMapIntensity={2}
             />
 
-            <motion3d.mesh
+            {/* <Image url={props.url} toneMapped={false} position={[0, 0, 0.1]} ref={image} scale={0.95} name={props.name} /> */}
+
+
+            {/* <motion3d.mesh
               ref={image}
               name={props.name}
               position={[0, 0, 0.1]}
@@ -298,7 +307,7 @@ const Timeline = () => {
             >
               <planeGeometry />
               <motion3d.meshBasicMaterial toneMapped={false} reflectivity={0} visible={!disposed} map={props.texture} />
-            </motion3d.mesh>
+            </motion3d.mesh> */}
 
           </instancedMesh>
           <motion3d.mesh
