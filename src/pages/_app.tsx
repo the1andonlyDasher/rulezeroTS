@@ -18,6 +18,5 @@ export default function App({ Component, pageProps }: AppProps) {
     <AnimatePresence>
       <GL />
     </AnimatePresence>
-
   </>)
 }

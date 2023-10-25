@@ -32,6 +32,7 @@ import { Texture } from "three";
 const Timeline = () => {
   const [fetching, fetch] = useState(true);
   const [array, setArray] = useState<any>([]);
+  const [videoID, setVideoID] = useState<any>([]);
   const [app, setApp] = useAtom<any>(imgs)
   const router = useRouter()
   const [manager, setManager] = useAtom<any>(loadManager)
@@ -59,14 +60,23 @@ const Timeline = () => {
     setDisposed(!isInPage)
   }
 
+  function youtube_parser(url: any) {
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    var match = url.match(regExp);
+    return (match && match[7].length == 11) ? match[7] : false;
+  }
 
   useEffect(() => {
 
+
     if (router.pathname.includes("/archive")) {
       if (typeof window !== "undefined" && fetching) {
-        var r: any,
-          rx: any =
-            /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
+
+        console.log(youtube_parser("/.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/"))
+
+        const rx: RegExp =
+          /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
+
 
         Papa.parse(
           "https://docs.google.com/spreadsheets/d/e/2PACX-1vSloYeSqI6BpICcq9gG5a3KRhXv99DKlrj9XmEAIvmX0BxWw-olhU9J9kDG0LvM976e8jYblR0THwkj/pub?output=csv",
@@ -78,14 +88,16 @@ const Timeline = () => {
             header: true,
             complete: (results) => {
               console.log("Parsing complete:", results);
+
               results.data.map((data: any, index) => {
-                r = data.Link.match(rx);
+                var r: any = youtube_parser(data.Link);
+
                 var l = data.Link
                 var t = data.Title;
                 var d = data.Dates;
                 var img = data.Images
                 if (fetching) {
-                  if (!app.find((item: any) => item.name === r[1])) {
+                  if (!app.find((item: any) => item.name === r)) {
                     app.push({
                       position: [
                         index % 2
@@ -102,15 +114,14 @@ const Timeline = () => {
                       ],
                       rotation: [0, 0, 0],
 
-                      url: `https://pipedproxy.kavin.rocks/vi/${r[1]}/mqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCfJ06q236MYGn0b_R9NtgE35MS2g&host=i.ytimg.com`,
+                      url: `https://pipedproxy.kavin.rocks/vi/${r}/mqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBhZx_n9AywKMVzcoL_2bYQpUlalw&host=i.ytimg.com`,
                       title: t,
                       link: l,
-                      name: r[1],
+                      name: r,
                       date: d,
                       img: img
                     });
                   }
-                  console.log(app)
                   setArray(app)
                   See(true)
                 }
