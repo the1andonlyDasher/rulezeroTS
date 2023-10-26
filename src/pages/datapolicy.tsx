@@ -13,7 +13,7 @@ export default function DataPolicy() {
         </Head>
         <Sec header="Data Protection Policy">
             <div>
-
+                <p>This page itself is not using any cookies.</p>
             </div>
         </Sec>
         <Footer />
