@@ -89,7 +89,7 @@ const Timeline = () => {
             complete: (results) => {
               console.log("Parsing complete:", results);
 
-              results.data.map((data: any, index) => {
+              results.data.reverse().map((data: any, index) => {
                 var r: any = youtube_parser(data.Link);
 
                 var l = data.Link
