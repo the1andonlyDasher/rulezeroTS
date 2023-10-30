@@ -8,7 +8,7 @@ export const cursor = atomWithStorage("cursor", "default")
 export const imgs = atom<any>([])
 export const totalLoad = atom<any>(false)
 export const curObject = atom<any>([undefined])
-export const globalTextures = atom<any>([])
+export const listView = atom<any>([])
 
 
 const manager = new THREE.LoadingManager();
