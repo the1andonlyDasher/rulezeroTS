@@ -141,21 +141,21 @@ form label {
 form :is(input, select, textarea) {
   padding: var(--space-xs);
   font-size: var(--fs-text);
-  border: 1px solid hsl(0deg 0% 12%);
+  background-color: #191a1f;
+  border: 1px solid #23242f;
   color: var(--clr-contrast-400);
   font-weight: 500;
-  background-color: var(--clr-contrast-750);
 }
 
 form input:active {
-  background-color: var(--clr-primary-100);
+  background-color: #0a0b0c;
 }
 
 form input:focus-visible,
 textarea:focus-visible {
   border: 1px solid var(--clr-contrast-700);
-  background-color: var(--clr-contrast-200);
-  color: var(--clr-contrast-750);
+  background-color: #0a0b0c;
+  color: var(--clr-contrast-100);
 }
 
 form .btn-group {

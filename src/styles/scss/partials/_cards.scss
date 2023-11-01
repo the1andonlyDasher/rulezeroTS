@@ -137,7 +137,7 @@
   max-width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-template-rows: repeat(auto-fill, minmax(500px, 1fr));
+
   justify-content: center;
   list-style-type: none;
   // background-color: #1d1e25;
@@ -201,5 +201,33 @@
         right: 0;
       }
     }
+  }
+}
+
+.list__form {
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  div {
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5rem 0;
+  }
+  span {
+    margin: 0 1rem;
+    font-family: "Cairo", sans-serif;
+    color: #71748e;
+    font-size: clamp(0.75rem, 5vw, 1.1rem);
+  }
+  .list__form-sort,
+  .list__form-search {
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 }
