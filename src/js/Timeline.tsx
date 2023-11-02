@@ -19,7 +19,7 @@ import {
 import { motion as motion3d } from "framer-motion-3d";
 import { proxy } from "valtio";
 import { useAtom } from "jotai";
-import { imgs, listView, loadManager } from "@/js/atoms";
+import { atomField, atomResult, atomSort, atomState, imgs, listView, loadManager } from "@/js/atoms";
 import Papa from "papaparse";
 import { useRouter } from "next/router";
 import { Vector3, Quaternion, ImageLoader } from '../vendor/three-export'
@@ -44,8 +44,21 @@ const Timeline = () => {
   const [mounted, setMounted] = useState(false)
   const [view, setView] = useAtom<any>(listView)
 
+  const [a, aa] = useAtom(atomState)
+
+  const [list, setList] = useState(a.list);
 
   useEffect(() => {
+    setList(a.list)
+  }, [a])
+
+
+
+
+
+
+  useEffect(() => {
+    console.log(list)
     setDisposed(false)
     if (router.pathname === "/archive") {
       setTimeout(() => {
@@ -159,7 +172,6 @@ const Timeline = () => {
   const App = ({ images }: { images: any }) => {
     const { size } = useThree();
     const [w, h] = useAspect(size.width, size.height)
-    const [app, setApp] = useAtom(imgs)
     const click = useRef<any>(false)
     const unit = proxy({ value: 15 });
 
@@ -185,7 +197,7 @@ const Timeline = () => {
 
       useFrame((state, dt) => {
         if (router.pathname === "/archive") {
-          ref.current.position.z = scroll.offset * (app.length * unit.value) - 20;
+          ref.current.position.z = scroll.offset * (a.list.length * unit.value) - 20;
           easing.damp3(state.camera.position, p, 0.4, dt);
           easing.dampQ(state.camera.quaternion, q, 0.4, dt);
         }
@@ -212,7 +224,7 @@ const Timeline = () => {
           <Line
             points={[
               [0, 0, 0],
-              [0, 0, -`${app.length}` * unit.value],
+              [0, 0, -`${a.list.length}` * unit.value],
             ]}
             color="white"
             lineWidth={1}
@@ -233,11 +245,11 @@ const Timeline = () => {
                 key={props.url + index}
                 url={props.url}
                 date={props.date}
-                start={[posX / 6, 0, -15 * index]}
-                end={[posX, props.position[1] - 4, -15 * index]}
+                start={[posX / 6, 0, props.position[2]]}
+                end={[posX, props.position[1] - 4, props.position[2]]}
                 points={[
-                  [0, 0, -15 * index],
-                  [posX, props.position[1] - 4, -15 * index],
+                  [0, 0, props.position[2]],
+                  [posX, props.position[1] - 4, props.position[2]],
                 ]}
                 {...props}
               />
@@ -255,7 +267,6 @@ const Timeline = () => {
       const text = useRef<any>(null!);
       const ref = useRef<any>(null!);
       const button = useRef<any>(null!);
-      const matButton = useRef<any>(null!);
       const router = useRouter()
       const group = useRef<any>(null!);
       const [hovering, hover] = useState(false);
@@ -273,14 +284,6 @@ const Timeline = () => {
       useEffect(() => {
         text.current.material.opacity = hovering && clicked === false ? 1 : 0;
       }, [hovering])
-
-      const controls_mesh = useAnimationControls();
-
-      const variants_mesh = {
-        hidden: { scaleX: 0, scaleY: 0 },
-        visible: { scaleX: Math.min(6 * (w / 10), 11), scaleY: Math.min(6 * (w / 10), 6), transition: { type: "spring", stiffness: 500, damping: 30 } },
-        exit: { scaleX: 0, scaleY: 0, transition: { type: "spring", stiffness: 500, damping: 30 } },
-      };
 
       const controls = useAnimationControls();
 
@@ -391,13 +394,13 @@ const Timeline = () => {
             anchorY="middle"
           >
             <meshBasicMaterial color={"white"} visible={!disposed} />
-            {props.date.split("-").join(" ")}
+            {new Date(props.date).toDateString().split("-").join(" ")}
           </Text>
           <QuadraticBezierLine
             // ref={line}
             start={props.start}
             end={props.end}
-            color="hotpink"
+            color="#71748e"
             needsUpdate={true}
             lineWidth={1}
             dashScale={2}
@@ -410,13 +413,13 @@ const Timeline = () => {
       );
     };
 
-    const pages = `${app.length}`;
+    const pages = `${a.list.length}`;
     const pageCount: number = +pages;
 
     return (
       <>
         <ScrollControls style={{ zIndex: 100 }} enabled={!click.current} distance={0.1} pages={pageCount} damping={.5}>
-          <Frames images={app} />
+          <Frames images={a.list} />
         </ScrollControls>
       </>
     )
@@ -435,7 +438,7 @@ const Timeline = () => {
     <directionalLight intensity={10} />
     <Suspense fallback={<Html>Loading timeline...</Html>}>
       <motion3d.group visible={!disposed} animate={controls} onAnimationComplete={onComplete}>
-        {mounted && !view && <App images={array} />}
+        {mounted && !view && <App images={a.list} />}
       </motion3d.group>
     </Suspense>
   </>)

@@ -1,4 +1,4 @@
-import { atomField, atomResult, atomSort, imgs, listView, totalLoad } from "@/js/atoms";
+import { atomField, atomResult, atomSort, atomState, imgs, listView, totalLoad } from "@/js/atoms";
 import { motion, useAnimation, useMotionValueEvent, useScroll } from "framer-motion";
 import { useAtom } from "jotai";
 import Head from "next/head";
@@ -82,6 +82,13 @@ export default function Archive() {
     query: "",
     list: images,
   });
+
+  const [a, aa] = useAtom(atomState)
+
+  useEffect(() => {
+    aa(state)
+    console.log(a)
+  }, [state])
 
   // Filter posts on typing in search input
   const handleChange = (e: any) => {

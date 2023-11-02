@@ -12,6 +12,10 @@ export const listView = atom<any>(true)
 export const atomSort = atom<any>("descending")
 export const atomField = atom<any>("date")
 export const atomResult = atom<any>(undefined)
+export const atomState = atom<any>({
+    query: "",
+    list: undefined,
+})
 
 
 const manager = new THREE.LoadingManager();

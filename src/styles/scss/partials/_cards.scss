@@ -148,9 +148,9 @@
   li {
     position: relative;
     width: 100%;
-    background-color: #191a1f;
+    background-color: hsl(232.5, 11.8%, 10%);
+    border: 1px solid hsl(232.5, 11.8%, 14.5%);
     // border: 1px solid #1d1e25;
-    border: 1px solid #23242f;
     border-radius: 3px;
     overflow: hidden;
     display: flex;
@@ -296,8 +296,8 @@
     align-items: center;
     margin: 0.5rem 0;
     button {
-      background-color: #191a1f;
-      border: 1px solid #23242f;
+      background-color: hsl(232.5, 11.8%, 10%);
+      border: 1px solid hsl(232.5, 11.8%, 14.5%);
       border-radius: 5px;
       padding: 0.5em 1em;
       color: var(--clr-contrast-100);

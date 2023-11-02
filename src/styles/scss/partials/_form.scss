@@ -141,8 +141,8 @@ form label {
 form :is(input, select, textarea) {
   padding: var(--space-xs);
   font-size: var(--fs-text);
-  background-color: #191a1f;
-  border: 1px solid #23242f;
+  background-color: hsl(232.5, 11.8%, 10%);
+  border: 1px solid hsl(232.5, 11.8%, 14.5%);
   color: var(--clr-contrast-400);
   font-weight: 500;
 }
