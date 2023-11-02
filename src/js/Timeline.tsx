@@ -19,7 +19,7 @@ import {
 import { motion as motion3d } from "framer-motion-3d";
 import { proxy } from "valtio";
 import { useAtom } from "jotai";
-import { imgs, loadManager } from "@/js/atoms";
+import { imgs, listView, loadManager } from "@/js/atoms";
 import Papa from "papaparse";
 import { useRouter } from "next/router";
 import { Vector3, Quaternion, ImageLoader } from '../vendor/three-export'
@@ -42,6 +42,7 @@ const Timeline = () => {
   const [disposed, setDisposed] = useState(false)
   const [isInPage, setIsInPage] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [view, setView] = useAtom<any>(listView)
 
 
   useEffect(() => {
@@ -119,7 +120,8 @@ const Timeline = () => {
                       link: l,
                       name: r,
                       date: d,
-                      img: img
+                      img: img,
+                      number: results.data.length - index
                     });
                   }
                   setArray(app)
@@ -413,7 +415,7 @@ const Timeline = () => {
 
     return (
       <>
-        <ScrollControls enabled={!click.current} distance={0.1} pages={pageCount} damping={.5}>
+        <ScrollControls style={{ zIndex: 100 }} enabled={!click.current} distance={0.1} pages={pageCount} damping={.5}>
           <Frames images={app} />
         </ScrollControls>
       </>
@@ -422,8 +424,8 @@ const Timeline = () => {
 
   useEffect(() => {
     setMounted(isInPage)
-    if (!isInPage) {
-      controls.start({ y: -100 }).then(() => setMounted(false))
+    if (!isInPage && !view) {
+      controls.start({ y: -10 }).then(() => setMounted(false))
     } else {
       controls.start({ y: 0, transition: { delay: 1 } })
     }
@@ -433,7 +435,7 @@ const Timeline = () => {
     <directionalLight intensity={10} />
     <Suspense fallback={<Html>Loading timeline...</Html>}>
       <motion3d.group visible={!disposed} animate={controls} onAnimationComplete={onComplete}>
-        {mounted && <App images={array} />}
+        {mounted && !view && <App images={array} />}
       </motion3d.group>
     </Suspense>
   </>)

@@ -1,23 +1,82 @@
-import { imgs, listView } from "@/js/atoms";
+import { atomField, atomResult, atomSort, imgs, listView, totalLoad } from "@/js/atoms";
+import { motion, useAnimation, useMotionValueEvent, useScroll } from "framer-motion";
 import { useAtom } from "jotai";
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { TupleType } from "typescript";
+import { Suspense, useEffect, useState } from "react";
+
+const colors = ["hsl(240, 11%, 61%)", "hsl(240, 11%, 50%)", "hsl(240, 11%, 40%)", "hsl(240, 11%, 25%)", "hsl(240, 11%, 15%)"];
+
+const containerVariants = {
+  initial: {},
+  animate: {
+    transition: {
+      when: "beforeChildren",
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const dotVariants = {
+  initial: {},
+  animate: {
+    height: [40, 100, 40],
+    transition: {
+      repeat: Infinity
+    }
+  }
+};
+
+const Dots = ({ count = 5 }) => {
+  return (<>
+    <motion.div variants={containerVariants}>
+      {Array(count)
+        .fill(null)
+        .map((_, index) => {
+          return (
+            <motion.div
+              key={index}
+              variants={dotVariants}
+              style={{
+                height: 40,
+                width: 40,
+                backgroundColor: colors[index % colors.length],
+                borderRadius: 20
+              }}
+            />
+          );
+        })}
+    </motion.div>
+  </>)
+}
+
+const formVariants = {
+  top: { backgroundColor: "rgba(17, 18, 22, 0)", borderColor: "rgba(35, 36, 47, 0)", width: "100%", padding: "1rem 0rem" },
+  scroll: { backgroundColor: "rgba(17, 18, 22, 255)", borderColor: "rgba(35, 36, 47, 255)", width: "110%", padding: "1rem 1rem" },
+}
+
+const list_variants = {
+  in: { opacity: 1, zIndex: 1 },
+  out: { opacity: 0, zindex: -100 },
+}
 
 export default function Archive() {
   const [view, setView] = useAtom(listView);
+  const [load, setLoad] = useAtom(totalLoad);
   const [app, setApp] = useAtom<any>(imgs);
-  const [images, setImages] = useState(app);
+  const [images, setImages] = useState<any>(app)
+  const { scrollY } = useScroll();
+  const controls = useAnimation()
+  const list_controls = useAnimation()
 
   // Store sortby order i.e. ascending or descending
-  const [sortType, setSortType] = useState("descending");
+  const [sortType, setSortType] = useAtom(atomSort);
 
   // Sortby field i.e. title or description
-  const [sortByField, setSortByField] = useState("date");
+  const [sortByField, setSortByField] = useAtom(atomField);
 
   // Store filter/latest posts
-  const [result, setResult] = useState();
+  const [result, setResult] = useAtom(atomResult);
 
   const [state, setstate] = useState({
     query: "",
@@ -43,7 +102,6 @@ export default function Archive() {
 
   // Sort posts depending on sort type and available results
   function sortFunc(results: any, sortType: any, sortByField: any) {
-    console.log(sortByField)
     if (sortByField === "title") {
       if (sortType === "ascending") {
         results.sort((a: any, b: any) =>
@@ -91,21 +149,20 @@ export default function Archive() {
   }
 
   useEffect(() => {
-    setImages(app);
-    let sortedCars = images.sort(
-      (a: any, b: any) =>
-        Date.parse(`${new Date(a.date.split("/").reverse().join("-"))}`) -
-        Date.parse(`${new Date(b.date.split("/").reverse().join("-"))}`)
-    );
-    let sortedCars1 = images.sort((a: any, b: any) =>
-      a.date
-        .split("/")
-        .reverse()
-        .join()
-        .localeCompare(b.date.split("/").reverse().join())
-    );
-    console.log(sortedCars1);
-  }, [app]);
+    load && setImages(app)
+  }, [load]);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    view &&
+      controls.start(latest > 0 ? "scroll" : "top")
+  })
+
+  useEffect(() => {
+    view ? list_controls.start({ pointerEvents: "all", display: "grid" }).then(() => { list_controls.start("in") }) :
+      list_controls.start("out").then(() => { list_controls.start({ pointerEvents: "none", display: "none" }) })
+  }, [view])
+
+
 
   return (
     <>
@@ -115,8 +172,8 @@ export default function Archive() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.webp" />
       </Head>
-      <section>
-        <form className="list__form">
+      <div className="archive__wrapper">
+        <motion.form className="list__form" initial={scrollY.get() > 0 ? "scroll" : "top"} variants={formVariants} animate={controls}>
           <div>
             <span>Search</span>
             <input
@@ -156,45 +213,41 @@ export default function Archive() {
               <option value="descending">Descending</option>
             </select>
           </div>
-        </form>
-        <ul className="video-list">
-          {state.list.map((item: any) => {
-            return item !== null ? (
-              <li key={item.name}>
-                <div
-                  className="list__image"
-                  style={{
-                    backgroundImage: `url('${item.url}')`,
-                    backgroundSize: "cover",
-                  }}
-                ></div>
-                <div className="list__info">
-                  <h5 className="list__header">{item.title}</h5>
-                  <p className="list__date">{item.date}</p>
-                  <Link href={item.link}>
-                    <button type="button" className="btn__alt">
-                      Watch now!
-                    </button>
-                  </Link>
-                </div>
-              </li>
-            ) : null;
-          })}
-          {/* {data.items.map(({ id, snippet = {} }: any) => {
-          const { title, thumbnails = {}, resourceId = {} }: any = snippet;
-          const { medium } = thumbnails;
-          return (
-            <li key={id}>
-              <a href={`https://www.youtube.com/watch?v=${resourceId.videoId}`}>
-                <p>
-                  <img width={medium.width} height={medium.height} src={medium.url} alt="" />
-                </p>
-                <h3>{title}</h3>
-              </a>
-            </li>
-          )})}  */}
-        </ul>
-      </section>
+          <div>
+            <button type="button" onClick={() => setView(!view)}>{view ? "timeline view" : "list view"}</button>
+          </div>
+        </motion.form>
+        <Suspense fallback={<Dots />}>
+          <motion.ul className="video-list" initial="in" animate={list_controls} variants={list_variants}>
+            {images && state.list.map((item: any) => {
+              return item !== null ? (
+                <li key={item.name}>
+                  <div className="list__image-wrapper">
+                    <div className="list__item-number">{item.number}</div>
+                    <div
+                      className="list__image"
+                      style={{
+                        backgroundImage: `url('${item.url}')`,
+                        backgroundSize: "cover",
+                      }}
+                    ></div>
+                  </div>
+                  <div className="list__info">
+                    <h5 className="list__header">{item.title}</h5>
+                    <p className="list__date">{new Date(item.date).toDateString()}</p>
+
+                    <Link href={item.link}>
+                      <button type="button" className="btn__alt">
+                        Watch now!
+                      </button>
+                    </Link>
+                  </div>
+                </li>
+              ) : null;
+            })}
+          </motion.ul>
+        </Suspense>
+      </div>
     </>
   );
 }

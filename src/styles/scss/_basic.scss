@@ -315,18 +315,18 @@ a {
   left: 0;
   height: 100%;
   width: 100vw;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 .main section {
   @extend %flex-center;
   height: auto;
-  overflow-x: hidden;
+  // overflow-x: hidden;
   min-height: 100vh;
-  padding: 1rem;
   width: 100%;
   flex-direction: column;
   position: relative;
+  padding: 1rem;
   @include mq(small) {
     padding: 1.5rem;
   }
