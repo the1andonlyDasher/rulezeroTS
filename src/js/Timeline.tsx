@@ -23,15 +23,14 @@ import { atomField, atomResult, atomSort, atomState, imgs, listView, loadManager
 import Papa from "papaparse";
 import { useRouter } from "next/router";
 import { Vector3, Quaternion, ImageLoader } from '../vendor/three-export'
-import { DownloadResult } from "image-downloader";
 import { Texture } from "three";
 
 
 
 
 const Timeline = () => {
+  const [a, aa] = useAtom(atomState)
   const [fetching, fetch] = useState(true);
-  const [array, setArray] = useState<any>([]);
   const [videoID, setVideoID] = useState<any>([]);
   const [app, setApp] = useAtom<any>(imgs)
   const router = useRouter()
@@ -43,22 +42,20 @@ const Timeline = () => {
   const [isInPage, setIsInPage] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [view, setView] = useAtom<any>(listView)
+  const [array, setArray] = useState(a.list)
+  // Store sortby order i.e. ascending or descending
+  const [sortType, setSortType] = useAtom(atomSort);
 
-  const [a, aa] = useAtom(atomState)
+  // Sortby field i.e. title or description
+  const [sortByField, setSortByField] = useAtom(atomField);
 
-  const [list, setList] = useState(a.list);
-
-  useEffect(() => {
-    setList(a.list)
-  }, [a])
-
-
-
-
-
+  // Store filter/latest posts
+  const [result, setResult] = useAtom(atomResult);
 
   useEffect(() => {
-    console.log(list)
+    setArray(a.list)
+  }, [a.list])
+  useEffect(() => {
     setDisposed(false)
     if (router.pathname === "/archive") {
       setTimeout(() => {
@@ -81,8 +78,6 @@ const Timeline = () => {
   }
 
   useEffect(() => {
-
-
     if (router.pathname.includes("/archive")) {
       if (typeof window !== "undefined" && fetching) {
 
@@ -90,7 +85,6 @@ const Timeline = () => {
 
         const rx: RegExp =
           /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
-
 
         Papa.parse(
           "https://docs.google.com/spreadsheets/d/e/2PACX-1vSloYeSqI6BpICcq9gG5a3KRhXv99DKlrj9XmEAIvmX0BxWw-olhU9J9kDG0LvM976e8jYblR0THwkj/pub?output=csv",
@@ -113,19 +107,7 @@ const Timeline = () => {
                 if (fetching) {
                   if (!app.find((item: any) => item.name === r)) {
                     app.push({
-                      position: [
-                        index % 2
-                          ? -(Math.random() < 0.5
-                            ? 15 + Math.random() * 5
-                            : 15 + Math.random() * 5)
-                          : Math.random() < 0.5
-                            ? 15
-                            : 15,
-                        Math.random() < 0.5
-                          ? 10 + Math.random() * 5
-                          : 10 + Math.random() * 5,
-                        -15 * index,
-                      ],
+
                       rotation: [0, 0, 0],
 
                       url: `https://pipedproxy.kavin.rocks/vi/${r}/mqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBhZx_n9AywKMVzcoL_2bYQpUlalw&host=i.ytimg.com`,
@@ -134,10 +116,10 @@ const Timeline = () => {
                       name: r,
                       date: d,
                       img: img,
-                      number: results.data.length - index
+                      number: results.data.length - index,
+                      index: index
                     });
                   }
-                  setArray(app)
                   See(true)
                 }
               });
@@ -153,9 +135,11 @@ const Timeline = () => {
                 loader.setRequestHeader({ "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" })
                 loader.load(item.url, function (image) {
                   texture.image = image;
+                  texture.name = item.name
                   texture.needsUpdate = true;
                 })
                 textures.push(texture)
+
               })
 
             },
@@ -163,17 +147,33 @@ const Timeline = () => {
         );
       }
     }
-    // console.log(textures)
+    console.log(textures)
   }, [router.pathname]);
-
-
-
 
   const App = ({ images }: { images: any }) => {
     const { size } = useThree();
     const [w, h] = useAspect(size.width, size.height)
     const click = useRef<any>(false)
     const unit = proxy({ value: 15 });
+    // const [position, setPosition]: any = useState([])
+
+    // useEffect(() => {
+    //   const pos: any = (index: any) => [
+    //     index % 2
+    //       ? -(Math.random() < 0.5
+    //         ? 15 + Math.random() * 5
+    //         : 15 + Math.random() * 5)
+    //       : Math.random() < 0.5
+    //         ? 15
+    //         : 15,
+    //     Math.random() < 0.5
+    //       ? 10 + Math.random() * 5
+    //       : 10 + Math.random() * 5,
+    //     -15 * index,
+    //   ]
+
+    //   setPosition(pos)
+    // }, [images])
 
     const Frames = ({ images }: { images: any }) => {
       const p: any = new Vector3();
@@ -183,11 +183,9 @@ const Timeline = () => {
       const scroll = useScroll();
 
       useEffect(() => {
-        // console.log(clicked)
         if (clicked.current) {
           clicked.current.updateWorldMatrix(true, true);
           clicked.current.getWorldQuaternion(q);
-
         }
         else {
           p.set(0, w / 6, 20);
@@ -202,6 +200,21 @@ const Timeline = () => {
           easing.dampQ(state.camera.quaternion, q, 0.4, dt);
         }
       });
+
+      const position: any = (index: any) => [
+        index % 2
+          ? -(Math.random() < 0.5
+            ? 15 + Math.random() * 5
+            : 15 + Math.random() * 5)
+          : Math.random() < 0.5
+            ? 15
+            : 15,
+        Math.random() < 0.5
+          ? 10 + Math.random() * 5
+          : 10 + Math.random() * 5,
+        -15 * index,
+      ]
+
 
       return (
         <group
@@ -224,7 +237,7 @@ const Timeline = () => {
           <Line
             points={[
               [0, 0, 0],
-              [0, 0, -`${a.list.length}` * unit.value],
+              [0, 0, -`${images.length}` * unit.value],
             ]}
             color="white"
             lineWidth={1}
@@ -232,25 +245,22 @@ const Timeline = () => {
             dashed={false}
           />
           {images.map((props: any, index: number) => {
-            const posX = props.position[0] > 0 ? Math.min((props.position[0] / 2) * (w / 10), props.position[0]) : Math.max((props.position[0] / 2) * (w / 10), props.position[0]);
+            const tex = textures.find((item: any) => item.name === props.name)
+            const posX = position(index)[0] > 0 ? Math.min((position(index)[0] / 2) * (w / 10), position(index)[0]) : Math.max((position(index)[0] / 2) * (w / 10), position(index)[0]);
             return (
               <Frame
-                name={"asd"}
+                name={props.name}
                 text={props.text}
                 isActive={props.isActive}
-                texture={textures[index]}
+                texture={tex}
                 popUp={props.popUp}
                 factor={Math.random() > 0.5 ? -1 : 1}
-                position={[posX, (props.position[1] / 2) * (h / 10), props.position[2]]}
+                position={[posX, position(index)[1], position(index)[2]]}
                 key={props.url + index}
                 url={props.url}
                 date={props.date}
-                start={[posX / 6, 0, props.position[2]]}
-                end={[posX, props.position[1] - 4, props.position[2]]}
-                points={[
-                  [0, 0, props.position[2]],
-                  [posX, props.position[1] - 4, props.position[2]],
-                ]}
+                start={[posX / 6, 0, position(index)[2]]}
+                end={[posX, position(index)[1] * 0.95, position(index)[2]]}
                 {...props}
               />
             )
@@ -281,9 +291,9 @@ const Timeline = () => {
       })
 
 
-      useEffect(() => {
-        text.current.material.opacity = hovering && clicked === false ? 1 : 0;
-      }, [hovering])
+      // useEffect(() => {
+      //   text.current.material.opacity = hovering && clicked === false ? 1 : 0;
+      // }, [hovering])
 
       const controls = useAnimationControls();
 
@@ -311,7 +321,7 @@ const Timeline = () => {
             onPointerOut={() => hover(clicked ? false : false)}
             onClick={() => setClick(true)}
             onPointerMissed={() => setClick(false)}
-            position={[posX, props.position[1], props.position[2]]}
+            position={props.position}
           >
             <planeGeometry />
             <motion3d.meshBasicMaterial
@@ -341,7 +351,7 @@ const Timeline = () => {
             transition={{ duration: 0.5 }}
             animate={clicked ? "visible" : "hidden"}
             ref={button}
-            position={[props.end[0], props.end[1], props.end[2] + 0.2]}
+            position={[props.position[0], props.position[1], props.position[2] + 0.2]}
             scale={[1, 1, 1]}
             visible={clicked}
             onPointerOver={(e) => (e.stopPropagation(), hover(true))}
@@ -370,12 +380,12 @@ const Timeline = () => {
             fontSize={0.6}
             position={[
               props.position[0],
-              props.position[1] - 5,
+              props.position[1] - 3.5,
               props.position[2],
             ]}
             font={"/fonts/prompt-v10-latin-900italic.woff"}
             anchorX="center"
-            anchorY="middle"
+            anchorY="top"
           >
             <meshBasicMaterial color={"white"} visible={!disposed} />
             {props.title.split("-").join(" ")}
@@ -419,7 +429,7 @@ const Timeline = () => {
     return (
       <>
         <ScrollControls style={{ zIndex: 100 }} enabled={!click.current} distance={0.1} pages={pageCount} damping={.5}>
-          <Frames images={a.list} />
+          <Frames images={images} />
         </ScrollControls>
       </>
     )
@@ -438,7 +448,7 @@ const Timeline = () => {
     <directionalLight intensity={10} />
     <Suspense fallback={<Html>Loading timeline...</Html>}>
       <motion3d.group visible={!disposed} animate={controls} onAnimationComplete={onComplete}>
-        {mounted && !view && <App images={a.list} />}
+        {mounted && !view && <App images={array} />}
       </motion3d.group>
     </Suspense>
   </>)

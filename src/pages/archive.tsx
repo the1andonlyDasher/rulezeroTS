@@ -160,11 +160,12 @@ export default function Archive() {
   }, [load]);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    view &&
-      controls.start(latest > 0 ? "scroll" : "top")
+    view && controls.start(view && latest > 0 ? "scroll" : "top")
   })
 
+
   useEffect(() => {
+    controls.start(view ? "top" : "top");
     view ? list_controls.start({ pointerEvents: "all", display: "grid" }).then(() => { list_controls.start("in") }) :
       list_controls.start("out").then(() => { list_controls.start({ pointerEvents: "none", display: "none" }) })
   }, [view])
@@ -195,10 +196,10 @@ export default function Archive() {
             <span>Sort By</span>
             <select
               className="list__form-sort"
-              defaultValue={"title"}
+              defaultValue={""}
               onChange={(e) => sortBy(e.target.value)}
             >
-              <option value="title" disabled>
+              <option value="" disabled>
                 None
               </option>
               <option value="date">Date</option>
