@@ -1,13 +1,12 @@
 import React, { forwardRef, ReactElement } from "react";
 import { motion } from "framer-motion";
 
-
 const section_variants = {
   initial: {
     transition: { staggerChildren: 0.2 },
   },
   enter: {
-    transition: { staggerChildren: 0.2, },
+    transition: { staggerChildren: 0.2 },
   },
   exit: {
     transition: { staggerChildren: 0.2 },
@@ -45,19 +44,25 @@ const header_variants = {
 
 interface sectionProps {
   sectionName?: string;
-  ref?: any
+  ref?: any;
   id?: string;
   header?: string | number;
   text?: string;
-  children?: JSX.Element
+  children?: JSX.Element;
 }
 
 interface sProps {
   props: sectionProps;
 }
 
-function Section({ sectionName, ref, id, text, header, children }: sectionProps) {
-
+function Section({
+  sectionName,
+  ref,
+  id,
+  text,
+  header,
+  children,
+}: sectionProps) {
   return (
     <motion.section
       data-section-name={sectionName}
@@ -69,21 +74,18 @@ function Section({ sectionName, ref, id, text, header, children }: sectionProps)
       id={id}
       variants={section_variants}
     >
-      <motion.div variants={section_variants} className="__s__b">
-        {header ? (
-          <motion.h2 variants={header_variants}>{header}</motion.h2>
-        ) : null}
-        {text ? (
-          <motion.p variants={text_variants}>{text}</motion.p>
-        ) : null}
-        {children}
-      </motion.div>
+      {header ? (
+        <motion.h2 variants={header_variants}>{header}</motion.h2>
+      ) : null}
+      {text ? <motion.p variants={text_variants}>{text}</motion.p> : null}
+      {children}
     </motion.section>
   );
 }
 
-
-const Sec = forwardRef<ReactElement, sectionProps>((props, ref) => <Section {...props}></Section>);
-Sec.displayName = "Section"
+const Sec = forwardRef<ReactElement, sectionProps>((props, ref) => (
+  <Section {...props}></Section>
+));
+Sec.displayName = "Section";
 
 export default Sec;
