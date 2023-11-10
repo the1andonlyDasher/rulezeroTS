@@ -153,6 +153,7 @@ export default function About() {
           </div>
           <div>
             <div>
+              <h4>Heading</h4>
               <p>
                 Lorem ipsum leo hendrerit felis ut sollicitudin torquent mi
                 pharetra, imperdiet nisl congue faucibus etiam est fames
@@ -164,7 +165,7 @@ export default function About() {
             </div>
           </div>
           <div>
-            <h4>Explore all episodes:</h4>
+            <h5>Explore all episodes:</h5>
             <Link href={""}>
               <button type="button" className="btn__primary">
                 Archive

@@ -65,9 +65,9 @@
     .grid__h3 {
       font-weight: 700;
       padding: 1rem;
-      text-shadow: 5px 5px 0px #101014;
+      text-shadow: 5px 5px 0px hsl(232.5, 11.8%, 10%);
       font-size: clamp(1.5rem, 5vw, 2rem);
-      background-color: #101014;
+      background-color: hsl(232.5, 11.8%, 10%);
       border-radius: 5px;
     }
     .grid__date {
@@ -87,7 +87,6 @@
     }
     p {
       margin: 0;
-      padding: 1rem;
       font-size: clamp(0.75rem, 5vw, 1.1rem);
     }
     video {
@@ -101,11 +100,14 @@
       width: 90%;
       height: 100%;
       background-size: cover;
-      box-shadow: 30px 20px 0px #111;
+      box-shadow: 30px 20px 0px hsl(232.5, 11.8%, 8%);
       border: 1px solid white;
       perspective: 700px;
       position: absolute;
       right: 0;
+      background-image: radial-gradient(#121317 50%, transparent 50%);
+      background-repeat: repeat;
+      background-size: 5px 5px;
     }
     .stat-card {
       padding: 1rem;
@@ -158,13 +160,18 @@
       margin-right: auto;
       width: 90%;
       height: 100%;
-      background-color: #0e0e12;
+      border: 1px solid #23252d;
+      box-shadow: 30px 20px 0px hsl(232.5, 11.8%, 8%);
+      background-color: hsl(232.5, 11.8%, 17.5%);
+      padding: 1rem;
       transform: rotateY(-15deg);
       perspective: 500px;
     }
   }
   & > div:nth-child(5) {
     grid-area: buttons;
+    gap: 1rem;
+
     a {
       flex: 1 1 100%;
       button {
