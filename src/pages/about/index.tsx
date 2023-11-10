@@ -78,6 +78,7 @@ export default function About() {
                 var l = data.Link;
                 var t = data.Title;
                 var d = data.Dates;
+                var desc = data.Description;
                 var img = data.Images;
                 if (fetching) {
                   if (!app.find((item: any) => item.name === r)) {
@@ -90,6 +91,7 @@ export default function About() {
                       img: img,
                       number: results.data.length - index,
                       index: index,
+                      description: desc
                     });
                   }
                   setItem(app[app.length - app.length]);
@@ -133,7 +135,7 @@ export default function About() {
           <div>
             {item && (
               <div
-                className="grid__vide-parent"
+                className="grid__video-parent"
                 style={{ backgroundImage: `url("${item.url}")` }}
               >
                 <h3
@@ -142,6 +144,7 @@ export default function About() {
                 >
                   {item.title}
                 </h3>
+                {/* <div className="live-badge">live</div> */}
                 <div
                   style={{ transform: "rotateY(15deg)" }}
                   className="grid__date"
@@ -153,15 +156,11 @@ export default function About() {
           </div>
           <div>
             <div>
-              <h4>Heading</h4>
-              <p>
-                Lorem ipsum leo hendrerit felis ut sollicitudin torquent mi
-                pharetra, imperdiet nisl congue faucibus etiam est fames
-                torquent phasellus, sit augue lectus curae aliquam egestas
-                fermentum euismod. Tincidunt leo ligula iaculis platea
-                ullamcorper justo enim convallis etiam, erat viverra etiam
-                bibendum tristique sit hendrerit laoreet placerat
-              </p>
+              <h4>On this show:</h4>
+              {item &&
+                <p>
+                  {`${item.description}`}
+                </p>}
             </div>
           </div>
           <div>

@@ -70,6 +70,19 @@
       background-color: hsl(232.5, 11.8%, 10%);
       border-radius: 5px;
     }
+    .live-badge {
+      padding: 2rem;
+      background-color: #e8434c;
+      border-radius: 10px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-weight: 700;
+      font-family: "Prompt";
+      text-transform: uppercase;
+      font-size: clamp(1rem, 5vw, 2rem);
+      transform: rotate(15deg);
+    }
     .grid__date {
       font-weight: 700;
       padding: 1rem;
@@ -88,6 +101,10 @@
     p {
       margin: 0;
       font-size: clamp(0.75rem, 5vw, 1.1rem);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 12;
+      overflow: hidden;
     }
     video {
       width: 100%;
@@ -95,7 +112,7 @@
       background-color: hsl(232.5, 11.8%, 10%);
       border-radius: 5px;
     }
-    .grid__vide-parent {
+    .grid__video-parent {
       transform: rotateY(15deg);
       width: 90%;
       height: 100%;
@@ -105,9 +122,6 @@
       perspective: 700px;
       position: absolute;
       right: 0;
-      background-image: radial-gradient(#121317 50%, transparent 50%);
-      background-repeat: repeat;
-      background-size: 5px 5px;
     }
     .stat-card {
       padding: 1rem;
@@ -148,13 +162,17 @@
   & > div:nth-child(3) {
     grid-area: video;
     perspective: 500px;
-    margin: 3rem 0;
+    margin: 4rem 0;
+    background-image: radial-gradient(#151516 30%, transparent 30%);
+    background-repeat: repeat;
+    background-size: 5px 5px;
+    background-attachment: scroll;
   }
   & > div:nth-child(4) {
     grid-area: main;
     perspective: 500px;
     position: relative;
-    margin: 3rem 0;
+    margin: 4rem 0;
 
     div {
       margin-right: auto;
