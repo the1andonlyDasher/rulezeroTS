@@ -50,6 +50,7 @@
     "buttons sidetext sidetext";
   div {
     display: flex;
+    backface-visibility: hidden;
     // gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;

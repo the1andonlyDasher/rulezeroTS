@@ -105,9 +105,23 @@ export default function About() {
     }
   }, [router.pathname]);
 
+  const gridVariants = {
+    initial: { opacity: 0, x: -10 },
+    enter: { opacity: 1, x: 0, transition: { staggerChildren: 0.2 } },
+    exit: { opacity: 0, x: 10, transition: { staggerChildren: 0.2, staggerDirection: -1 } },
+  }
+
+  const gridItemVariants = {
+    initial: { rotateY: "180deg" },
+    enter: { rotateY: "0deg", transition: { type: "spring", mass: 5, damping: 50, stiffness: 100, duration: 0.25 } },
+    exit: { rotateY: "-180deg" },
+  }
+
+  const gridControls = useAnimation();
+
   useEffect(() => {
-    console.log(item);
-  }, [item]);
+    gridControls.start(item && app !== null ? "enter" : "initial")
+  }, [app, item])
 
   return (
     <>
@@ -118,12 +132,12 @@ export default function About() {
         <link rel="icon" href="/favicon.webp" />
       </Head>
       <Sec>
-        <div className="hero__grid">
-          <div>
+        <motion.div initial="initial" animate={gridControls} variants={gridVariants} className="hero__grid">
+          <motion.div variants={gridItemVariants}>
             <h2>Check out the latest show...</h2>
             <h3 className="">...or read more about the panel members.</h3>
-          </div>
-          <div>
+          </motion.div>
+          <motion.div variants={gridItemVariants}>
             {item && (
               <Link href={item.link}>
                 <button type="button" className="btn__primary">
@@ -131,8 +145,8 @@ export default function About() {
                 </button>
               </Link>
             )}
-          </div>
-          <div>
+          </motion.div>
+          <motion.div variants={gridItemVariants}>
             {item && (
               <div
                 className="grid__video-parent"
@@ -153,8 +167,8 @@ export default function About() {
                 </div>
               </div>
             )}
-          </div>
-          <div>
+          </motion.div>
+          <motion.div variants={gridItemVariants}>
             <div>
               <h4>On this show:</h4>
               {item &&
@@ -162,17 +176,17 @@ export default function About() {
                   {`${item.description}`}
                 </p>}
             </div>
-          </div>
-          <div>
+          </motion.div>
+          <motion.div variants={gridItemVariants}>
             <h5>Explore all episodes:</h5>
             <Link href={""}>
               <button type="button" className="btn__primary">
                 Archive
               </button>
             </Link>
-          </div>
+          </motion.div>
           {app && (
-            <div>
+            <motion.div variants={gridItemVariants}>
               <div className="stat-card">
                 <p>{app.length}</p>
                 <span>videos</span>
@@ -185,9 +199,9 @@ export default function About() {
                 <p>2384</p>
                 <span>Minutes</span>
               </div>
-            </div>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       </Sec>
       <Sec>
         <motion.div variants={cards_variants} className="cards">
