@@ -5,66 +5,86 @@ export const images = [
   // Front
   // { position: [0, 0, 1.5 * fac], rotation: [0, 0, 0], url: "/images/robot.png" },
   // Back
-  { clip: "polygon(0 0, 100% 0%, 75% 100%, 0% 100%)",
-    pos: [-0.8* fac, 0, -0.6* fac], rot: [0, 0, 0], 
-    name:"Troy Francis",
-    id:"Troy",
+  {
+    clip: "polygon(0 0, 100% 0%, 75% 100%, 0% 100%)",
+    pos: [-0.8 * fac, 0, -0.6 * fac], rot: [0, 0, 0],
+    name: "Troy Francis",
+    id: "Troy",
     creator: "Troy",
-    url: "/images/Troy.jpg" },
-  { clip: "polygon(25% 0, 80% 0, 90% 100%, 0 100%)",
-    pos: [0.8* fac, 0, -0.6* fac], rot: [0, 0, 0],
-    name:"Aaron Clarey",
-    id:"Aaron",
+    url: "/images/Troy.webp"
+  },
+  {
+    clip: "polygon(25% 0, 80% 0, 90% 100%, 0 100%)",
+    pos: [0.8 * fac, 0, -0.6 * fac], rot: [0, 0, 0],
+    name: "Aaron Clarey",
+    id: "Aaron",
     creator: "Aaron",
-    url: "/images/Aaron.jpg" },
+    url: "/images/Aaron.webp"
+  },
   // Left
-  { clip: "polygon(0 0, 100% 0, 100% 100%, 10% 100%)",
-    pos: [-1.8* fac, 0, -0.3* fac], rot: [0, Math.PI / 5, 0], 
-  name:"Jack Napier",
-  id:"Jack",
+  {
+    clip: "polygon(0 0, 100% 0, 100% 100%, 10% 100%)",
+    pos: [-1.8 * fac, 0, -0.3 * fac], rot: [0, Math.PI / 5, 0],
+    name: "Jack Napier",
+    id: "Jack",
     creator: "Jack",
-url: "/images/Jack.jpg" },
-  { clip: "polygon(0 0, 80% 0, 100% 100%, 0 100%)",
-    pos: [-1.8* fac, 0, -0.3* fac], rot: [0, Math.PI / 5, 0], 
-    name:"Jon Fitch",
-    id:"Fitch",
+    url: "/images/Jack.webp"
+  },
+  {
+    clip: "polygon(0 0, 80% 0, 100% 100%, 0 100%)",
+    pos: [-1.8 * fac, 0, -0.3 * fac], rot: [0, Math.PI / 5, 0],
+    name: "Jon Fitch",
+    id: "Fitch",
     creator: "Fitch",
-  url: "/images/Fitch.jpg" },
-  { clip: "polygon(0 0, 90% 0, 80% 100%, 20% 100%)",
-    pos: [-2.5* fac, 0, .6* fac], rot: [0, Math.PI / 3, 0], 
-    name:"Rollo Tomassi",
-    id:"Rollo",
+    url: "/images/Fitch.webp"
+  },
+  {
+    clip: "polygon(0 0, 90% 0, 80% 100%, 20% 100%)",
+    pos: [-2.5 * fac, 0, .6 * fac], rot: [0, Math.PI / 3, 0],
+    name: "Rollo Tomassi",
+    id: "Rollo",
     creator: "Rollo",
-  url: "/images/Rollo.jpg" },
-  { clip: "polygon(10% 0, 90% 0, 100% 100%, 0 100%)",
-    pos: [-3.5* fac, 0, .75* fac], rot: [0, Math.PI / 2.5, 0], 
-    name:"Stirling Cooper",
-    id:"Stirling",
+    url: "/images/Rollo.webp"
+  },
+  {
+    clip: "polygon(10% 0, 90% 0, 100% 100%, 0 100%)",
+    pos: [-3.5 * fac, 0, .75 * fac], rot: [0, Math.PI / 2.5, 0],
+    name: "Stirling Cooper",
+    id: "Stirling",
     creator: "Stirling",
-  url: "/images/Stirling.jpg"  },
+    url: "/images/Stirling.webp"
+  },
   // Right
-  { clip: "polygon(0 0, 100% 0, 85% 100%, 10% 100%)",
-    pos: [1.75* fac, 0, 0.25* fac], rot: [0, -Math.PI / 2.5, 0], 
-    name:"Rian Stone",
-    id:"Rian",
+  {
+    clip: "polygon(0 0, 100% 0, 85% 100%, 10% 100%)",
+    pos: [1.75 * fac, 0, 0.25 * fac], rot: [0, -Math.PI / 2.5, 0],
+    name: "Rian Stone",
+    id: "Rian",
     creator: "Rian",
-  url: "/images/Stone.jpg"  },
-  { clip: "polygon(15% 0, 100% 0, 100% 100%, 0 100%)",
-    pos: [2.15* fac, 0, 1.5* fac], rot: [0, -Math.PI / 2.5, 0], 
-    name:"Thor",
-    id:"Thor",
+    url: "/images/Stone.webp"
+  },
+  {
+    clip: "polygon(15% 0, 100% 0, 100% 100%, 0 100%)",
+    pos: [2.15 * fac, 0, 1.5 * fac], rot: [0, -Math.PI / 2.5, 0],
+    name: "Thor",
+    id: "Thor",
     creator: "Thor",
-  url: "/images/Thor.jpg"  },
-  { clip: "polygon(0 0, 80% 0%, 100% 100%, 0 100%)",
-    pos: [3* fac, 0, 2.75* fac], rot: [0, -Math.PI / 2.5, 0], 
-    name:"Paul Benjamin",
-    id:"PaulBenjamin",
+    url: "/images/Thor.webp"
+  },
+  {
+    clip: "polygon(0 0, 80% 0%, 100% 100%, 0 100%)",
+    pos: [3 * fac, 0, 2.75 * fac], rot: [0, -Math.PI / 2.5, 0],
+    name: "Paul Benjamin",
+    id: "PaulBenjamin",
     creator: "Paul",
-  url: "/images/Paul_Ben.jpg"  },
-  { clip: "polygon(0 0, 100% 0, 100% 100%, 20% 100%)",
-    pos: [3* fac, 0, 2.75* fac], rot: [0, -Math.PI / 2.5, 0], 
-  name:"Paul Bauer",
-  id:"PaulBauer",
+    url: "/images/Paul_Ben.webp"
+  },
+  {
+    clip: "polygon(0 0, 100% 0, 100% 100%, 20% 100%)",
+    pos: [3 * fac, 0, 2.75 * fac], rot: [0, -Math.PI / 2.5, 0],
+    name: "Paul Bauer",
+    id: "PaulBauer",
     creator: "Paul",
-url: "/images/Paul_CoMPodcast.jpg"  }
-  ]
+    url: "/images/Paul_CoMPodcast.webp"
+  }
+]

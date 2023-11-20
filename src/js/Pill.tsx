@@ -1,18 +1,18 @@
-import * as THREE from 'three'
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
-import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Vector3, useFrame, extend, useThree } from '@react-three/fiber'
-import { Instance, SpotLight, Text3D, useAspect, useGLTF } from '@react-three/drei'
+
+import { FontLoader, TextGeometry } from 'three-stdlib'
+import React, { useEffect, useRef, useState } from 'react'
+import { Vector3, useThree } from '@react-three/fiber'
+import { SpotLight, useAspect, useGLTF } from '@react-three/drei'
 import { motion } from 'framer-motion-3d'
-import { Physics, PlaneProps, Triplet, useBox, usePlane } from '@react-three/cannon'
-import { Color, Mesh } from 'three'
-import { geometry } from 'maath';
-import { loc } from '@/pages/atoms';
+import { Physics, PlaneProps, useBox, usePlane } from '@react-three/cannon'
+import { loc } from '@/js/atoms';
 import { useAtom } from 'jotai';
 import { Box, Flex } from '@react-three/flex';
 import { useRouter } from 'next/router';
-import { useAnimation, useAnimationControls } from 'framer-motion';
+import { useAnimation } from 'framer-motion';
+import { Object3D, Mesh } from '../vendor/three-export'
+
+
 
 type pillProps = {
     position: Vector3
@@ -35,7 +35,7 @@ export default function Pill({ position }: pillProps) {
 
         const textGeo = (text: any) => new TextGeometry(`${text}`, {
             font: font,
-            size: 2.5,
+            size: size,
             height: 1,
         })
         const loader = new FontLoader()
@@ -46,51 +46,47 @@ export default function Pill({ position }: pillProps) {
 
         }, [])
 
-        const args: Triplet = [size, size, size]
         const [ref, { at }] = useBox(
             () => ({
-                args,
                 mass: 1.5,
                 position: [Math.random() + 2, Math.random() + 30, Math.random() - 0.5],
             }),
-            useRef<any>(null),
+            useRef<any>(!null),
         )
-        useEffect(() => {
-            ref.current.setMatrixAt(1, new THREE.Matrix4())
-            ref.current.instanceMatrix.needsUpdate = true
-        }, [])
 
-        useEffect(() => { app === "firstSection" ? at(0).position.set(Math.random() + 2, Math.random() + 40, Math.random() - 0.5) : null }, [app])
+        useEffect(() => { if (app === "firstSection") { ref.current.position.set(Math.random() + 2, Math.random() + 40, Math.random() - 0.5) } }, [app])
         return (
 
-            <instancedMesh ref={ref} geometry={textGeo(text)} args={[undefined, undefined, number]} >
-                <meshLambertMaterial color={"white"} />
-            </instancedMesh>
+            <mesh ref={ref} geometry={textGeo(text)} >
+                <meshLambertMaterial toneMapped={false} color={"#6b191d"} />
+            </mesh>
         )
     }
 
     function Plane(props: PlaneProps) {
         const [ref] = usePlane(() => ({ ...props }), useRef<Mesh>(null))
-        return (
-            <mesh ref={ref}>
-                <planeGeometry args={[50, 40]} />
-                <shadowMaterial color="#171717" />
-            </mesh>
+        return (<>
+            {app == "secondSection" && router.pathname === "/" &&
+                <mesh ref={ref}>
+                    <planeGeometry args={[50, 40]} />
+                    <shadowMaterial color="#171717" />
+                </mesh>
+            }
+        </>
         )
     }
 
 
     const [number] = useState<any>(1)
-    const [textSize] = useState<any>(0.8)
+    const [textSize] = useState<any>(2)
     const [text] = useState<any>(["Praxeology", "Game", "Seduction", "Health", "Advice", "Fitness", "Money", "Frame", "Dating", "Relationships"])
     const group = useRef<any>(!null);
     const top_half = useRef<any>(!null);
     const bottom_half = useRef<any>(!null);
-    const [target] = useState(() => new THREE.Object3D())
+    const [target] = useState(() => new Object3D())
     const { nodes, materials }: any = useGLTF("/models/RPill.glb")
     const { size } = useThree()
     const [vpWidth, vpHeight] = useAspect(size.width, size.height);
-    const InstacedMeshes = Boxes;
 
 
     return (<>
@@ -135,9 +131,8 @@ export default function Pill({ position }: pillProps) {
             <Physics isPaused={app == "secondSection" && router.pathname === "/" ? false : true} gravity={[0, -20, 0]} broadphase='Naive'>
                 <Plane rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} />
                 {text.map((item: any) =>
-                    <InstacedMeshes key={item} {...{ number, size: textSize, text: item }} />
+                    <Boxes key={item} {...{ number, size: textSize, text: item }} />
                 )}
-
             </Physics>
         </motion.group>
     </>)

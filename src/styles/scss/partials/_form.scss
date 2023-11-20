@@ -87,12 +87,11 @@
 
 form {
   @extend %flex-center;
-  flex: 1 1 100%;
   margin: 0 auto 0 0;
+  padding: 1rem 0;
   flex-direction: column;
   width: 100%;
   margin: 0;
-  flex: 1 1 auto;
   min-width: 250px;
   color: var(--clr-contrast-100);
 }
@@ -142,21 +141,21 @@ form label {
 form :is(input, select, textarea) {
   padding: var(--space-xs);
   font-size: var(--fs-text);
-  border: 1px solid hsl(0deg 0% 12%);
+  background-color: hsl(232.5, 11.8%, 10%);
+  border: 1px solid hsl(232.5, 11.8%, 14.5%);
   color: var(--clr-contrast-400);
   font-weight: 500;
-  background-color: var(--clr-contrast-750);
 }
 
 form input:active {
-  background-color: var(--clr-primary-100);
+  background-color: #0a0b0c;
 }
 
 form input:focus-visible,
 textarea:focus-visible {
   border: 1px solid var(--clr-contrast-700);
-  background-color: var(--clr-contrast-200);
-  color: var(--clr-contrast-750);
+  background-color: #0a0b0c;
+  color: var(--clr-contrast-100);
 }
 
 form .btn-group {

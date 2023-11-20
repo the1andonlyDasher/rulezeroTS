@@ -1,6 +1,6 @@
 import { faCookie } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { motion, useAnimation, useCycle } from "framer-motion"
+import { motion, useAnimation } from "framer-motion"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 

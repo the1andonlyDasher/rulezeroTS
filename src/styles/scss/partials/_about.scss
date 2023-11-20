@@ -1,0 +1,207 @@
+@use "../media-queries.scss" as *;
+
+%flex-full {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+%absolute-full {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+%top-left-full {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+%flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+%trans {
+  transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  -o-transition: 0.5s ease-in-out;
+  -webkit-transition: 0.5s ease-in-out;
+  transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.hero__grid {
+  display: grid;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+  margin: 2rem 0;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-areas:
+    "heading heading stats"
+    "video video main"
+    "video video main"
+    "buttons sidetext sidetext";
+  div {
+    display: flex;
+    backface-visibility: hidden;
+    // gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    h2,
+    h3 {
+      border: none;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .grid__h3 {
+      font-weight: 700;
+      padding: 1rem;
+      text-shadow: 5px 5px 0px hsl(232.5, 11.8%, 10%);
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      background-color: hsl(232.5, 11.8%, 10%);
+      border-radius: 5px;
+    }
+    .live-badge {
+      padding: 2rem;
+      background-color: #e8434c;
+      border-radius: 10px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-weight: 700;
+      font-family: "Prompt";
+      text-transform: uppercase;
+      font-size: clamp(1rem, 5vw, 2rem);
+      transform: rotate(15deg);
+    }
+    .grid__date {
+      font-weight: 700;
+      padding: 1rem;
+      font-size: clamp(1rem, 5vw, 2rem);
+      background-color: #ffffff;
+      color: #000;
+      border-radius: 10px;
+      margin-right: auto;
+    }
+    h4 {
+      font-family: "Cairo", monospace;
+      font-style: normal;
+      font-weight: 400;
+      color: #939399;
+    }
+    p {
+      margin: 0;
+      font-size: clamp(0.75rem, 5vw, 1.1rem);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 12;
+      overflow: hidden;
+    }
+    video {
+      width: 100%;
+      height: auto;
+      background-color: hsl(232.5, 11.8%, 10%);
+      border-radius: 5px;
+    }
+    .grid__video-parent {
+      transform: rotateY(15deg);
+      width: 90%;
+      height: 100%;
+      background-size: cover;
+      box-shadow: 30px 20px 0px hsl(232.5, 11.8%, 8%);
+      border: 1px solid white;
+      perspective: 700px;
+      position: absolute;
+      right: 0;
+    }
+    .stat-card {
+      padding: 1rem;
+      background-color: hsl(232.5, 11.8%, 10%);
+      border-radius: 5px;
+      flex: 1 1 auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      p {
+        font-size: clamp(1rem, 5vw, 1.5rem);
+        color: rgb(138, 138, 150);
+        font-family: "Prompt";
+        text-align: center;
+        line-height: 1;
+        margin: 0;
+      }
+      span {
+        color: rgb(101, 101, 117);
+        font-size: clamp(0.5rem, 3vw, 1rem);
+      }
+    }
+  }
+  & > div:nth-child(1) {
+    grid-area: heading;
+  }
+  & > div:nth-child(2) {
+    grid-area: stats;
+    a {
+      width: 100%;
+      button {
+        width: 100%;
+      }
+    }
+  }
+  & > div:nth-child(3) {
+    grid-area: video;
+    perspective: 500px;
+    margin: 4rem 0;
+    background-image: radial-gradient(#151516 30%, transparent 30%);
+    background-repeat: repeat;
+    background-size: 5px 5px;
+    background-attachment: scroll;
+  }
+  & > div:nth-child(4) {
+    grid-area: main;
+    perspective: 500px;
+    position: relative;
+    margin: 4rem 0;
+
+    div {
+      margin-right: auto;
+      width: 90%;
+      height: 100%;
+      border: 1px solid #23252d;
+      box-shadow: 30px 20px 0px hsl(232.5, 11.8%, 8%);
+      background-color: hsl(232.5, 11.8%, 17.5%);
+      padding: 1rem;
+      transform: rotateY(-15deg);
+      perspective: 500px;
+    }
+  }
+  & > div:nth-child(5) {
+    grid-area: buttons;
+    gap: 1rem;
+
+    a {
+      flex: 1 1 100%;
+      button {
+        width: 100%;
+      }
+    }
+  }
+  & > div:nth-child(6) {
+    gap: 2rem;
+    display: flex;
+    flex-direction: row;
+    grid-area: sidetext;
+  }
+}
