@@ -109,8 +109,7 @@ const Timeline = () => {
                     app.push({
 
                       rotation: [0, 0, 0],
-
-                      url: `https://pipedproxy.kavin.rocks/vi/${r}/mqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBhZx_n9AywKMVzcoL_2bYQpUlalw&host=i.ytimg.com`,
+                      url: `https://yt.artemislena.eu/vi/${r}/mqdefault.jpg`,
                       title: t,
                       link: l,
                       name: r,

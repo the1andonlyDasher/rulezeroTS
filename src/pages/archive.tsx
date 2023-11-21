@@ -60,6 +60,18 @@ const list_variants = {
   out: { opacity: 0, zindex: -100 },
 }
 
+// const YOUTUBE_PLAYLIST_ITEMS_API = 'https://www.googleapis.com/youtube/v3/playlistItems';
+
+// export async function getServerSideProps() {
+//   const res = await fetch(`${YOUTUBE_PLAYLIST_ITEMS_API}?part=snippet&maxResults=50&playlistId=TLPPMjAxMTIwMjMrsZfUMlJuig&key=${process.env.YOUTUBE_API_KEY}`);
+//   const data = await res.json();
+//   return {
+//     props: {
+//       data
+//     }
+//   }
+// }
+
 export default function Archive() {
   const [view, setView] = useAtom(listView);
   const [load, setLoad] = useAtom(totalLoad);
