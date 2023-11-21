@@ -5,8 +5,6 @@ import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Footer from "@/components/Footer";
-import { useAtom } from "jotai";
-import { imgs } from "@/js/atoms";
 import { useRouter } from "next/router";
 import Papa from "papaparse";
 
@@ -37,12 +35,27 @@ const name_variants = {
   hidden: { y: 0, opacity: 1 },
   visible: { y: 20, opacity: 0 },
 };
+// const YOUTUBE_PLAYLIST_ITEMS_API = 'https://www.googleapis.com/youtube/v3/playlistItems';
+
+// export async function getServerSideProps() {
+//   const res = await fetch(`${YOUTUBE_PLAYLIST_ITEMS_API}?part=snippet&maxResults=50&playlistId=PLCQ8-0muO9aUVrXLHLHp48zbPre2heX9d&key=${process.env.YOUTUBE_API_KEY}`);
+//   const data = await res.json();
+//   return {
+//     props: {
+//       data
+//     }
+//   }
+// }
+
 
 export default function About() {
   const [app, setApp] = useState<any>([]);
   const [item, setItem] = useState<any>(app[app.length - app.length]);
+  const [list, setList] = useState<any>([])
   const router = useRouter();
   const [fetching, fetch] = useState(true);
+
+
 
   function youtube_parser(url: any) {
     var regExp =
@@ -54,9 +67,9 @@ export default function About() {
   useEffect(() => {
     if (router.pathname.includes("/about")) {
       if (typeof window !== "undefined" && fetching) {
-        console.log(
-          youtube_parser("/.*(?:youtu.be/|v/|u/w/|embed/|watch?v=)([^#&?]*).*/")
-        );
+        // console.log(
+        //   youtube_parser("/.*(?:youtu.be/|v/|u/w/|embed/|watch?v=)([^#&?]*).*/")
+        // );
 
         const rx: RegExp =
           /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
@@ -83,7 +96,7 @@ export default function About() {
                 if (fetching) {
                   if (!app.find((item: any) => item.name === r)) {
                     app.push({
-                      url: `https://pipedproxy.kavin.rocks/vi/${r}/mqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBhZx_n9AywKMVzcoL_2bYQpUlalw&host=i.ytimg.com`,
+                      url: `https://yt.artemislena.eu/vi/${r}/mqdefault.jpg`,
                       title: t,
                       link: l,
                       name: r,
@@ -95,8 +108,12 @@ export default function About() {
                     });
                   }
                   setItem(app[app.length - app.length]);
+                  console.log(app.map((item: any) => {
+                    item.name
+                  }))
                 }
               });
+
               fetch(false);
             },
           }
@@ -104,6 +121,7 @@ export default function About() {
       }
     }
   }, [router.pathname]);
+
 
   const gridVariants = {
     initial: { opacity: 0, x: -10 },

@@ -2,6 +2,16 @@
 const path = require("path");
 const ThreeMinifierPlugin = require("@yushijinhun/three-minifier-webpack");
 const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "yt.artemislena.eu",
+        port: "",
+        pathname: "/vi/**",
+      },
+    ],
+  },
   reactStrictMode: true,
   compress: true,
   sassOptions: {
