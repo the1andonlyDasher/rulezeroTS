@@ -151,7 +151,7 @@ export default function About() {
       </Head>
       <Sec>
         <motion.div initial="initial" animate={gridControls} variants={gridVariants} className="hero__grid">
-          <motion.div variants={gridItemVariants}>
+          <motion.div >
             <h2>Check out the latest show...</h2>
             <h3 className="">...or read more about the panel members.</h3>
           </motion.div>
@@ -159,7 +159,7 @@ export default function About() {
             {item && (
               <Link href={item.link}>
                 <button type="button" className="btn__primary">
-                  Right here!
+                  Watch here!
                 </button>
               </Link>
             )}

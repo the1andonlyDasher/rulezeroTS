@@ -193,6 +193,8 @@ a {
 .btn__alt {
   @extend %trans;
   font-family: $ff-header;
+  flex: 1 1 100%;
+  width: 100%;
   border: var(--clr-contrast-100) 2px solid;
   text-transform: uppercase;
   border-radius: 3px;

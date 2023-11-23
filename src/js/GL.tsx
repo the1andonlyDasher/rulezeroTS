@@ -96,7 +96,6 @@ export const GL = () => {
 
   return (
     <>
-
       <div id="canvasWrapper" ref={wrapper} className="canvas__wrapper" >
         <Canvas dpr={[1, 1.5]} gl={{ antialias: false }} >
           <fog attach="fog" args={["#1e1f26", 30, 70]} ></fog>
