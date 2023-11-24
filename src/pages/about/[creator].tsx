@@ -20,6 +20,8 @@ export default function Page() {
     }
   }, [router])
 
-  return <Sec header={`${creator}`}>{text}</Sec>
+  return <Sec header={`${creator}`}>
+    {text}
+  </Sec>
 
 }

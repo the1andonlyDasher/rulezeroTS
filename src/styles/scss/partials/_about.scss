@@ -256,3 +256,14 @@
     grid-area: sidetext;
   }
 }
+
+.creator__text {
+  @extend %flex-full;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 2rem;
+  & > p {
+    flex: 2 1 30ch;
+  }
+}
