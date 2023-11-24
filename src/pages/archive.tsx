@@ -237,8 +237,9 @@ export default function Archive() {
             <button type="button" onClick={() => setView(!view)}>{view ? "timeline view" : "list view"}</button>
           </div>
         </motion.form>
-        <Suspense fallback={<Dots />}>
-          <motion.ul className="video-list" initial="in" animate={list_controls} variants={list_variants}>
+
+        <motion.ul className="video-list" initial="in" animate={list_controls} variants={list_variants}>
+          <Suspense fallback={<Dots />}>
             {images && state.list.map((item: any) => {
               return item !== null ? (
                 <li key={item.name}>
@@ -265,8 +266,9 @@ export default function Archive() {
                 </li>
               ) : null;
             })}
-          </motion.ul>
-        </Suspense>
+          </Suspense>
+        </motion.ul>
+
       </div>
     </>
   );
