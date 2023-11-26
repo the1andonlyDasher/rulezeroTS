@@ -19,11 +19,13 @@ import {
 import { motion as motion3d } from "framer-motion-3d";
 import { proxy } from "valtio";
 import { useAtom } from "jotai";
-import { atomField, atomResult, atomSort, atomState, imgs, listView, loadManager } from "@/js/atoms";
+import { atomField, atomResult, atomSort, atomState, cursor, cursorText, imgs, listView, loadManager } from "@/js/atoms";
 import Papa from "papaparse";
 import { useRouter } from "next/router";
 import { Vector3, Quaternion, ImageLoader } from '../vendor/three-export'
-import { Texture } from "three";
+import { DoubleSide, Texture } from "three";
+import Triangle from "./Triangle";
+import { Cursor } from "@/components/Cursor";
 
 
 
@@ -129,7 +131,7 @@ const Timeline = () => {
                 const loader = new ImageLoader(manager);
                 loader.setCrossOrigin("");
                 loader.withCredentials
-                loader.setRequestHeader({ "Access-Control-Allow-Origin": "https://localhost:3000" })
+                loader.setRequestHeader({ "Access-Control-Allow-Origin": "https://rulezeroarchive.com" })
                 loader.setRequestHeader({ "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT" })
                 loader.setRequestHeader({ "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" })
                 loader.load(item.url, function (image) {
@@ -248,6 +250,7 @@ const Timeline = () => {
             const posX = position(index)[0] > 0 ? Math.min((position(index)[0] / 2) * (w / 10), position(index)[0]) : Math.max((position(index)[0] / 2) * (w / 10), position(index)[0]);
             return (
               <Frame
+                number={props.number}
                 name={props.name}
                 text={props.text}
                 isActive={props.isActive}
@@ -259,7 +262,7 @@ const Timeline = () => {
                 url={props.url}
                 date={props.date}
                 start={[posX / 6, 0, position(index)[2]]}
-                end={[posX, position(index)[1] * 0.95, position(index)[2]]}
+                end={[posX, position(index)[1] - 1, position(index)[2]]}
                 {...props}
               />
             )
@@ -272,16 +275,24 @@ const Timeline = () => {
 
 
     const Frame = ({ ...props }) => {
+      const [currentCursor, setCursor] = useAtom(cursor);
+      const [currentCursorText, setCursorText] = useAtom(cursorText);
       const image = useRef<any>(null!);
       const text = useRef<any>(null!);
       const ref = useRef<any>(null!);
+      const plane = useRef<any>(null!);
       const button = useRef<any>(null!);
       const router = useRouter()
       const group = useRef<any>(null!);
       const [hovering, hover] = useState(false);
       const [clicked, setClick] = useState(false)
-      useCursor(hovering)
+      // useCursor(hovering)
 
+      useEffect(() => {
+        if (typeof document !== "undefined") {
+          hovering ? document.body.classList.add("viewItem") : document.body.classList.remove("viewItem")
+        }
+      }, [hovering])
 
 
       useFrame((state, dt) => {
@@ -310,41 +321,96 @@ const Timeline = () => {
 
       const posX = props.position[0] > 0 ? Math.min((props.position[0] / 2) * (w / 10), props.position[0]) : Math.max((props.position[0] / 2) * (w / 10), props.position[0]);
 
+      const vertices = [
+        new Vector3(0, -4, 0),
+        new Vector3(0, 0, 0),
+        new Vector3(3, 0, 0)
+      ];
+
+
       return (
 
         <motion3d.group ref={group} >
-
-          <instancedMesh ref={ref} args={[undefined, undefined, 1]}
+          {/* ----------------------- Parent Plane-----------------------*/}
+          <motion3d.instancedMesh ref={ref} args={[undefined, undefined, 1]}
             scale={[Math.min(11 * (w / 10), 11), Math.min(6 * (w / 10), 6), 1]}
             onPointerOver={(e) => (e.stopPropagation(), hover(clicked ? false : true))}
-            onPointerOut={() => hover(clicked ? false : false)}
+            onPointerOut={() => { hover(clicked ? false : false) }}
             onClick={() => setClick(true)}
             onPointerMissed={() => setClick(false)}
             position={props.position}
+            animate={clicked ? { rotateY: Math.PI } : { rotateY: 0 }}
+            transition={{ type: "tween", ease: "easeOut", duration: 0.25 }}
+
+
           >
-            <planeGeometry />
+            <motion3d.planeGeometry ref={plane} />
             <motion3d.meshBasicMaterial
               variants={variants}
-              initial="hidden"
+              side={DoubleSide}
               visible={!disposed}
-              animate={controls}
+              toneMapped={false}
               // exit={controls}
               transition={{ type: "tween", ease: "easeOut", duration: 0.25 }}
-              color="#ffffff"
+              color="#191a1f"
             // envMapIntensity={2}
             />
-
+            {/* ----------------------- Image -----------------------*/}
             <motion3d.mesh
               ref={image}
               name={props.name}
               position={[0, 0, 0.1]}
-              scale={[0.95, 0.95, 0.95]}
+              scale={[0.95, 0.9, 0.95]}
             >
               <planeGeometry />
               <motion3d.meshBasicMaterial toneMapped={false} reflectivity={0} visible={!disposed} map={props.texture} />
             </motion3d.mesh>
 
-          </instancedMesh>
+          </motion3d.instancedMesh>
+          {/* ----------------------- Number Triangle -----------------------*/}
+          <Triangle clicked={clicked} vertices={vertices}
+            position={[
+              props.position[0] - 5.25,
+              props.position[1] + 2.75,
+              props.position[2] + 0.1,
+            ]} />
+          {/* ----------------------- NUmber -----------------------*/}
+          <Text
+            ref={text}
+            maxWidth={10}
+            characters="abcdefghijklmnopqrstuvwxyz0123456789!"
+            fontSize={Math.min(1.5 * (w / 1), 1.5)}
+            position={[
+              props.position[0] - 3.8,
+              props.position[1] + 2.4,
+              props.position[2] + 0.1,
+            ]}
+            font={"/fonts/prompt-v10-latin-900italic.woff"}
+            anchorX="center"
+            anchorY="top"
+          >
+            <motion3d.meshBasicMaterial transparent animate={clicked ? { opacity: 0 } : { opacity: 1, transition: { type: "spring", stiffness: 700, damping: 25, delay: 0.5 } }} color={"#191a1f"} visible={!disposed} />
+            {props.number}
+          </Text>
+          {/* ---------- Number Shadow -------*/}
+          <Text
+            ref={text}
+            maxWidth={10}
+            characters="abcdefghijklmnopqrstuvwxyz0123456789!"
+            fontSize={Math.min(1.5 * (w / 1), 1.5)}
+            position={[
+              props.position[0] - 4,
+              props.position[1] + 2.5,
+              props.position[2] + 0.2,
+            ]}
+            font={"/fonts/prompt-v10-latin-900italic.woff"}
+            anchorX="center"
+            anchorY="top"
+          >
+            <motion3d.meshBasicMaterial transparent animate={clicked ? { opacity: 0 } : { opacity: 1, transition: { type: "spring", stiffness: 700, damping: 25, delay: 0.5 } }} color={"white"} visible={!disposed} />
+            {props.number}
+          </Text>
+          {/* ----------------------- Watch Button -----------------------*/}
           <motion3d.mesh
             variants={button_variants}
             transition={{ duration: 0.5 }}
@@ -372,6 +438,8 @@ const Timeline = () => {
               {"Watch now!".split("-").join(" ")}
             </Text>
           </motion3d.mesh>
+          {/* ----------------------- Title Text -----------------------*/}
+
           <Text
             ref={text}
             maxWidth={10}
@@ -389,6 +457,8 @@ const Timeline = () => {
             <meshBasicMaterial color={"white"} visible={!disposed} />
             {props.title.split("-").join(" ")}
           </Text>
+          {/* ----------------------- Date Text -----------------------*/}
+
           <Text
             maxWidth={10}
             characters="abcdefghijklmnopqrstuvwxyz0123456789!"
@@ -408,7 +478,7 @@ const Timeline = () => {
           <QuadraticBezierLine
             // ref={line}
             start={props.start}
-            end={props.end}
+            end={[props.position[0], props.position[1] - 5, props.position[2]]}
             color="#71748e"
             needsUpdate={true}
             lineWidth={1}

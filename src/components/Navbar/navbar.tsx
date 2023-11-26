@@ -9,7 +9,9 @@ import NavbarToggle from "./NavbarToggle";
 
 
 
+
 const Navbar = ({ logo, alt, children }: any) => {
+
   const navbarMain = useRef<any>(!null);
   const [isShrunk, setShrunk] = useState(false);
   useEffect(() => {
