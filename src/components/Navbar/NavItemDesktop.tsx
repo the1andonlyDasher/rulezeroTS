@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import Link from 'next/link';
+import Link from "next/link";
+import { cursor } from "@/js/atoms";
+import { useAtom } from "jotai";
 
 const variants = {
   initial: {
     x: 50,
     opacity: 0,
-
   },
   animate: {
     x: 0,
@@ -22,9 +23,10 @@ type NavItemProps = {
   href?: string;
   name?: string;
   clickLink?: any;
-}
+};
 
 export const NavItem = ({ href, name, clickLink }: NavItemProps) => {
+  const [currentCursor, setCursor] = useAtom(cursor);
   const [isShrunk, setShrunk] = useState(false);
   useEffect(() => {
     const handler = () => {
@@ -59,12 +61,25 @@ export const NavItem = ({ href, name, clickLink }: NavItemProps) => {
         exit="exit"
         transition={{
           type: "tween",
-          duration: 0.75
+          duration: 0.75,
         }}
       >
-        <Link aria-label={name} scroll={false} className={isShrunk ? "nav-link black" : "nav-link"} href={`${href}`} onClick={clickLink}>{name}</Link>
+        <Link
+          onPointerEnter={() => {
+            setCursor("link");
+          }}
+          onPointerLeave={() => {
+            setCursor("default");
+          }}
+          aria-label={name}
+          scroll={false}
+          className={isShrunk ? "nav-link black" : "nav-link"}
+          href={`${href}`}
+          onClick={clickLink}
+        >
+          {name}
+        </Link>
       </motion.li>
     </>
   );
 };
-

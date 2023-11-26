@@ -1,3 +1,4 @@
+import { Cursor } from "@/components/Cursor";
 import { atomField, atomResult, atomSort, atomState, imgs, listView, totalLoad } from "@/js/atoms";
 import { motion, useAnimation, useMotionValueEvent, useScroll } from "framer-motion";
 import { useAtom } from "jotai";

@@ -1,6 +1,7 @@
 import { useEffect, useRef, Suspense } from "react";
 import { Canvas, useFrame, useThree, Vector3 } from "@react-three/fiber";
 import {
+  GradientTexture,
   Html,
   PerspectiveCamera,
   Preload,
@@ -101,7 +102,7 @@ export const GL = () => {
           <fog attach="fog" args={["#1e1f26", 30, 70]} ></fog>
           <Preload all />
           <Camera />
-          <color attach={"background"} args={["#1e1f26"]} ></color>
+          <GradientTexture attach={"background"} colors={["#111", "#1e1f26"]} stops={[0, 0.1]} />
           <Suspense fallback={<Html>Loading experience...</Html>}>
             <Timeline />
             <LandingGL />
