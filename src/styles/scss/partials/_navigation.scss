@@ -164,8 +164,8 @@ a {
 
 .nav-items-mobile {
   @extend %flex-center, %absolute-full;
-  max-width: 100vh;
-  max-width: 100dvh;
+  max-width: 100vw;
+  max-width: 100dvw;
   position: fixed;
   margin: 0;
   padding: 0;

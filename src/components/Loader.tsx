@@ -19,6 +19,7 @@ export default function Loader() {
                 setLoad(true), (bar.current.style.width = 100 + "%");
             }, 1000);
         } else {
+            setLoad(false)
             manager.onProgress = function (
                 url: any,
                 itemsLoaded: any,
@@ -36,14 +37,18 @@ export default function Loader() {
                 );
                 bar.current.style.width = (itemsLoaded / itemsTotal) * 100 + "%";
                 if ((itemsLoaded / itemsTotal) * 100 === 100) {
+
+                    setTimeout(() => {
+                        setLoad(true);
+                    }, 500);
+
                 }
             };
-            manager.onLoad = function () {
-                setTimeout(() => {
-                    setLoad(true);
-                }, 1000);
-            };
+
         }
+    }, [router]);
+
+    useEffect(() => {
         load === true &&
             cover_controls
                 .start({
@@ -53,7 +58,7 @@ export default function Loader() {
                 .then(() => {
                     cover_controls.start({ display: "none" });
                 });
-    }, [load, router.pathname]);
+    }, [load])
 
     return (
         <>

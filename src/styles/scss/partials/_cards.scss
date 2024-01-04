@@ -64,6 +64,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 2rem;
+  row-gap: 4rem;
   margin: 2rem 0;
   .card {
     @extend %trans;
