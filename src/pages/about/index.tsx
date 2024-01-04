@@ -7,6 +7,8 @@ import Link from "next/link";
 import Footer from "@/components/Footer";
 import { useRouter } from "next/router";
 import Papa from "papaparse";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 
 const cards_variants = {
   initial: { opacity: 0 },
@@ -67,9 +69,6 @@ export default function About() {
   useEffect(() => {
     if (router.pathname.includes("/about")) {
       if (typeof window !== "undefined" && fetching) {
-        // console.log(
-        //   youtube_parser("/.*(?:youtu.be/|v/|u/w/|embed/|watch?v=)([^#&?]*).*/")
-        // );
 
         const rx: RegExp =
           /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
@@ -109,7 +108,7 @@ export default function About() {
                   }
                   setItem(app[app.length - app.length]);
                   console.log(app.map((item: any) => {
-                    item.name
+                    item
                   }))
                 }
               });
@@ -213,15 +212,14 @@ export default function About() {
                 <p>{images.length}</p>
                 <span>creators</span>
               </div>
-              <div className="stat-card">
-                <p>2384</p>
-                <span>Minutes</span>
-              </div>
+              <a className="stat-card" href="#panelMembers">
+                More <FontAwesomeIcon className="h-2 w-2" icon={faArrowDown} />
+              </a>
             </motion.div>
           )}
         </motion.div>
       </Sec>
-      <Sec>
+      <Sec id="panelMembers">
         <motion.div variants={cards_variants} className="cards">
           {images.map((img: any, index: number) => (
             <motion.div variants={card_variants} className="card" key={index}>

@@ -1,6 +1,7 @@
 import { Cursor } from "@/components/Cursor";
 import { atomField, atomResult, atomSort, atomState, imgs, listView, totalLoad } from "@/js/atoms";
 import { motion, useAnimation, useMotionValueEvent, useScroll } from "framer-motion";
+import { stat } from "fs";
 import { useAtom } from "jotai";
 import Head from "next/head";
 import Link from "next/link";
@@ -96,12 +97,10 @@ export default function Archive() {
     list: images,
   });
 
+
   const [a, aa] = useAtom(atomState)
 
-  useEffect(() => {
-    aa(state)
-    console.log(a)
-  }, [state])
+
 
   // Filter posts on typing in search input
   const handleChange = (e: any) => {
@@ -169,12 +168,19 @@ export default function Archive() {
   }
 
   useEffect(() => {
-    load && setImages(app)
-  }, [load]);
+    setImages(app)
+  }, [app]);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     view && controls.start(view && latest > 0 ? "scroll" : "top")
   })
+
+
+  useEffect(() => {
+    aa(state)
+  }, [state])
+
+
 
 
   useEffect(() => {
@@ -238,38 +244,32 @@ export default function Archive() {
             <button type="button" onClick={() => setView(!view)}>{view ? "timeline view" : "list view"}</button>
           </div>
         </motion.form>
-
         <motion.ul className="video-list" initial="in" animate={list_controls} variants={list_variants}>
-          <Suspense fallback={<Dots />}>
-            {images && state.list.map((item: any) => {
-              return item !== null ? (
-                <li key={item.name}>
-                  <div className="list__image-wrapper">
-                    <div className="list__item-number">{item.number}</div>
-                    <div
-                      className="list__image"
-                      style={{
-                        backgroundImage: `url('${item.url}')`,
-                        backgroundSize: "cover",
-                      }}
-                    ></div>
-                  </div>
-                  <div className="list__info">
-                    <h5 className="list__header">{item.title}</h5>
-                    <p className="list__date">{new Date(item.date).toDateString()}</p>
+          {state.list.map((item: any) => <li key={item.name}>
+            <div className="list__image-wrapper">
+              <div className="list__item-number">{item.number}</div>
+              <div
+                className="list__image"
+                style={{
+                  backgroundImage: `url('${item.url}')`,
+                  backgroundSize: "cover",
+                }}
+              ></div>
+            </div>
+            <div className="list__info">
+              <h5 className="list__header">{item.title}</h5>
+              <p className="list__date">{new Date(item.date).toDateString()}</p>
 
-                    <Link href={item.link}>
-                      <button type="button" className="btn__alt">
-                        Watch now!
-                      </button>
-                    </Link>
-                  </div>
-                </li>
-              ) : null;
-            })}
-          </Suspense>
+              <Link href={item.link}>
+                <button type="button" className="btn__alt">
+                  Watch now!
+                </button>
+              </Link>
+            </div>
+          </li>
+          )}
+
         </motion.ul>
-
       </div>
     </>
   );

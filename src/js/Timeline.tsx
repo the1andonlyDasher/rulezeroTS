@@ -148,7 +148,6 @@ const Timeline = () => {
         );
       }
     }
-    console.log(textures)
   }, [router.pathname]);
 
   const App = ({ images }: { images: any }) => {
