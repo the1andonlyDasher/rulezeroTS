@@ -1,8 +1,23 @@
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import Head from "next/head";
+import { useEffect, useState } from "react";
 
 export default function Archive() {
+
+
+  function getRandomInt(min: any, max: any) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  var computerResponse = getRandomInt(1, 3);
+
+  const [rand, setRand] = useState(computerResponse)
+  const [isHydrated, setIsHydrated] = useState(false)
+
+  useEffect(() => {
+    setRand(computerResponse)
+  }, []);
   return (
     <>
       <Head>
@@ -12,12 +27,13 @@ export default function Archive() {
         <link rel="icon" href="/favicon.webp" />
 
       </Head>
-      <ContactForm props={{
-        title: "Contact us!",
-        subtitle: "Requests, suggestions, criticism, we'll handle it.",
-        sectionName: undefined,
-        id: undefined
-      }} />
+
+      {rand &&
+        <ContactForm props={{
+          title: "Contact us!",
+          sectionName: undefined,
+          id: undefined
+        }} />}
       <Footer />
 
 

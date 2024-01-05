@@ -55,7 +55,46 @@ const ContactForm = ({ props }: contactProps) => {
     return await messageControls.start("enter");
   };
 
-  const [status, setStatus] = useState("Send");
+  const sentMessages = [
+    "Rocketed to the Inbox!",
+    "Sent into Cyberspace!",
+    "Beam Successful!",
+  ]
+
+  const sendingMessages = [
+    "Deploying Digital Doves...",
+    "Beaming Bytes...",
+    "Propelling Prose..."
+  ]
+
+  const sendMessages = [
+    "Toss Your Text",
+    "Hoot and Holler",
+    "Blast the Bits",
+  ]
+
+  const contactTexts = [
+    "Tell Us All: We've Got the Ears, You Bring the Words",
+    "Let's Chat: Because Emails are the New Coffee Breaks",
+    "Buzz Us: Your Questions, Our Answers, No Sting Attached",
+  ]
+
+  function getRandomInt(min: any, max: any) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  var computerResponse = getRandomInt(0, 2);
+
+  const [rand, setRand] = useState(computerResponse)
+
+
+
+  useEffect(() => {
+    setRand(computerResponse)
+    console.log(rand)
+  }, []);
+
+  const [status, setStatus] = useState(sendMessages[rand]);
 
   const bringBackform = async (e: any) => {
     e.preventDefault();
@@ -65,11 +104,11 @@ const ContactForm = ({ props }: contactProps) => {
 
   const testMail = (e: any) => {
     e.preventDefault();
-    setStatus("Sending...");
+    setStatus(sendingMessages[rand]);
     setTimeout(() => {
-      setStatus("Sent!");
+      setStatus(sentMessages[rand]);
       setTimeout(() => {
-        setStatus("Send");
+        setStatus(sendMessages[rand]);
       }, 1000);
       setFirstName("");
       setEmail("")
@@ -80,7 +119,7 @@ const ContactForm = ({ props }: contactProps) => {
   const sendEmail = (e: any) => {
     e.preventDefault();
     if (form.current == null) return;
-    setStatus("Sending...");
+    setStatus(sendingMessages[rand]);
     emailjs
       .sendForm(
         "service_svvit4h",
@@ -90,9 +129,9 @@ const ContactForm = ({ props }: contactProps) => {
       )
       .then(
         (result: any) => {
-          setStatus("Sent!");
+          setStatus(sentMessages[rand]);
           setTimeout(() => {
-            setStatus("Send");
+            setStatus(sendMessages[rand]);
           }, 1000);
           sequence();
           setFirstName("");
@@ -112,12 +151,14 @@ const ContactForm = ({ props }: contactProps) => {
     }
   }, [inView, controlsForm]);
 
+
+
   return (
     <>
       <Sec sectionName={props.sectionName}>
         <>
           <h3 data-before={props.title}>{props.title}</h3>
-          <p>{props.subtitle}</p>
+          <p>{contactTexts[rand]}</p>
           <motion.div
             className="thanks__message"
             variants={messageVariants}
